@@ -1,0 +1,30 @@
+#########################################
+##### CLIMATE DATA OVERVIEW         #####
+#########################################
+
+This area breaks the data up into the different variables and downloads
+the data and processes separately for each variable:
+tp t2m ssr
+
+Users must add and configure the local path structure themselves
+
+# First file 1_...sh
+Downloads the data from CDS
+
+# Second file 2_...sh
+Processes to 8-day timesteps
+
+# Third file 3_shift_leapY.sh
+Previous ncdf files are 8-day averages. This script shifts the files with a leap
+year in order to  ensure that all time periods are equivalent between years.
+Specifically, the date after the leap year is shifted back 24hours such that
+the dates overlap. The leap years will have an extra day averaged in the final
+timestep.
+
+# Fourth file 4_mergetime_remap.sh
+Merge the files corresponding to different years and remap according to a target grid
+
+# Fifth file 5_reduce_DeSeason_reMap.sh
+Clip data to the target area centred on Europe.
+Deseasonalise the data by subtracting the long term mean at each 8-day period
+Match spatial resolution to kNDVI (0.05deg)
