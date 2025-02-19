@@ -12,7 +12,7 @@
 ###################################################
 
 # dir root of analysis
-root_project <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/"
+root_project <- "FOREST-RESILIENCE/"
 
 # dir of input data
 root_data_input <- paste0(root_project, "data/")

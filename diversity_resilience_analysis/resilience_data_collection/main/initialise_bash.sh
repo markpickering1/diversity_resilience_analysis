@@ -4,8 +4,8 @@
 # this script should be run before running the individual bash scripts of the project
 
 # dir of input data
-ROOT_DATA_INPUT="/eos/jeodpp/data/projects/FOREST-RESILIENCE/data/"
+ROOT_DATA_INPUT="FOREST-RESILIENCE/data/"
 # dir of intermediate data
-ROOT_DATA_PROCE="/eos/jeodpp/data/projects/FOREST-RESILIENCE/data_processing/"
+ROOT_DATA_PROCE="FOREST-RESILIENCE/data_processing/"
 # dir of output figures
-ROOT_FIGURES="/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/"
+ROOT_FIGURES="FOREST-RESILIENCE/figures/"
