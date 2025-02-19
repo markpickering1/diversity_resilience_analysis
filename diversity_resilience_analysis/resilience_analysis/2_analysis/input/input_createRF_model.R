@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 This file should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 15/06/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -15,35 +15,11 @@
 ###################################################
 
 # set output path name - with date this will link output (variables) to next script
-# script_output_ext <- 'createRF_parallelDiv_metrics_selections'           # directory name (may include timestamp)
-# script_output_ext <- 'createRF_bootDiv_metrics_4'           # directory name (may include timestamp)
-# script_output_ext <- 'createRF_metrics_4'           # directory name (may include timestamp)
-script_output_ext <- 'createRF_bootDiv_metrics_preselectTestTrain_shanUpdate'           # directory name (may include timestamp)
+script_output_ext <- 'createRF_bootDiv_2025-02-19'           # directory name (may include timestamp)
 
 # input dataset containing the combined dataframes to create RF
-# date_production <- 'sv1_2023-05-26'   # first production - 1st v on new system - incorrect TPSSR
-# date_production <- 'sv1_2023-06-28'   # second production - add topo, update forest cover - incorrect TPSSR
-# input_file <- 'df_all.RData' # df_comb
-
-# date_production <- '2023-07-08_rerunTPSSR' # correct TP SSR
-# date_production <- '2023-10-26_addVarResid' # New correct TP SSR
-# date_production <- '2023-11-01_altResilMetrics'             # lambda version S&B
-# date_production <- '2_ts_statistics_sv1_origDetren_2023-11-09'              # new div res metrics
-# date_production <- '3_combDFselect_origDetren_2023-11-15' # first new div res metrics
-
-# # new div metrics - selecting on GEDI and kndvi Count
-# date_production <- '4_selections_2024-01-22' # new div add GEDI_entries kndvi_n_ts_entries selections
-# # input_dir <- paste0(root_data_proce, '2_ts_statistics_sv1_', date_production, '/')
-# input_dir <- paste0(root_data_proce, date_production, '/') 
-# # input_file <- 'df_all.RData'  # input_file <- 'df_all_short.RData' # 'df_all_GSonly.RData' # df_comb 
-# # input_file <- '4_selections_16Nov/df_all_long_base.RData' # this was used for the first RF production on new metrics
-# input_file <- 'df_all_long_reduce_gt40GEDIcount_gt200kndvicount.RData' # new div add GEDI_entries kndvi_n_ts_entries selections
-
-# new div metrics - selecting on GEDI and kndvi Count ++ common test-train split
-# date_production <- '4_selections_2024-02-21' # new div add GEDI_entries kndvi_n_ts_entries selections - old shannon
-date_production <- '4_selections_2024-08-07_shanUpdate' # as above - updated shannon
+date_production <- '4_selections_2025-02-19' # as above - updated shannon
 input_dir <- paste0(root_data_proce, date_production, '/') 
-# input_file <- '4_selections_16Nov/df_all_long_base.RData' # this was used for the first RF production on new metrics
 input_file <- 'df_all.RData' # new div add GEDI_entries kndvi_n_ts_entries selections
 
 
@@ -56,8 +32,6 @@ input_file <- 'df_all.RData' # new div add GEDI_entries kndvi_n_ts_entries selec
 # diversity metrics, including 'no_diversity' metric)
 
 # target variable to predict - either single string for simple model or vector for running over multiple
-# v_target <- 'kndvi_VAR_resid' # 'kndvi_CV'
-# v_target <- 'kndvi_lambda_xt' # 'kndvi_lambda_variance' # 'kndvi_lambda_xt'  # lambda value in place of TAC
 v_target <- c('kndvi_lambda_xt') #,'kndvi_lambda_variance') # , 'kndvi_TAC') # 'kndvi_lambda_xt') # , 'kndvi_lambda_variance')       #  ,'kndvi_TAC', , if this doesn't work in some scripts put only one until script updated
 
 # v_identifiers <- c('x', 'y')
@@ -97,26 +71,6 @@ v_optional_predictors <- c( # "no_diversity" ,
   # "sd_sd"                     "sd_mean"                   "sd_cv"                       "euclidean_distances_stdev"
 )
 
-
-# old div  
-#   #"no_diversity",
-#                              # "rh50_mean", "rh98_mean"
-#                              "fhd_mean"
-#                              # "skew_mean", "kurt_mean"
-#                             # "shannon_entropy", "simpson_index"
-#                             # "rao_quadratic_entropy", "euclidean_distances_mean", "convex_hull_volume"
-# )
-
-# first version of diversity metrices
-# "diversity_structural_skew_avg_diversity" , "diversity_structural_kurt_avg_diversity" , 
-# "diversity_structural_rh50_avg_diversity" , "diversity_structural_rh98_avg_diversity" ,
-# "diversity_structural_fhd_avg_diversity"  
-# "diversity_structural_skew_cv_diversity" , # "diversity_structural_kurt_cv_diversity",  
-# "diversity_structural_rh50_cv_diversity" ,  "diversity_structural_fhd_cv_diversity" # ,
-# non-structural variables
-# "EVI_dissimilarity_glcmdiversity"  , "EVI_homogeneity_glcmdiversity",
-# "biomass_dissimilarity_glcmdiversity", "biomass_homogeneity_glcmdiversity" ,
-# "biomass_dissimilarity_glcmdiversity", "biomass_homogeneity_glcmdiversity" )
 
 
 ###################################################

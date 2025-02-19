@@ -6,8 +6,8 @@
 # Inputs	      : df_comb single df containing all columns and all rows (inc NAs)
 # Outputs	      : df tailored to particular analysis or plotting
 # Options	      : 
-# Date          : 16/11/23
-# Version       : 1
+# Date          : 2025-02-19
+# Version       : 3
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
 # ########################################################
@@ -197,32 +197,3 @@ df_comb <- df_comb %>% filter(kndvi_TAC > 0.03)
 summary(df_comb$kndvi_lambda_variance)
 save(df_comb      , file=paste0(output_path, 'df_all_TACgt003.RData' )    )
 
-# MISC TEST 
-dim(df_comb %>% filter(kndvi_TAC <0)) # 244 negative tac pixels
-summary(df_comb %>% filter( is.na(kndvi_lambda_variance) ))
-# are the unphysical lambda variance values resulting from sig^2/var[x] > 1
-dim(df_comb %>% filter( is.na(kndvi_lambda_variance) ))
-df_comb_test <- df_comb %>% mutate(sig2divVar  = kndvi_sigma_xt^2 / kndvi_lt_var  ) 
-summary(df_comb_test$sig2divVar)
-summary(df_comb_test %>% filter( sig2divVar >=1 ) )
-# so we have 8517 pixels where sig2/Var[x] > 1 and so undefined rest rate var
-df_comb_undefined <- df_comb_test %>% filter( sig2divVar >=1 )
-dim(df_comb_undefined %>% filter(kndvi_TAC <0)) # 
-hist(df_comb_undefined$y)
-hist(df_comb_undefined$sig2divVar)
-hist(df_comb_test$sig2divVar)
-# are tehse high sig2divVar values coming from the high signma or the low variance
-hist(df_comb_undefined$kndvi_sigma_xt) ; mean(df_comb_undefined$kndvi_sigma_xt)
-hist(df_comb_test$kndvi_sigma_xt)      ; mean(df_comb_test$kndvi_sigma_xt)
-hist(df_comb_undefined$kndvi_lt_var) ; mean(df_comb_undefined$kndvi_lt_var)
-hist(df_comb_test$kndvi_lt_var)      ; mean(df_comb_test$kndvi_lt_var)
-
-# remove entries of zero for certain entropies etc.
-# unnecessary
-
-# remove unnecessary columns
-
-# save dataframe to have a version with all present rows (e.g. plotting)
-
-# omit the rows that are not present in all columns (based on key metrics of res and div to make comparable)
-# can move this to the RF production

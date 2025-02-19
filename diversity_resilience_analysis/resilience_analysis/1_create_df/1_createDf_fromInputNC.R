@@ -1,5 +1,5 @@
 # ########################################################
-# Title         : createDF_kndviclim.R
+# Title         : 1_createDf_fromInputNC.R
 # Description   : create a df of X | Y | Date & one of each of KNDVI + climate variables
 #                 given in  input/input_createDf_fromInputNC.R
 #                 Also create df of residual & separately a static X | Y df of other variables
@@ -7,7 +7,7 @@
 # Inputs	      : links to netcdf containing KNDVI and CLIMATE data as well as non time-series data from 
 # Outputs	      : two dataframes for each timeseries variable (var summary stats and residual summary stats)
 # Options	      : 
-# Date          : 20/5/23
+# Date          : 19/02/25
 # Version       : 3 
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
@@ -182,19 +182,3 @@ f_time_update(t_start_time)
 #########
 ## END ##
 #########
-
-
-# ###################################################
-# ######       TEST PLOT SINGLE SLICE           #####
-# ###################################################
-# df_i_baseVar_1 <- df_i_baseVar[1:3]
-# 
-# r_i_baseVar_1 <- terra::rast(  as.matrix(df_i_baseVar_1) , type="xyz")
-# plot(r_i_baseVar_1)
-# # lost a lot of data - why?
-# 
-# r2_i_baseVar  <- raster(file_i_baseVar) #, varname = 'kndvi') ; plot(r_i_baseVar[[1]])
-# plot(r2_i_baseVar)
-# # convert r to dataframe, reset titles, convert to long format
-# df2_i_baseVar <- as.data.frame(r2_i_baseVar, xy = T, na.rm = T)
-# head(df2_i_baseVar)

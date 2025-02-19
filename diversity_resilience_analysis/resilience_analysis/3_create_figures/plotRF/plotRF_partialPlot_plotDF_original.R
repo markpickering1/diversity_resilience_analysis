@@ -9,7 +9,7 @@
 #                 figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 21/12/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -36,7 +36,6 @@ load(input_plot_pdp) # summary(df_partDep_div)
 
 # we have the dataframes of partial dependence 
 ### Now plot the diversity figs
-# load('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_2023-11-29_partialPlot/df_rf_model_partDep_diversity_data-train.RData')
 if(b_run_partialplot_nonDiv) pdp_plot <- df_partDep_nondiv
 if(b_run_partialplot       ) pdp_plot <- df_partDep_div
 
@@ -194,8 +193,6 @@ if(b_run_partialplot_nonDiv){
     # head(pp_j)
     pp_j <- as.data.frame(pp_j) ;  pp_j[1:2] <- pp_j[1:2] %>% round( digits = 5)
     pp_j[3] <- var_name_j
-    
-    # save(pp_j, file=paste0(output_path, 'df_pdp_-',var_name_i, '-', var_name_j , '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
     
     if (j == 1){df_partDep_nondiv <- pp_j
     } else{df_partDep_nondiv <- rbind(df_partDep_nondiv, pp_j)}

@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 This file should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 21/05/23
+# Date          : 19/02/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -17,13 +17,10 @@
 script_output_ext <- '2_ts_statistics_sv1'           # time-series stats     
 
 # input dataset containing the dataframes to calculate stats for
-# version_num <- '2023-06-27' # 1st: 2023-05-23 # pre alignment
-version_num <- '2023-11-09' # new div res metrics
-#version_num <- '2023-11-09_origDetren' # new div res metrics
+version_num <- '2025-02-19' # new div res metrics
 input_dir <- paste0(root_data_proce, '1_inputDataframes_sv1_', version_num, '/')
 
 # input phenology dataframe to be used in case of growing season masking
-#f_phenology_df <- 'ancillary/phenology/modis_phenology_df/phenology_df.RData'                # old version pre alignment fix, now in data/old_pre_alignment_fix/... 
 f_phenology_df <- 'ancillary/phenology/modis_phenology_nc_masked_005_df/phenology_df.RData'   # new version post alignment fix
 
 #####################################################
@@ -34,17 +31,17 @@ f_phenology_df <- 'ancillary/phenology/modis_phenology_nc_masked_005_df/phenolog
 # 2) static variables (to extract single value snapshot)
 
 # time-series variables to create dataframes containing TAC, mean, CV
-v_variables        <- c( 'kndvi'
-                         # 't2m'
-                          # 'VPD'
-                         # 'ssr'
+v_variables        <- c( 'kndvi',
+                         't2m',
+                          'VPD',
+                         'ssr'
                            # 'tp'
-                         ) #; v_variables <- c('kndvi', 'spei','swvl1')
+                         ) 
 
 ###################################################
 ######     SET OUTLIERS THRESHOLD             #####
 ###################################################
-# set this threshold as number of std
+# set this threshold as number of std for cloud cover
 outlier_threshold <- -2.5
 
 ###################################################

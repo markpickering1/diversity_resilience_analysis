@@ -8,7 +8,7 @@
 # Outputs	      : figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 29/11/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -178,11 +178,7 @@ if(b_run_dice){
                                                 b_useAbs_RestRate, '_derivVspredic-', predictor_m, '.png' ) , 
                width = fig_width_wide, height = fig_height_wide ) # , width = wid, height = hei)
         
-          # f_obs_vs_mod_density(df_comb_predictVobs, s_title = paste0(y_lab_i, ' for ', x_lab_i), 
-          #                              b_cor = T, b_mse = T, b_rmse = T,  b_mae = F, b_pbias = T,
-          #                              lims_x = c_lims, lims_y = c_lims)
-          # 
-        
+
       } # end loop over v_predictors
       } # create figs vs predictors
       

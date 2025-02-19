@@ -9,8 +9,8 @@
 #                 functions script and input dataset - df of combined predictors and response
 # Outputs	      : model
 # Options	      : can run cross validation on tree depth
-# Date          : 15/6/23
-# Version       : 3 (updated 2/2/24)
+# Date          : 2025-02-19
+# Version       : 3 (updated 2025-02-19)
 # Authors       : Mark Pickering & Agata Elia
 # ########################################################
 
@@ -185,71 +185,3 @@ print('end of script')
 f_time_update(t_start_time)
 
 
-
-#############
-### EXTRA INFO FOR BOOTSTRAPPING
-#############
-### this code produces the pdps for set variables in line
-### insert after 'save results'
-
-
-# print('extract results')
-# Extract results
-# l_rf_boot <- results$rf.models
-# the following do.call commands rejoin the separate results into one dataframe
-# # pdp_list_df <- do.call(rbind, lapply(results$pdp_i, function(pdp_i) {
-# #   pdp_i$iteration <- i
-# #   return(pdp_i)
-# # }))
-# pdp_list_df <- do.call(rbind, lapply(1:length(results$pdp_i), function(i) {
-#   pdp_i <- results$pdp_i[[i]]
-#   pdp_i$post_iteration <- i
-#   return(pdp_i)
-# }))
-# indices_list_df <- do.call(rbind, lapply(1:length(results$indices), function(i) {
-#   indices <- results$indices[[i]]
-#   indices$post_iteration <- i
-#   return(indices)
-# }))
-
-# save(l_rf_boot      , file=paste0(output_path, 'list_rf_model_boot_nIter-', n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # , '_mntry-', mtry_1, '_ntree-', ntree_1
-# save(indices_list_df, file=paste0(output_path, 'list_indices_boot_nIter-' , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) #
-# save(pdp_list_df    , file=paste0(output_path, 'list_pdp-', v_pdp, '_fc_boot_nIter-'  , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) #
-
-
-# # initialise list to store RF object and the pdps
-# l_rf_boot <- list()
-# l_indices_boot <- list()
-# l_pdp_boot <- list()
-# 
-# 
-# # for(j in 1:n_iterations) { # j <- 1
-#   # print(paste0('bootstrap iteration j = ', j) )
-#   
-#   
-#   # Sample with replacement
-#   # indices_j <- sample(1:nrow(df_comb.train_i), replace = TRUE) # length(unique(indices_j))/dim(df_comb.train_i)[1]
-#   # boot_data_j <- df_comb.train_i[indices_j, ] # length(unique(indices))
-#   
-#   # rf.model_j <- randomForest( kndvi_TAC ~ . , data = boot_data_j, 
-#   #                           mtry = mtry_1, ntree = ntree_1, importance = TRUE,
-#   #                           na.action=na.omit) # superfluous: previously cleaned NAs manually
-#   
-#   # pp_j <- partialPlot(rf.model_j, boot_data, 'forestcover' )
-#   l_rf_boot[[j]] <- rf.model_j
-#   l_indices_boot[[j]] <- indices_j
-#   
-#   # LATER REMOVE - this is for testing only for forestcover - in order to test if should produce pdps now or later
-#   # already create the pdps for each variable - this allows us to run on the bootstrapped data
-#   # for variables to plot:
-#   pdp_j <- partial(rf.model_j, train = boot_data_j,  pred.var = 'forestcover', pred.grid = pred_grid ) # train = df_comb.train_i
-#   l_pdp_boot[[j]] <- pdp_j
-#   
-#   f_time_update(t_start_time) # time check
-# } # end of loop over boot iteration j
-# 
-# # save the files, along with the seed in case of replication    
-# save(l_rf_boot     , file=paste0(output_path, 'list_rf_model_boot_nIter-', n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # , '_mntry-', mtry_1, '_ntree-', ntree_1
-# save(l_indices_boot, file=paste0(output_path, 'list_indices_boot_nIter-' , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # 
-# save(l_pdp_boot    , file=paste0(output_path, 'list_pdp_fc_boot_nIter-'  , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # 
-# 

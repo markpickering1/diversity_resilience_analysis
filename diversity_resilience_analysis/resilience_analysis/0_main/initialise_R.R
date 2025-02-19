@@ -4,7 +4,7 @@
 #                 Script should be sourced at the start of the R files in order to
 #                 standardise the location of the I/O area and other variables
 #                 
-# Date          : 18/05/23
+# Date          : 19/2/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -13,8 +13,6 @@ print('initialise')
 
 # # todo
 # - make the folders be created if not yet created 
-# - should it incorporate also data from an input file that sets where to find certain extensions (if supplied)
-
 
 ###################################################
 ######     INITIALISE INPUT INFO              #####
@@ -74,14 +72,10 @@ f_time_update <- function(reference_time){
 }
 
 
-# short funciton to add a string (string_2) into another string (string_1) at the final position
+# short function to add a string (string_2) into another string (string_1) at the final position
 # that a third string (e.g. a period [default]) is found
 f_inst_str_b4_expr <- function(string_item, string_insert, expr_find = "\\.") {
   # https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html
-  # If “.” matches any character, how do you match a literal “.”? You need to use an “escape” to tell the regular expression you 
-  # want to match it exactly, not use its special behaviour. Like strings, regexps use the backslash, \, to escape special behaviour. 
-  # So to match an ., you need the regexp \.. Unfortunately this creates a problem. We use strings to represent regular expressions, 
-  # and \ is also used as an escape symbol in strings. So to create the regular expression \. we need the string "\\.".
   last_period_index <- max(gregexpr(expr_find, string_item)[[1]])
   
   if (last_period_index > 0) {
@@ -92,23 +86,3 @@ f_inst_str_b4_expr <- function(string_item, string_insert, expr_find = "\\.") {
   }
 }
 
-
-
-# 
-# # dir of input data
-# root_data_input <- paste0(root_project, "data/")
-# # dir of intermediate data
-# root_data_proce <- paste0(root_project, "data_processing/version_1_preEGU/")
-# # dir of git
-# root_git <- paste0(root_project, "GIT-FOREST-RESILIENCE/FOREST-RESILIENCE/")
-# # dir of output figures
-# root_figures <- paste0(root_project, "figures/version_1_preEGU/")
-# # dir of main/master code
-# root_main <-  paste0(root_git, "code/main/")
-# 
-# # initialise working directory
-# setwd(root_project)
-# 
-# 
-# 
-# 

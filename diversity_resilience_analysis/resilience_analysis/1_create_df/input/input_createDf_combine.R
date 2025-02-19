@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code.
 #                 createDf_combine.R should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 23/05/23
+# Date          : 19/02/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -19,15 +19,10 @@
 script_output_ext <- '3_combDFselect_origDetren'           # time-series stats
 
 # input dataset containing the time-series statistic dataframes to combine
-# input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2023-05-26/') # first attempt
-# input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2023-06-28/') # post EGU presentation
-# input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2023-11-01/')   # Smith Boers metrics
-input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2023-11-09_origDetren/')   # New div metrics + SB metrics
+input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2025-02-19/')   # 
 
 # input dataset containing the static dataframes to combine
-# input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1_2023-05-23/')
-# input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1_2023-06-27/') # post EGU presentation
-input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1_2023-11-09/') # New div metrics + SB metrics
+input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1_2025-02-19/') # New div metrics + SB metrics
 
 f_name_output_comb <- 'df_all_long_base'
 
@@ -43,9 +38,6 @@ v_variables        <- c('kndvi', 't2m', 'VPD',  'ssr',  'tp' ) #; v_variables <-
 
 
 # static variables to create dataframes of a single snapshot
-# v_variables_static <- c('forestcover', 'socc30cm', 
-#                         'diversity', 
-#                         'EVI_dissimilarity', 'EVI_homogeneity', 'biomass', 'kndvi_diversity')
 v_variables_static <- c('forestcover', 'socc30cm', 
                         'KG5', 'KG16',
                         'forestarea',

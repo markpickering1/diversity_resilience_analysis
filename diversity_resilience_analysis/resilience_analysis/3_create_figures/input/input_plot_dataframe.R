@@ -3,7 +3,7 @@
 # Description   : This text script acts as a user input to plot_dataframe.R
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 this script does not contain plotting or styles themes: see initialse_figs.R
-# Date          : 5/06/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -13,26 +13,14 @@
 ###################################################
 
 # input dataset containing the combined dataframes to plot
-# date_production <- '2023-07-08_rerunTPSSR'   # updated tp/ssr '2023-11-01_altResilMetrics' # alt lambda etc resil metrics
-# input_dir <- paste0(root_data_proce, '2_ts_statistics_sv1_', date_production, '/') 
-
-# date_production <- '3_combDFselect_origDetren_2023-11-15/4_selections_16Nov/' # first dataframes new res metrics (no filtering)
-# date_production <- '4_selections_2024-01-22/'              # new div res metrics with filtering
-# date_production <- '4_selections_2024-02-21/'               # common test train split + select >40 Gedi & >200 n_ts_kndvi - not working shannon
-date_production <- '4_selections_2024-08-07_shanUpdate/'               # common test train split + select >40 Gedi & >200 n_ts_kndvi + working shannon
+date_production <- '4_selections_2025-02-19/'              
 input_dir <- paste0(root_data_proce, date_production ) 
 
 # input file
-# input_file <- 'df_all_GSonly.RData' # input_file <- 'df_all_fullAnnual.RData' # the full annual timeseries
-# input_file <- 'df_all_long_reduce_resilienceMetricComparison.RData' # the added resilience comparison metrics
-# input_file <- 'df_all_long_base.RData' # long form dataframe
-# input_file <- 'df_all_long_reduce_lt40GEDIcount.RData' # check whether <40 Gedi entries fit for purpose
-# input_file <- 'df_all_long_reduce_gt40GEDIcount.RData' # check whether >40 Gedi entries fit for purpose
-# input_file <- 'df_all_long_reduce_gt40GEDIcount_gt200kndvicount.RData' # select >40 Gedi & >200 n_ts_kndvi
 input_file <- 'df_all.RData'   # common test train split + select >40 Gedi & >200 n_ts_kndvi
 
 # set output path name - with date this will link output (variables) 
-script_output_ext <- 'combineDF_plots_newDivnewResMetrics_selections_shanUpdate'           # time-series stats     
+script_output_ext <- 'combineDF_plots_2025-02-19'           # time-series stats     
 
 #######################################
 ##### SELECTIONS ON NAS           #####
@@ -387,7 +375,6 @@ l_convex_hull_volume       <- list(    label        = convex_hull_volume_label,
 
 
 
-# # OLD limits for static metrics - diversity structural
 
 #######################################
 ##### SELECT OPTIONS TO LOOP OVER #####
@@ -455,49 +442,7 @@ l_vars    <- list(# time varying metrics
                 )
 
 
-#  END
 
-## OLD METRICS
-# skew_avg_label    <- 'Skewness'          # skew_avg
-# l_skew_avg_hist   <- c(-2.5, 2.5  )   ;   l_skew_avg_map   <- c(-0.8, 0.8  )  ; l_skew_avg_unit  <- 'average'
-# kurt_avg_label    <- 'Kurtosis'          # kurt_avg
-# l_kurt_avg_hist   <- c(-2, 2  )       ;   l_kurt_avg_map   <- c(-1, 1  )      ; l_kurt_avg_unit  <- 'average'
-# rh50_avg_label    <- 'RH50'          # rh50_avg
-# l_rh50_avg_hist   <- c(0, 20  )       ;   l_rh50_avg_map   <- c(0, 15  )      ; l_rh50_avg_unit  <- 'average [m]'
-# fhd_avg_label     <- 'Foliage height diversity'          # fhd_avg
-# l_fhd_avg_hist    <- c(0, 4  )        ;   l_fhd_avg_map   <- c(2.2, 3.2  )    ; l_fhd_avg_unit   <- 'average'
-# rh98_avg_label    <- 'RH98'          # rh98_avg
-# l_rh98_avg_hist   <- c(0, 1  )        ;   l_rh98_avg_map   <- c(0.1, 0.4  )   ; l_rh98_avg_unit  <- 'average'
-# skew_cv_label    <- 'Skewness'          # skew_cv
-# l_skew_cv_hist   <- c(-5, 5  )        ;   l_skew_cv_map   <- c(-2.5, 2.5  )   ; l_skew_cv_unit  <- 'C.V.'
-# kurt_cv_label    <- 'Kurtosis'          # kurt_cv
-# l_kurt_cv_hist   <- c(-4,4  )         ;   l_kurt_cv_map   <- c(-3,1  )        ; l_kurt_cv_unit  <- 'C.V.'
-# rh50_cv_label    <- 'RH50'              # rh50_cv
-# l_rh50_cv_hist   <- c(0, 2  )         ;   l_rh50_cv_map   <- c(0, 1       )   ; l_rh50_cv_unit  <- 'C.V.'
-# fhd_cv_label     <- 'Foliage height diversity'          # fhd_cv
-# l_fhd_cv_hist    <- c(0, 0.4  )       ;   l_fhd_cv_map    <- c(0.5, 0.15  )   ; l_fhd_cv_unit   <- 'C.V.'
-
-#######################################
-##### ORGANISE LIMITS DICTS       #####
-#######################################
-
-# OLD - CV diversity metrics
-# l_skew_cv  <- list(    label        = skew_cv_label,
-#                        diversity_structural_skew_cv      = list(l_skew_cv_hist,   l_skew_cv_map, l_skew_cv_unit)  )
-# l_kurt_cv  <- list(    label        = kurt_cv_label,
-#                        diversity_structural_kurt_cv      = list(l_kurt_cv_hist,   l_kurt_cv_map, l_kurt_cv_unit)  )
-# l_rh50_cv  <- list(    label        = rh50_cv_label,
-#                        diversity_structural_rh50_cv      = list(l_rh50_cv_hist,   l_rh50_cv_map, l_rh50_cv_unit)  )
-# l_fhd_cv   <- list(    label        = fhd_cv_label,
-#                        diversity_structural_fhd_cv       = list(l_fhd_cv_hist,   l_fhd_cv_map, l_fhd_cv_unit)  )
-
-
-
-# prev diversity metrics
-# 'diversity_structural_skew_avg' = l_skew_avg, 'diversity_structural_kurt_avg' = l_kurt_avg, 'diversity_structural_fhd_avg' = l_fhd_avg,
-# 'diversity_structural_rh50_avg' = l_rh50_avg, 'diversity_structural_rh98_avg' = l_rh98_avg,
-# 'diversity_structural_skew_cv'  = l_skew_cv,  'diversity_structural_kurt_cv'  = l_kurt_cv,  
-# 'diversity_structural_rh50_cv'  = l_rh50_cv,  'diversity_structural_fhd_cv'   = l_fhd_cv   )
 
 
 l_vars_cor <- c(
@@ -527,15 +472,3 @@ l_vars_cor <- c(
 
 
 )
-
-# ,"kndvi_SD"        
-# "topology_elevation_mean"  , "topology_slope_mean"   ,   "topology_slope_std"       , 
-# "kndvi_n"                , "kndvi_n_ts_entries" , "kndvi_slope_kappa"         ,"kndvi_slope_xt"          ,  "kndvi_lambda_kappa"        ,
-# "kndvi_sigma_kappa"     ,   "kndvi_sigma_xt"           , "kndvi_lt_var"           ,    "kndvi_rob_slope_kappa"   , 
-# "kndvi_rob_slope_xt"    ,   "kndvi_rob_lambda_kappa"   , "kndvi_rob_lambda_xt"    ,   "kndvi_rob_sigma_kappa"    , "kndvi_rob_sigma_xt"      , 
-# "kndvi_rob_lt_var"      ,   "kndvi_rob_lambda_variance", "kndvi_VAR_resid"        ,   "kndvi_SD_resid"    ,
-# "t2m_n"                   , "t2m_SD"                   ,"VPD_n"                   , "tp_n"                    , 
-# "VPD_SD"                   ,"ssr_n"                   ,  "KG5"                      , "KG16"      
-# "ssr_SD"                   , "tp_SD"                    ,
-# "mu_skew_negativevalues",   "mu_kurt_negativevalues"   , "mu_sd_negativevalues"   ,   "mu_cv_negativevalues"     , 
-# , "rao_quadratic_entropy"  ,   "euclidean_distances_mean" 

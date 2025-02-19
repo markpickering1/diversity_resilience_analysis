@@ -131,9 +131,7 @@ save(df_importance    , file=paste0(output_path, 'df_importance_boot_all.RData' 
 ###################################################
 ####### CREATE IMPORTANCE BOOT SUMMARY   ##########
 ###################################################
-# load( file=paste0('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCommonTestTrain_2024-07-02_importance_boot/type1_noScale/'  , 'df_importance_boot_all.RData' )    ) #
-# load( file=paste0('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCommonTestTrain_2024-07-02_importance_boot/type1_withScale/', 'df_importance_boot_all.RData' )    ) # 
-load( file=paste0('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCTT_shanUpdate_kurtInvert_2024-09-17_importance_boot/', 'df_importance_boot_all.RData' )    ) #   # this is the version we used in paper
+load( file=paste0('figures/plotRF_newDiv_2025-02-19/', 'df_importance_boot_all.RData' )    ) #   # this is the version we used in paper
 
 #### Take summary statistics 
 
@@ -220,10 +218,6 @@ for (i in 1:length(v_optional_predictors)){ # i <- 1
   } # end loop over  v_target
 } # end loop over div_metric
 
-
-      
-
-      
 
 df_importance$div_metric <- as.factor(df_importance$div_metric)
 df_importance$res_metric <- as.factor(df_importance$res_metric)

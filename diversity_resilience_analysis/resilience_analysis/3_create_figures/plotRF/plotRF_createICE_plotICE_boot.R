@@ -8,7 +8,7 @@
 # Outputs	      : figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 29/11/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -27,9 +27,7 @@ script_subtitle <- 'createICE'
 source('3_create_figures/functions/f_plotRF_initialise.R')
 
 # location of iterations to loop over
-f_ice_input <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCTT_shanUpdate_kurtInvert_2024-11-13_createICE/iter_shannon_xt/'
-# join the forest area file as I forgot...
-file_to_add     <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/data_processing/version_3_Aug23/2023-11-08_alignment/1_inputDataframes_sv1_2023-11-09/df_forestpixelcount_baseVar_full.RData'
+f_ice_input <- 'figures/plotRF_newDiv_2025-02-19'
 load(file_to_add) # ; summary(df_var) ; dim(df_var)
 df_var[1:2] <- df_var[1:2] %>% round( digits = 3) # this only works for 0.05deg check rounding
 # iterate [20] over the different rfs produced for each seed to create the ICE (for now run on one seed 98)

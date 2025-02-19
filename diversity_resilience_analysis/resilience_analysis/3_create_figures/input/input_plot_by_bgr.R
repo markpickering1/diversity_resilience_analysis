@@ -3,7 +3,7 @@
 # Description   : This text script acts as a user input to all the scripts working by bgr
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 this script does not contain plotting or styles themes: see initialse_figs.R
-# Date          : 13/11/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -13,33 +13,19 @@
 ###################################################
 
 # set output path name - with date this will link output (variables) to next script
-# script_output_ext <- 'combineDF_plots_explore_ice_pdp_coarse'         # old name     
 script_output_ext <- 'combineDF_plots_by_bgr'                           # new name
 
 # input dataset containing the dataframes used for training the rf models and the respective rf models
-# date_production_rf <- 'parallelDiv_metrics_2023-11-23' # before trimming gedi points
-# date_production_rf <- 'parallelDiv_metrics_2024-01-23' # after trimming gedi points
-# date_production_rf <- 'bootDiv_metrics_2024-02-02_preCommonTestTrainSplit'      # bootstrapped rf models
-# date_production_rf <- 'bootDiv_metrics_preselectTestTrain_2024-02-23' # bootstrapped rf models with same train test for all
-date_production_rf <- 'bootDiv_metrics_preselectTestTrain_2024-03-03_noXYTS' # bootstrapped rf models with same train test for all corrected for x and y in the training df
-# date_production_rf <- 'bootDiv_metrics_preselectTestTrain_2024-03-20_TACgt003' # non bootstrapped rf with filter on TAC to test for dip
-# input_dir_rf <- paste0(root_data_proce, 'createRF_', date_production_rf, '/')
-input_dir_rf <- paste0('/eos/jeodpp/data/projects/FOREST-RESILIENCE/data_processing/version_3_Aug23/2023-11-08_alignment/', 'createRF_', date_production_rf, '/') # for the bs rf models
+date_production_rf <- 'bootDiv_metrics_2025-02-19' # bootstrapped rf models with same train test for all corrected for x and y in the training df
+input_dir_rf <- paste0('data_processing/', 'createRF_', date_production_rf, '/') # for the bs rf models
 
 # input file used to retrieve x,y if necessary
-# date_production <- '3_combDFselect_origDetren_2023-11-15' # new div res metrics
-# input_dir <- paste0(root_data_proce, date_production, '/') 
-# input_file <- 'old/df_all_long_base.RData'
-
 # input file containing the BGR
-input_dir_bgr <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/data/ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/'
-# input_file_bgr <- 'df_bgr_baseVar_full.RData'           #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) separated
+input_dir_bgr <- 'data/ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/'
 input_file_bgr <- 'df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
 
 # input datasets contatining the pdp by bgr
-# input_dir_pdp_by_bgr <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment_agata/combineDF_plots_explore_ice_coarse_2023-12-04/'
-# input_dir_pdp_by_bgr <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment_agata/combineDF_plots_explore_ice_coarse_p1.5t2m_2024-01-16/'
-input_dir_pdp_by_bgr <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment_agata/combineDF_plots_explore_ice_coarse_2024-01-17/'  
+input_dir_pdp_by_bgr <- 'figures/combineDF_plots_explore_ice_coarse_2025-02-19/'  
 
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####

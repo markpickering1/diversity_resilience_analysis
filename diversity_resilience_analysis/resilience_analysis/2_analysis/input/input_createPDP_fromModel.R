@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 This file should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 4/09/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -21,21 +21,12 @@
 # here is info for the no diversity dataset
 
 # the main directory used
-# input_dir <- 'createRF_2023-08-24_noDiv_bootstrap/' # this is the header folder that a di
-# input_dir <- 'createRF_bootDiv_metrics_2024-02-02_working/'
-# input_dir <- 'createRF_bootDiv_metrics_preselectTestTrain_2024-02-25/'
-# input_dir <- 'createRF_bootDiv_metrics_preselectTestTrain_2024-03-03/'
-# input_dir <- 'createRF_bootDiv_metrics_preselectTestTrain_2024-03-06/'
-input_dir <- 'createRF_bootDiv_metrics_preselectTestTrain_shanUpdate_2024-08-07/'
-# input_dir <- 'createRF_bootDiv_metrics_preselectTestTrain_shanUpdate_2024-11-12_resampleNullHyp/'   # null hypothesis test
-
-# input_dir <- 'createRF_bootDiv_metrics_4_2024-02-19/'
+input_dir <- '4_selections_2025-02-19/'
 
 # list of the subdirectories
 # input_subdir           <- c('createRF_2023-08-24_101/',  'createRF_2023-08-24_102/',  'createRF_2023-08-24_103/', 'createRF_2023-08-26_104_parallel/')
 input_subdir           <- c('','','','','')
 # list of the seeds used in each subdir production (should correspond to the dir order)
-# l_seed                 <- c(101,102,103,104)
 l_seed                 <- c(98,99,100,101,102)
 # list of the niterations used in each subdir productions (should correspond to the dir order)
 l_iter                 <- c(20,20,20,20,20)
@@ -45,24 +36,6 @@ f_results_name <- 'list_rf_model_boot'                        # this is the earl
 f_results_name_2 <- 'list_rf_model_pdp_results_boot_parallel' # used for the ones over diversity metrics
 
 
-# here is info for the diversity dataset
-
-# # the main directory used
-# # input_dir <- 'createRF_2023-08-26_diversity_kurtShanSimpSkew/' # this is the header folder that a di
-# input_dir <- 'createRF_2023-08-28_diversity_fhdRH/'
-# # list of the subdirectories
-# # input_subdir           <- c('createRF_2023-08-28/',  'createRF_2023-08-29/',  'createRF_2023-08-30/')
-# input_subdir           <- c('createRF_2023-09-04/', 'createRF_2023-09-06/')
-# # list of the seeds used in each subdir production (should correspond to the dir order)
-# # l_seed                 <- c(101,102,103)
-# l_seed                 <- c(103,102)
-# # list of the niterations used in each subdir productions (should correspond to the dir order)
-# # l_iter                 <- c(8,16,16)
-# l_iter                 <- c(16,16)
-# 
-# # prefix of name of results object to load
-# f_results_name <- 'list_rf_model_pdp_results_boot_parallel'     # this is the earliest produced results ones
-# f_results_name_2 <- 'list_rf_model_pdp_results_boot_parallel' # used for the ones over diversity metrics
 
 
 #####################################################

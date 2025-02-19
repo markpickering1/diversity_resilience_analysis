@@ -4,7 +4,7 @@
 #                 
 #                 
 #                 Themes
-# Date          : 9/07/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -34,31 +34,6 @@ f_plotRF_load_RFDF <- function(df_in, s_train_test_all = s_use_pdp_dataset){
   return( df_out )
 }
 
-# remove the below when happy all fine
-# # load rf model
-# load( paste0(input_dir, 'rf_model_div-',var_name_i, '_targ-', target_name_k, '_seed-102.RData' ) ) # rf.model load the rf model for each div variable
-# # load dataframes of variables containing test/train split
-# # load df containing all test train data
-# load( paste0(input_dir, 'df_all_div-',var_name_i, '_targ-', target_name_k, '.RData') )        # df_comb_i      head(df_comb_i)
-# # # initialise train/test df
-# df_comb.train_i <- subset(df_comb_i, train_sample == T) # head(df_comb.train_i)
-# df_comb.test_i  <- subset(df_comb_i, train_sample == F) # head(df_comb.test_i)
-# 
-# # create the pdps using the training testing or all data
-# if(s_use_pdp_dataset == 'train') df_pdp <-  df_comb.train_i[complete.cases(df_comb.train_i), ]
-# if(s_use_pdp_dataset == 'test')  df_pdp <-  df_comb.test_i[complete.cases(df_comb.test_i), ]
-# if(s_use_pdp_dataset == 'all')   df_pdp <-  df_comb_i[complete.cases(df_comb_i), ]
-
-# f_plotRF_load_RFDF <- function(var_name_i){ 
-#   # load df containing all test train data
-#   load( paste0(input_dir, 'df_all_div-',var_name_i, '.RData') )        # df_comb_i      head(df_comb_i)
-#   
-#   # # initialise train/test df
-#   df_comb.train_i <- subset(df_comb_i, train_sample == T) # head(df_comb.train_i)
-#   df_comb.test_i  <- subset(df_comb_i, train_sample == F) # head(df_comb.test_i)
-#   
-#   return( c(df_comb_i, df_comb.train_i, df_comb.test_i))
-# }
 
 
 ###################################################
@@ -320,97 +295,6 @@ f_plot_partial_overlay <- function(df_pdp, var_name_x, var_name_y,
   return(g_pdp)
 }
 
-# # this function tries to create a common plotting format for partial dependence plots which can be matched with a 
-# # histogram underneath. 
-# # input a df containing pdp vals of format x-col
-# f_plot_partial <- function(df_pdp, var_name_x, var_name_y, 
-#                            lims_x = lims_in, lims_y = y_lims_pdp, 
-#                            var_label_x = NA, var_label_y = NA,
-#                            add_hist_under = F, add_error_band_even = F, add_error_band_uneven = F, # add error bands or histogram
-#                            var_name_se = 'NA'){
-#   
-#   # rename the axes if required
-#   if(is.na(var_label_x)) var_label_x <- var_name_x
-#   if(is.na(var_label_y)) var_label_y <- var_name_y
-#   
-#   g_pdp <- ggplot( df_pdp , aes( !!sym(var_name_x), !!sym(var_name_y) ) ) + # replace aes_string with !!
-#   # g_pdp <- ggplot( df_pdp , aes_string(var_name_x, var_name_y) ) + #, color = variable)) + group_color = 'black',   # Draw ggplot2 plot with one axis
-#     geom_line( linewidth = 1) + # add line of mean
-#     ylab(var_label_y) + # "TAC"
-#     # basic_graph_theme +
-#     scale_y_continuous(limits = lims_y , labels = fixed_width_labels(12)) 
-#   # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm")) # y_axis_space <- unit(2, "cm")
-#   
-#   
-#   
-#   # set x-axis scale or leave to default
-#   if(length(lims_x) ==2){ g_pdp <- g_pdp +   scale_x_continuous(limits = lims_x  ) }
-#   
-#   # if we add a histogram underneath, we want to remove the x_axis label and ticks
-#   if(add_hist_under) {
-#     g_pdp <- g_pdp + xlab("") +  theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) 
-#   } else{
-#     g_pdp <- g_pdp + basic_graph_theme +     
-#       xlab(var_label_x)}
-#   # add an even band of error vals(e.g. from standard error)
-#   if(add_error_band_even) {
-#     g_pdp <- g_pdp + geom_ribbon( aes(ymin = ( !!(sym(var_name_y)) - !!(sym(var_name_se) ) ), 
-#                                       ymax = ( !!(sym(var_name_y)) + !!(sym(var_name_se) ) ) ), alpha=0.2)  # add uncertainty band
-#   }
-#   # add a uneven band of uncertainty (e.g. confidence interval)
-#   if(add_error_band_uneven) {
-#     g_pdp <- g_pdp + geom_ribbon( aes(ymin = (  !!(sym( paste0( var_name_se, 'lower' )  ) ) ), 
-#                                       ymax = (  !!(sym( paste0( var_name_se, 'upper' )  ) ) ) ), alpha=0.2)  # add uncertainty band
-#   }
-#   return(g_pdp)
-# }
-# 
-# 
-# 
-# 
-# 
-# # this function overlays a number of different pdps onto the same figure
-# # input a df containing pdp vals of format x-col
-# f_plot_partial_overlay <- function(df_pdp, var_name_x, var_name_y, 
-#                                    overlay_column = 'index', color_column = NA, 
-#                            lims_x = lims_in, lims_y = y_lims_pdp, 
-#                            var_label_x = NA, var_label_y = NA,
-#                            line_width = 0.05, 
-#                            add_hist_under = F){
-#   
-#   # rename the axes if required
-#   if(is.na(var_label_x)) var_label_x <- var_name_x
-#   if(is.na(var_label_y)) var_label_y <- var_name_y
-#   
-#   g_pdp <- ggplot( df_pdp , aes( x =!!sym(var_name_x), y = !!sym(var_name_y), group = !!sym(overlay_column)  ) ) + # replace aes_string with !!
-#   # g_pdp <- ggplot( df_pdp , aes( x =!!sym(var_name_x), y = !!sym(var_name_y), group = !!sym(overlay_column),  color = !!sym(color_column)  ) ) + # replace aes_string with !!
-#     # g_pdp <- ggplot( df_pdp , aes_string(var_name_x, var_name_y) ) + #, color = variable)) + group_color = 'black',   # Draw ggplot2 plot with one axis
-#     geom_line( linewidth = line_width) + # add line of mean
-#     # geom_line() 
-#     ylab(var_label_y) + # "TAC"
-#     # basic_graph_theme +
-#     scale_y_continuous(limits = lims_y , labels = fixed_width_labels(12))
-#   # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm")) # y_axis_space <- unit(2, "cm")
-#   
-#   if( ! is.na( color_column ) ){
-#     g_pdp <- g_pdp + aes( color = factor(!!sym( color_column  ) ) ) +
-#       geom_line( linewidth = line_width ) +  labs( color = color_column )
-#   }
-#   
-#   # set x-axis scale or leave to default
-#   if(length(lims_x) ==2){ g_pdp <- g_pdp +   scale_x_continuous(limits = lims_x  ) }
-#   
-#   # if we add a histogram underneath, we want to remove the x_axis label and ticks
-#   if(add_hist_under) {
-#     g_pdp <- g_pdp + xlab("") +  theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) 
-#   } else{
-#     g_pdp <- g_pdp + basic_graph_theme +     
-#       xlab(var_label_x)
-#   }
-#   
-#   return(g_pdp)
-# }
-
 
 ###################################################
 ######     2D PDP                             #####
@@ -460,12 +344,12 @@ pdp_2d_parallelDiv_function <- function( var_name_i, target_name_k) {
     print('create pdp_2d')
     pdp_2d <- partial(rf.model, train = df_pdp, pred.var = c(pdp_2d_var_j, var_name_i) )
     print('save pdp_2d')
-    save(pdp_2d, file=paste0(output_path, 'df_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+    save(pdp_2d, file=paste0(output_path, 'df_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) 
     
     # create basic partial plot
     print('create pdp_2d plot')
     g_pdp1 <- plotPartial(pdp_2d) # plot(g_pdp1)
-    save(g_pdp1, file=paste0(output_path, 'g_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.png' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+    save(g_pdp1, file=paste0(output_path, 'g_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.png' )    ) 
     # ggsave(filename = paste0(output_path, 'g_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.png' ), plot = g_pdp1, path = output_path, width = fig_width_wide, height = fig_height_wide)
     
     f_time_update(t_start_time)
@@ -569,7 +453,7 @@ f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predi
     #frac_to_build = 1)
     
     # as a temporary precaution save these blocks of ice objects
-    save(rf.ice_j, file=paste0(output_path, 'df_dice-', predictor_metric, '_targ-', target_name_k, '_iceObj_split-', j, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+    save(rf.ice_j, file=paste0(output_path, 'df_dice-', predictor_metric, '_targ-', target_name_k, '_iceObj_split-', j, '.RData' )    ) 
     print(paste0('saved ice-object block:', j))
     
     # create a derivative ice object (dice)
@@ -599,7 +483,7 @@ f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predi
     # df_rf.dice_j <- cbind(rf.dice_j$Xice, df_rf.dice_j$ice_deriv)
     
     print('save chunk')
-    save(df_rf.dice_j, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-', j, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+    save(df_rf.dice_j, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-', j, '.RData' )    ) 
     
     print('join chunk')
     # join the split dice with the other splits
@@ -610,7 +494,7 @@ f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predi
     f_time_update(t_start_time)
     
   } # end loop over deciles
-  save(df_ice_i, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-all.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+  save(df_ice_i, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-all.RData' )    ) 
   
   return(df_ice_i)
 } # close function
@@ -618,10 +502,7 @@ f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predi
 
 # simply loop over different dice objects and rbind them together
 # should not be a real function - this is a quick fix
-# input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_shannonIndex/"
-# input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_rh98/"
-# input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_kurt/"
-input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_2023-12-18_createICE/"
+input_dice <- "figures/plotRF_newDiv_2025-02-19/"
 f_run_ICE_loop<- function(input_dice  ) { #df_comb_i, rf.model,  var_name_i){ # , lims_h_i = F, lims_h_i = F
   
   # create empty df of ICE
@@ -651,66 +532,3 @@ f_run_ICE_loop<- function(input_dice  ) { #df_comb_i, rf.model,  var_name_i){ # 
   return(df_dice)
 } # close function
 
-
-# 
-# # simply loop over different ice objects - create dice objects with them... and rbind them together
-# # should not be a real function - this is a quick fix
-# # input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_shannonIndex/"
-# # input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_rh98/"
-# input_dice <- "/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_2_postEGU/2023-06-27_allVars_waitingFinalEdit/plotRF_2023-07-10_fhd_mean/"
-# f_run_ICE_loop<- function(input_dice  ) { #df_comb_i, rf.model,  var_name_i){ # , lims_h_i = F, lims_h_i = F
-#   
-#   # create empty df of ICE
-#   df_ice_i <- data.frame()
-#   
-#   # loop over the previous outputs, load and add to df of ICE
-#   for (m in 1:10){ # m <- 1 
-#     
-#     # load( paste0(input_dice, "df_dice-shannon_entropy_diceObj_split-", m, ".RData" ) )
-#     load( paste0(input_dice, "df_dice-fhd_mean_iceObj_split-", m, ".RData" ) )
-#     # print(dim(rf.ice_j)[1])
-#     
-#     # create a derivative ice object (dice)
-#     rf.dice_j <- dice(rf.ice_j)
-#     # test plot ;    plot.dice
-#     
-#     # ice sorts the order of the df so need to recombine with the input dataframe 
-#     # (match the input diversity values with the 'xj' valuse of predictor as a check)
-#     print('check column match:') ; print(summary(rf.dice_j$Xice[[var_name_i]] == rf.dice_j$xj))
-#     
-#     # now bind the dice output of the derivative at the point (local derivative)
-#     df_rf.dice_j_t <- as.data.frame(rf.dice_j$actual_deriv) #, rf.dice_j$dpdp)
-#     names(df_rf.dice_j_t) <- 'actual_deriv'
-#     if(dim(rf.dice_j$Xice)[1] == dim(df_rf.dice_j_t)[1]) {
-#       df_rf.dice_j <- cbind(rf.dice_j$Xice, df_rf.dice_j_t) }
-#     # should I add dpdp (overall derivative? It has a different length so can't bind to original df
-#     # need to confirm what exactly is this from literature but was difficult
-#     df_rf.dice_j_d <- as.data.frame(rf.dice_j$dpdp) #, rf.dice_j$dpdp) }
-#     names(df_rf.dice_j_d) <- 'dpdp'
-#     if( dim(df_rf.dice_j)[1] == dim(df_rf.dice_j_d)[1] ) { print('add dpdp')
-#       df_rf.dice_j <- cbind(df_rf.dice_j, df_rf.dice_j_d) }
-#     
-#     # df_rf.dice_j <- cbind(rf.dice_j$xj,rf.dice_j$actual_deriv) # list of changed points
-#     # df_rf.dice_j <- as.data.frame(df_rf.dice_j)
-#     # names(df_rf.dice_j)[2] <- 'ice_deriv'
-#     # df_rf.dice_j <- cbind(rf.dice_j$Xice, df_rf.dice_j$ice_deriv)
-#     
-#     
-#     save(df_rf.dice_j, file=paste0(output_path, 'df_dice-',var_name_i, '_diceObj_split-', m, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
-#     
-#     
-#     print('dice split timing complete for split : ', m)
-#     rf_end_time <- Sys.time() ; print(rf_end_time)      # initialise time
-#     rf_duration <- rf_end_time - rf_start_time ; print(rf_duration)
-#     
-#     # join the split dice with the other splits
-#     if (m == 1){df_ice_i <- df_rf.dice_j
-#     } else{df_ice_i <- rbind(df_ice_i, df_rf.dice_j)}
-#     
-#   } # end loop  
-#   
-#   print(dim(df_ice_i)[1]) # head(df_ice_i)
-#   # df_ice_i_ <- df_ice_i
-#   
-#   return(df_ice_i)
-# } # close function

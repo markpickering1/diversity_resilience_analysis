@@ -9,8 +9,8 @@
 #                 functions script and input dataset - df of combined predictors and response
 # Outputs	      : model
 # Options	      : can run cross validation on tree depth
-# Date          : 15/6/23
-# Version       : 2
+# Date          : 2025-02-19
+# Version       : 3
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : Can probably set aside this version as a legacy version. Do not need the bootstrapping as an updated parallel version does it better
 # ########################################################
@@ -161,53 +161,3 @@ print('end of script')
 # output timings
 f_time_update(t_start_time)
 
-
-
-# # Run over bootstraped iterations of the rf model
-# this is non-parallelised way of rooning the bootstrapping - not advised 
-# # if(!b_run_boot) n_iterations <- 1 # if we want to run over same RF code lines could just put this in and remove sampling
-# # note - there is an updated version that runs in parallel - this parallel version should be used preferentially
-# 
-# if(b_run_boot){
-#   # set sampling seed (do not reuse seed when combining bootstrapped rfs between R sessions)
-#   set.seed(n_setseed_boot)
-#   
-#   # LATER REMOVE - this is for testing only for forestcover - in order to test if should produce pdps now or later
-#   # set the values of the partial variable to predict on:
-#   pred_grid <- data.frame('forestcover' = seq(min(df_comb.train_i$forestcover), max(df_comb.train_i$forestcover), length.out = 100))
-#   
-#   # initialise list to store RF object and the pdps
-#   l_rf_boot <- list()
-#   l_indices_boot <- list()
-#   l_pdp_boot <- list()
-#   
-#   for(j in 1:n_iterations) { # j <- 1
-#     print(paste0('bootstrap iteration j = ', j) )
-#     
-#     # Sample with replacement
-#     indices_j <- sample(1:nrow(df_comb.train_i), replace = TRUE) # length(unique(indices_j))/dim(df_comb.train_i)[1]
-#     boot_data_j <- df_comb.train_i[indices_j, ] # length(unique(indices))
-#     
-#     rf.model_j <- randomForest( kndvi_TAC ~ . , data = boot_data_j, 
-#                                 mtry = mtry_1, ntree = ntree_1, importance = TRUE,
-#                                 na.action=na.omit) # superfluous: previously cleaned NAs manually
-#     
-#     # pp_j <- partialPlot(rf.model_j, boot_data, 'forestcover' )
-#     l_rf_boot[[j]] <- rf.model_j
-#     l_indices_boot[[j]] <- indices_j
-#     
-#     # LATER REMOVE - this is for testing only for forestcover - in order to test if should produce pdps now or later
-#     # already create the pdps for each variable - this allows us to run on the bootstrapped data
-#     # for variables to plot:
-#     pdp_j <- partial(rf.model_j, train = boot_data_j,  pred.var = 'forestcover', pred.grid = pred_grid ) # train = df_comb.train_i
-#     l_pdp_boot[[j]] <- pdp_j
-#     
-#     f_time_update(t_start_time) # time check
-#   } # end of loop over boot iteration j
-#   
-#   # save the files, along with the seed in case of replication    
-#   save(l_rf_boot     , file=paste0(output_path, 'list_rf_model_boot_nIter-', n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # , '_mntry-', mtry_1, '_ntree-', ntree_1
-#   save(l_indices_boot, file=paste0(output_path, 'list_indices_boot_nIter-' , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # 
-#   save(l_pdp_boot    , file=paste0(output_path, 'list_pdp_fc_boot_nIter-'  , n_iterations, '_div-',var_name_i, '_seed-', n_setseed_boot, '_targ-', v_target, '.RData' )    ) # 
-#   
-# } # end of bootstrapping

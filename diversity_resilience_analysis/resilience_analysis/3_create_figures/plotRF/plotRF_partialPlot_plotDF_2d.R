@@ -9,7 +9,7 @@
 #                 figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 21/12/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -34,11 +34,6 @@ library(purrr)  # if using map()
 ###### PARTIAL DEPENDENCE GROUP PLOTTING 1D   #####
 ###################################################
 
-# we have the dataframes of partial dependence 
-### Now plot the diversity figs
-# load('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_2023-11-29_partialPlot/df_rf_model_partDep_diversity_data-train.RData')
-# if(b_run_partialplot_nonDiv) pdp_plot <- df_partDep_nondiv
-# if(b_run_partialplot       ) pdp_plot <- df_partDep_div
 
 # load dataframes of variables containing test/train split
 # load df containing all test train data
@@ -79,7 +74,6 @@ if ( !exists("df_pdp_2d") || (exists("df_pdp_2d") && dim(df_pdp_2d)[1] == 0) ) {
       var_name_y <- v_optional_predictors[y] ; print(var_name_y)
 
       # Construct the filename and check if the file exists
-      # file_path <- paste0(dir_input_2d_pdps, "df_pdp_2d-", var_name_y, "-", var_name_x, ".RData")
       file_path <- paste0(dir_input_2d_pdps, "df_pdp_2d-", var_name_y, "-", var_name_x, "_targ-", target_name_k , ".RData")
       
       if( file.exists(file_path) ) {
@@ -224,28 +218,5 @@ if ( !exists("df_pdp_2d") || (exists("df_pdp_2d") && dim(df_pdp_2d)[1] == 0) ) {
 save(df_pdp_2d, file=paste0(dir_input_2d_pdps, 'df_pdp_2d-all', '_targ-', target_name_k, '.RData' )    )
 
 } # close initial if statement
-
-
-
-#######
-# ggExtra::ggMarginal(p, type = "histogram")
-# # from documentation
-# form <- stats::as.formula(    paste("yhat ~", paste(names(pdp_2d)[1L:2L], collapse = "*")  )  )
-# col.regions <- grDevices::terrain.colors() # hcl.colors(1000)
-# levelplot(
-#   form, data = pdp_2d, col.regions = col.regions)
-# 
-# # my attempt
-# p <- ggplot(pdp_2d, aes(x = var_name_x, y = var_name_y, z = yhat) ) + 
-#   # scale_fill_gradient(low = "green", high = "red") +
-#   scale_fill_viridis_c() +
-#   # scale_fill_gradientn(colors = col.regions) +
-#   scale_y_continuous(limits = lim_fhd_mean ) + # scale_y_continuous(limits = lims_y ) +
-#   # geom_point() +
-#   geom_tile() +
-#   # geom_raster() +
-#   # geom_contour() +
-#   theme_classic()
-# p
 
 

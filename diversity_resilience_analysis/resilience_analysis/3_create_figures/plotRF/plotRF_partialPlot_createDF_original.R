@@ -8,7 +8,7 @@
 #                 figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 21/12/23
+# Date          : 2025-02-19
 # Version       : 3
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -98,8 +98,7 @@ for (k in 1:length(v_target)){ # k <- 1
         pp_j[3] <- var_name_j
         pp_j[4] <- target_name_k
 
-        # save(pp_j, file=paste0(output_path, 'df_pdp_-',var_name_i, '-', var_name_j ,  '_targ-', target_name_k, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
-        
+
         if (dim(df_partDep_nondiv)[1] == 0){  df_partDep_nondiv <- pp_j  ; print('new df')
         } else{df_partDep_nondiv <- rbind(df_partDep_nondiv, pp_j)}
         
@@ -194,22 +193,12 @@ for (k in 1:length(v_target)){ # k <- 1
         
         pdp_2d <- partial(rf.model, pred.var = c(pdp_2d_var_j, var_name_i) )
         
-        save(pdp_2d, file=paste0(output_path, 'df_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+        save(pdp_2d, file=paste0(output_path, 'df_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) # 
         
         # create partial plot
         g_pdp1 <- plotPartial(pdp_2d) # plot(g_pdp1)
-        save(g_pdp1, file=paste0(output_path, 'g_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) # load(/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/rf_test_diversity/rf_test_diversity_2023-03-21_plot/df_ice_test-fhd_avg_diversity.RData)
+        save(g_pdp1, file=paste0(output_path, 'g_pdp_2d-',var_name_i, '-', pdp_2d_var_j, '_targ-', target_name_k, '.RData' )    ) # 
         f_time_update(t_start_time)
-        
-        # probably want to build a separate function for plloting by ggplot2 - can add features        
-        # # plot the histogram below
-        # # Plot instead the normalized histogram for kurtosis
-        # x_hist <- make_hist(df_comb_i,  pdp_2d_var_j, pdp_2d_var_j, lims_in)
-        #   ggplot(df_comb_i, aes_string(x = Kurtosis) ) +
-        #   geom_histogram(binwidth = 0.1) +
-        #   xlab("Kurtosis") +
-        #   ylab("Frequency")
-        
         
       } # end loop over 2d pdp vars
     } # end 2d pdp
@@ -235,35 +224,3 @@ for (k in 1:length(v_target)){ # k <- 1
 
 
 
-
-############################################################################################################################################
-############################                   END                  ########################################################################
-############################################################################################################################################
-
-
-# just in case we need to amalgamate the different  df_partDep_div created above
-# bind the different outputs and the different training/test sets
-
-input_dir <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selections_2024-01-25_partialPlot/training_data_input/'
-l_files <- c('df_rf_model_partDep_diversity_targ-kndvi_lambda_variance_data-train.RData',   'df_rf_model_partDep_diversity_targ-kndvi_TAC_data-train.RData' , 'df_rf_model_partDep_diversity_targ-kndvi_lambda_xt_data-train.RData')
-df_partDep_div_all <- data.frame()
-for(f_file in l_files){
-  print(f_file)
-  load(paste0(input_dir, f_file))
-  df_partDep_div_all <- rbind(df_partDep_div_all,  df_partDep_div)
-}
-df_partDep_div_all$test_train <- 'train'
-
-input_dir <- '/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selections_2024-01-25_partialPlot/test_data_input/'
-l_files <- c('df_rf_model_partDep_diversity_targ-kndvi_lambda_variance_data-test.RData',   'df_rf_model_partDep_diversity_targ-kndvi_TAC_data-test.RData' , 'df_rf_model_partDep_diversity_targ-kndvi_lambda_xt_data-test.RData')
-for(f_file in l_files){
-  print(f_file)
-  load(paste0(input_dir, f_file))
-  df_partDep_div$test_train <- 'test'
-  df_partDep_div_all <- rbind(df_partDep_div_all,  df_partDep_div)
-}
-df_partDep_div_all$test_train <- as.factor(df_partDep_div_all$test_train)
-summary(df_partDep_div_all)
-df_partDep_div <- df_partDep_div_all
-
-save(df_partDep_div, file=paste0(output_path, 'df_rf_model_partDep_diversity', '_data-', 'both', '.RData' )    )

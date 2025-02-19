@@ -6,7 +6,7 @@
 # Inputs	      : df_comb containing various columns of data to plot
 # Outputs	      : figures to a specified directory
 # Options	      : 
-# Date          : 5/6/23
+# Date          : 2025-02-19
 # Version       : 2 
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
@@ -171,11 +171,6 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
     
     # create the map with title var_i_full and legend title either statistic or var_i_full (if no stat) ifelse(stat_j == col_name, var_i_full, stat_j )
     # so var unit goes on the z/fill-axis, var_i_full goes as the title (which I think we don't add)
-    # g_input <- make_map(df_comb_var, col_name, var_unit , var_i_full, lims_m_i)
-    # g_input <- make_map(df_comb_var, col_name, var_i_full , var_i_full, lims_m_i, s_direction = s_direction_rr)
-    # g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, s_direction = s_direction_rr)
-    # g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12, "Blue-Red 3", rev = s_direction_rr)) # for div
-    # g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12,"Green-Brown", rev = s_direction_rr)) # for res
     g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12,"Terrain", rev = s_direction_rr)) # for res
     # g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12, "Heat", rev = s_direction_rr)) # for div
     # add stats 

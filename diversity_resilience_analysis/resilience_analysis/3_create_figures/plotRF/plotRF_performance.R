@@ -7,7 +7,7 @@
 # Outputs	      : figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 9/07/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
@@ -68,10 +68,7 @@ for (i in 1:length(v_optional_predictors)){ # i <- 2
     # ####### LOAD RF AND DF                   ##########
     # ###################################################
      
-    # # load df containing all test train data - moved to common test-train split
-    # load( paste0(input_dir, 'df_all_div-',var_name_i, '.RData') )        # df_comb_i      head(df_comb_i)
-    # df_comb.train_i <- subset(df_comb_i, train_sample == T) ; df_comb.test_i  <- subset(df_comb_i, train_sample == F) # head(df_comb.test_i)
-     
+
     # load rf model
     # load( paste0(input_dir, 'rf_model_div-',var_name_i, '.RData' ) ) # rf.model load the rf model for each div variable
     load( paste0(input_dir, 'list_rf_model_results_parallelDiv_div-',var_name_i, '_targ-', target_name_j, '.RData' ) ) # rf.model load the rf model for each div variable

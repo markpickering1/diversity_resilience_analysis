@@ -99,12 +99,6 @@ df_pdp_bgr <- df_pdp_bgr[df_pdp_bgr$BiogeoRegions2016 %in% c(1, 7, 9), ]
 
 # identify bgr classes for plots
 bgr <- c(1, 7, 9)
-# colors <- c("blue", "cyan", "red")
-# colors <- c("darkturquoise", "darkgreen", "salmon4")
-#colors <- c("#D55E00", "#009E73","#F0E442")
-#colors <- c("#753401", "#05A076","#F0E442")
-#colors <- c("#0C94EC", "#0B5843","#F0E442")
-#colors <- c("#5F5F5F", "#009E73","#F0E442")
 colors <- c("#D55E00", "#5BB99F","#F0E442")
 regions <- c("alpine", "temperate", "mediterranean")
 

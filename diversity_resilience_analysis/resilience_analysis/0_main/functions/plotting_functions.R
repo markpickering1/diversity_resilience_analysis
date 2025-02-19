@@ -4,7 +4,7 @@
 #                 
 #                 
 #                 Themes
-# Date          : 20/05/23
+# Date          : 19/02/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -27,8 +27,6 @@ make_hist <- function(df_in, stat_in, stat_in_full, lims_in){
     basic_hist_theme          +   
     theme(
       axis.title.y = element_text( vjust = 2)
-    #   axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))  # Correctly set margins
-    #   # axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))  # Correct use of margin
     #   # axis.title.y = element_text(margin = margin(r = 10, unit = "pt"))  # Increase right margin of y-axis title (more space title-number)
     #   # plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Top, right, bottom, left margins of the plot
     )
@@ -37,7 +35,6 @@ make_hist <- function(df_in, stat_in, stat_in_full, lims_in){
 
 
 # create a map of stat_in with a selected shapefile outline
-# make_map <- function(df_in, stat_in, stat_in_full, title_full , lims_in, s_direction = FALSE){
 make_map <- function(df_in, stat_in, stat_in_full, title_full , lims_in, col_palette = hcl.colors(12, "Blue-Red 3", rev = FALSE)){
     g_input <-  ggplot() +
     # geom_tile(data = df_in, aes_string(x = 'x', y = 'y', fill = stat_in)) + # add the raster data

@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 This file should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 10/7/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -17,17 +17,9 @@
 script_output_ext <- 'combineDF_plots_residuals_climate_space'           # time-series stats     
 
 # input dataset containing the dataframes used for training the rf models and the respective rf models
-# date_production <- 'sv1_2023-07-08_rerunTPSSR' # revised tp and ssr
-# date_production_rf <- '2023-07-08_mntry7_ntree500' 
-# date_production_bc <- 'sv1_2023-07-08_rerunTPSSR_fullAnnualVersion'
-# input_dir <- paste0(root_data_proce, '2_ts_statistics_', date_production, '/') 
-# input_dir_rf <- paste0(root_data_proce, 'createRF_', date_production_rf, '/')
-# input_dir_bc <-  paste0(root_data_proce, '2_ts_statistics_', date_production_bc, '/') 
-# input_file <- 'df_all_GSonly.RData' 
-# input_file_bc <- 'df_all_fullAnnual.RData'
 
-date_production_rf <- 'bootDiv_metrics_preselectTestTrain_2024-03-03_noXYTS' # bootstrapped rf models with same train test for all corrected for x and y in the training df
-input_dir_rf <- paste0('/eos/jeodpp/data/projects/FOREST-RESILIENCE/data_processing/version_3_Aug23/2023-11-08_alignment/', 'createRF_', date_production_rf, '/') # for the bs rf models
+date_production_rf <- 'bootDiv_metrics_2025-02-19' # bootstrapped rf models with same train test for all corrected for x and y in the training df
+input_dir_rf <- paste0('data_processing/', 'createRF_', date_production_rf, '/') # for the bs rf models
 
 
 #####################################################

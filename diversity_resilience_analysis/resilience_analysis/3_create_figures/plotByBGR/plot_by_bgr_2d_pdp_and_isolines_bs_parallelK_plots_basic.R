@@ -65,19 +65,8 @@ library(stringr)
 
 # output location
 # set/create output directory
-# full_date <- '2024-02-22'
-# full_date <- 'shannon_kndvi_TAC_2024-03-05'     # parallel with new rfs
-# full_date <- 'shannon_lambda_xt_2024-03-05'     # parallel with new rfs
-# full_date <- 'shannon_lambda_variance_2024-03-05'     # parallel with new rfs
-# full_date <- 'sd_rh98_kndvi_TAC_2024-03-05'     # parallel with new rfs
-# full_date <- 'sd_rh98_lambda_xt_2024-03-05'     # parallel with new rfs
-# full_date <- 'sd_rh98_lambda_variance_2024-03-05'     # parallel with new rfs
-# full_date <- 'shannon_lambda_variance_TACTgt003_2024-03-21'
-# full_date <- 'mu_kurt_kndvi_TAC_2024-03-05'     # parallel with new rfs
-full_date <- 'mu_kurt_lambda_xt_2024-03-05'     # parallel with new rfs
-# full_date <- 'mu_kurt_lambda_variance_2024-03-05'     # parallel with new rfs
-# full_date <- 'shannon_lambda_xt_2024-08-30'     # parallel with new rfs with updated shannon
-# full_date <- 'shannon_lambda_variance_2024-08-30'     # parallel with new rfs with updated shannon
+full_date <- 'mu_kurt_lambda_xt_2025-02-19'     # parallel with new rfs
+# full_date <- 'shannon_lambda_xt_2025-02-19'     # parallel with new rfs with updated shannon
 
 output_path <- paste0(root_data_figs, script_output_ext, '_2d_pdp_and_isolines_bs_parallelK_', full_date,  '/')
 # output_path_plots <- paste0(root_data_figs, script_output_ext, '_2d_pdp_and_isolines_bs_parallelK_', full_date,  '/plots_new_col/')

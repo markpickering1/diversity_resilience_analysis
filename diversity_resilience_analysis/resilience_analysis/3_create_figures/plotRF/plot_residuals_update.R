@@ -6,7 +6,7 @@
 # Aims          : plot RF kndvi TAC residuals
 # Inputs	      : dataframes and models
 # Outputs	      : plots
-# Date          : 10/7/23
+# Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
 # ########################################################

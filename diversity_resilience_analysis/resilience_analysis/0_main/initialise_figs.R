@@ -4,7 +4,7 @@
 #                 in order to run the analysis R code. Script should be sourced when 
 #                 plotting analysis figures.
 #                 Themes
-# Date          : 20/05/23
+# Date          : 19/02/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -83,44 +83,19 @@ l_diversity_metrics_list <- list(
 )
 
 ########### COLOUR SCHEMES           #############
-# agg_fact <- 1                                   # aggregation T/F and factor for visualisation purposes (speeds up visualisation but associated problems)
+# agg_fact <- 1        # aggregation T/F and factor for visualisation purposes (speeds up visualisation but associated problems)
 # color scheme for variables    diversity          red             blue           brown            yellow              green
 group.colors_Gio <- c(Diversity = "#9933ff", T2M = "#e60000",  TP = "#0000ff", SSR ="#734d26",  VPD = "#ffcc00", Other = "#00cc00")
 
 colors_resilience_metrics <- setNames(c("red", "blue", "green"), c("kndvi_lambda_variance", "kndvi_lambda_xt", "kndvi_TAC") )
 
-# colors_diversity_metrics <- setNames(c("red", "blue", "green"), c("sd_rh98", "mu_kurt", "kndvi_TAC") )
-# colors_diversity_metrics <- setNames(c("red", "blue", "green"), c("Horizontal diversity", "Vertical diversity", "Combined diversity") )
-# colors_diversity_metrics <- setNames(c("#CC0000", "#000099", "#009933"), c("FSDH", "FSDV", "FSDH+V") )
-# colors_diversity_metrics <- setNames(c("#D55E00", "#0072B2", "#009E73"), c("FSDH", "FSDV", "FSDH+V") ) # CB-safe https://davidmathlogic.com/colorblind/#%23648FFF-%23785EF0-%23DC267F-%23FE6100-%23FFB000
-# colors_diversity_metrics <- setNames(c("#D55E00", "#005F8E", "#3AC96D"), c("FSDH", "FSDV", "FSDH+V") ) # CB safe viridis (G&B - not sure orange  as from davidmath but prob safe)
 colors_diversity_metrics <- setNames(c("#E41A1C", "#377EB8", "#4DAF4A"), c("FSDH", "FSDV", "FSDH+V") ) # CB robust  palette.colors(8, "Dark 2")
-
-# hcl.colors(8,'Earth')
-#  "#A36B2B" "#B78F55" "#CBB47F" "#E1D8AB" "#D3DBC2" "#A4BFAD" "#60A69E" "#2686A0"
-# 
-#  hcl.colors(12,"Blue-Red 3" , rev = TRUE)
-#  [1] "#5F1415" "#98393A" "#C56566" "#E09696" "#F2C3C3" "#FAE9E9" "#E9ECF8" "#C2CEF0" "#94A9E0" "#5C80CC" "#2257A5" "#002F70"
-#  hcl.colors(8,"Blue-Red 3" , rev = TRUE)
-#  "#5F1415" "#B74F4F" "#E39D9D" "#F9DFDF" "#DFE5F7" "#9BAEE2" "#3C6FC4" "#002F70"
-#  hcl.colors(8,"Green-Brown", rev = TRUE )
-#  "#533600" "#9F7519" "#D7B383" "#F7E6D4" "#CCF0EB" "#5ECABE" "#009283" "#004B40"
-# hcl.colors(12,"YlGnBu" )
-# [1] "#26185F" "#003E84" "#0063A3" "#0085B2" "#009DAE" "#00B3AE" "#51C6B2" "#8BD7B8" "#B3E6C2" "#D3F2CD" "#EBFBD7" "#FCFFDD"
-#  hcl.colors(12,"viridis" )
-#  [1] "#4B0055" "#45256B" "#30437F" "#005F8E" "#007896" "#009097" "#00A691" "#00B983" "#3AC96D" "#8BD650" "#C8DF32" "#FDE333"
-# 
-#  palette.colors(8, "Set 1")
-#  [1] "#E41A1C" "#377EB8" "#4DAF4A" "#984EA3" "#FF7F00" "#FFFF33" "#A65628" "#F781BF"
-#  [1] "#000000" "#E69F00" "#56B4E9" "#009E73" "#F0E442" "#0072B2" "#D55E00" "#CC79A7" # Okabe-ito"
-#  [1] "#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3" "#A6D854" "#FFD92F" "#E5C494" "#B3B3B3"
-#  [1] "#1B9E77" "#D95F02" "#7570B3" "#E7298A" "#66A61E" "#E6AB02" "#A6761D" "#666666"
 
 ########### HISTOGRAMS ONLY #############
 n_bins <- 100
 
 ########### MAPS ONLY       #############
-# extent_europe <- c(-10.66164, 44.56369, 33.0, 71.18416 ) #full europe
+# extent_europe <- c(-10.66164, 44.56369, 33.0, 71.18416 ) # full Europe
 extent_europe <- c(-10.66164, 44.56369, 33.0, 53 ) # Europe GEDI
 
 

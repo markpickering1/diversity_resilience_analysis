@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code.
 #                 createDf_combine.R should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 16/11/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -23,8 +23,7 @@ f_name_output_comb <- 'df_all_long_reduce'
 
 
 # input dataset containing the time-series statistic dataframes to combine
-# input_dir <- '3_combDFselect_origDetren_2023-11-15'           # new div metrics & orig detrend deseason - but wrong shannon
-input_dir <- '3_combDFselect_shanUpdate_2024-08-07'           # new div metrics & orig detrend deseason
+input_dir <- '3_combDFselect_shanUpdate_2025-02-19'           #
 # set input name
 f_name_input <- 'df_all_long_base'
 

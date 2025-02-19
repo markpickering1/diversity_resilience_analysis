@@ -8,7 +8,7 @@
 #                 one df for residuals and one for actualy values
 # Outputs	      : separate and combined dfs of variables
 # Options	      : 
-# Date          : 21/5/23
+# Date          : 19/02/25
 # Version       : 3 
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
@@ -90,7 +90,7 @@ for (i in 1:length(v_variables)){ # i <- 1
   # load( paste0(input_dir, 'df_', var_i, '_deseason' ,'_full.RData'  ) ) # original
   load( paste0(input_dir, 'df_', var_i, '_deseason_full.RData'  ) ) # head(df_var) # dim(df_var)
   
-  # MP Can probably remove this or move to separate anamaly checking script
+  # MP Can probably remove this or move to separate anomaly checking script
   ### create a kndvi df with z_scores of kndvi anomalies
   ### and save it and a df of count of non-na values
   if(var_i =='kndvi' & b_stats_outliers){
@@ -122,7 +122,7 @@ for (i in 1:length(v_variables)){ # i <- 1
     names(df_var)[4] <- var_i
   }
 
-  # MP Can probably remove this or move to separate anamaly checking script
+  # MP Can probably remove this or move to separate anomaly checking script
   ### create a df with z_scores of kndvi anomalies
   ### after masking them for outliers and save it and a df of count of non-na values after masking outliers
   if(var_i =='kndvi' & b_stats_outliers){

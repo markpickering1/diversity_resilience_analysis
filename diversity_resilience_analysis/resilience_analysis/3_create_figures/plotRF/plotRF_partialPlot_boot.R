@@ -8,8 +8,8 @@
 # Outputs	      : figures for each diversity: 1) performance 2) Importance 3) dice 
 #                 summary figures: 1) partial plot of diversity 2) ranked average Importance 3) Importance of diversity metrics
 # Options	      : 
-# Date          : 12/09/23
-# Version       : 2 - updated to include other res metrics (2/2/24)
+# Date          : 2025-02-19
+# Version       : 3 - updated to include other res metrics (2/2/24)
 # Authors       : Mark Pickering & Agata Elia
 # Maintainer    : Mark Pickering 
 # Notes		      : Could extend with other metrics as well as partial plots of other variables
@@ -290,7 +290,7 @@ save(df_pdp , file=paste0(output_path, 'df_pdp_unc.RData' )    ) # the built-in 
 ###################################################
 ######  RESCALE AND PLOT DIV METRICS ON SAME FIG #####
 ###################################################
-load('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCTT_shanUpdate_kurtInvert_2024-09-24_partialPlot_boot_scaled/df_pdp_unc.RData')
+load('figures/plotRF_newDiv_2025-02-19/df_pdp_unc.RData')
 
 # load df_all
 load( paste0(input_dir_pdp_para, 'df_all.RData' ) ) # head(df_comb)
@@ -374,14 +374,11 @@ for(jj in 1:length(v_target)){ # jj <- 1
                                 line_width = 1, legend_pos = 'right', # 'none', #NA , 
                                 add_hist_under = F,
                                 add_error_band_even = F, add_error_band_uneven = T, var_name_se = 'yhat_') #, add_error_band_even = F, add_error_band_uneven = T, var_name_se = 'yhat_')  # var_name_se = 'se_yhat'
-
   g_pdp  # + scale_x_continuous(breaks = seq(0, 1, by = 0.5)) # scale_x_continuous(limits = c(0,1.1)) 
   
   ggsave(plot = g_pdp, path = output_path, 
          filename = paste0( 'g_partDep_boot_', 'targ-', target_name_jj,  '_absRR-', b_useAbs_RestRate, '_scaled-', percentile_alpha, '.png'),  
          width =  fig_width_wide*1.5, height = fig_height_wide)
-  
-  
 }
 
 
@@ -392,7 +389,7 @@ for(jj in 1:length(v_target)){ # jj <- 1
 
 # load the df of different non-bootstrapped pdps
 
-load('/eos/jeodpp/data/projects/FOREST-RESILIENCE/figures/version_3_Aug23/2023-11-08_alignment/plotRF_newDiv_selectionsCommonTestTrain_2024-03-12_partialPlot/df_rf_model_partDep_diversity_div-kurtShannonSDRH98_data-train.RData')
+load('figures/plotRF_newDiv_2025-02-19/df_rf_model_partDep_diversity_div-kurtShannonSDRH98_data-train.RData')
 summary(df_partDep_div)
 df_partDep_div <- df_partDep_div  %>% filter(  res_metric %in%  c('kndvi_lambda_xt', 'kndvi_lambda_variance') ) #  %>% filter(  !variable %in%  var_group_2 ) # exclude with !    
 
@@ -407,102 +404,5 @@ g_pdp_boot_piu_normal <- g_pdp +
 g_pdp_boot_piu_normal
 ggsave(plot = g_pdp_boot_piu_normal, path = output_path, filename = paste0( 'g_partDep_bootPlusOriginalDotted_var-', s_non_boot_div_metric , '_targ-lambda', '_absRR-', b_useAbs_RestRate, '.png'),  width =  fig_height_wide, height = fig_width_wide)
 
-###################################################
-######     PLOT RES METRICS TOGETHER          #####
-###################################################
 
 
-
-
-############################################################################################################################################
-############################                   END                  ########################################################################
-############################################################################################################################################
-# # g_pdp <- g_pdp + aes(color = metric_res)
-# g_pdp <- g_pdp + aes(color = res_metric )    + labs(color = 'Metric') 
-# g_pdp <- g_pdp + scale_color_manual(name = "lambda", values = colors_resilience_metrics)
-# # g_pdp <- g_pdp + aes(linetype = test_train)  + labs(linetype = 'Dataset') 
-# g_pdp <- g_pdp + theme(legend.position = "none") # "bottom")
-
-
-###########################
-### create the pdp dataframe from separate lists
-###########################
-
-
-# # loop over the seeds load
-# df_pdp_all <- data.frame()
-# for( i_seed in l_seeds ){
-#   # load pdp dataframe created separately
-#   # f_pdp <- paste0(input_dir_pdp_para, 
-#   #        'df_pdp_div-', div_metric_var_name, '_varPDP-', var_name_i , '.RData' )
-#   f_pdp <- paste0(input_dir_pdp_para, 
-#                   'list_rf_model_pdp_results_boot_parallel_nIter-20_div-', 
-#                   var_name_i , '_seed-',i_seed, '_targ-' , target_name_j, '.RData')
-#   if(! file.exists(f_pdp) ) {next}
-#   load( f_pdp ) # head(df_pdp_all)
-#   ###################################################
-#   ######     bind pdps together                 #####
-#   ###################################################
-#   for( nn in 1:length(results$pdp_i)){ # nn <- 1
-#     df_seed_i <- results$pdp_i[[nn]]
-#     df_seed_i$seed <- i_seed
-#     df_pdp_all <- rbind(df_pdp_all, df_seed_i)
-#   }
-#   # length(unique(df_pdp_all$mu_kurt))
-#   rm(results)
-#   }
-
-
-
-
-
-
-
-#########################################################################
-
-## Manyally creating the partial plots
-# g_pdp <- ggplot( pdp_list_mean , aes_string(var_name_i, 'mean_yhat') ) + #, color = variable)) +    # Draw ggplot2 plot with one axis
-#   geom_line( size = 1) + # add line of mean
-#   xlab("") +
-#   ylab("TAC") +
-#   scale_x_continuous(limits = lims_in  ) + 
-#   theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) +
-#   geom_ribbon( aes(ymin = (mean_yhat - se_yhat), ymax = (mean_yhat + se_yhat) ), alpha=0.2) + # add uncertainty band
-#   # basic_graph_theme +
-#   scale_y_continuous(limits = y_lims_pdp, labels = fixed_width_labels(12))
-# # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm"))    # geom_point(data = pdp_list_df, aes(Petal.Width, yhat, color = iteration ), size = 3 )
-# # g_pdp
-
-# # Plot the histogram for the x-axis
-# g_hist <- ggplot(df_comb.train_i, aes_string(x = var_name_i) ) +
-#   geom_histogram(bins = n_bins_x) +
-#   scale_x_continuous(limits = lims_in, oob=squish  ) + 
-#   xlab(var_name_i) +
-#   theme(axis.text.y = element_text(size = 8)) +
-#   ylab("Frequency") +
-#   # basic_graph_theme +
-#   scale_y_continuous(labels = fixed_width_labels(12))
-# # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm"))    # geom_point(data = pdp_list_df, aes(Petal.Width, yhat, color = iteration ), size = 3 )
-# 
-
-
-# # Plot instead the normalized histogram for Petal.Width
-# g_dens <- ggplot(df_comb.train_i, aes(x = !!sym(var_name_i), y = ..density..)) +
-#   geom_histogram(binwidth = 0.1, aes(y = ..count../max(..count..))) +
-#   scale_x_continuous(limits = lims_in, oob=squish  ) + 
-#   xlab(var_name_i) +
-#   ylab("Density")
-
-# # Plot a TAC histogram for the y-axis
-# g_yhist <- ggplot(df_comb.train_i, aes_string(x = 'kndvi_TAC') ) +
-#   geom_histogram(bins = n_bins/2) +
-#   # scale_x_continuous(limits = y_lims_pdp , oob=squish  ) + 
-#   # xlab(var_name_i) +
-#   theme(axis.text.y = element_text(size = 8)) +
-#   ylab("Frequency") +
-#   # basic_graph_theme +
-#   scale_y_continuous(labels = fixed_width_labels(12))
-# # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm"))    # geom_point(data = pdp_list_df, aes(Petal.Width, yhat, color = iteration ), size = 3 )
-
-# y-axis hist also
-# g_pdp_hist <- grid.arrange(g_pdp, g_hist, g_yhist) #ncol = 1, heights = c(3, 1)

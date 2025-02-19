@@ -4,7 +4,7 @@
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 This file should not change once initialised, except when running full separate
 #                 analysis after major changes
-# Date          : 10/7/23
+# Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -18,8 +18,8 @@ script_output_ext <- 'combineDF_plots_predictions'           # time-series stats
 
 # input dataset containing the dataframes used for training the rf models and the respective rf models
 # and a df to merge x,y
-date_production <- 'sv1_2023-07-08_rerunTPSSR' # revised tp and ssr
-date_production_rf <- '2023-07-08_mntry7_ntree500' 
+date_production <- '2025-02-19_rerunTPSSR' # revised tp and ssr
+date_production_rf <- '2025-02-19_mntry7_ntree500' 
 input_dir <- paste0(root_data_proce, '2_ts_statistics_', date_production, '/') 
 input_dir_rf <- paste0(root_data_proce, 'createRF_', date_production_rf, '/')
 input_file <- 'df_all_GSonly.RData' 
