@@ -30,6 +30,7 @@ static_variables/socc/
 
 The Nitrogen deposition data:
 https://www.emep.int/mscw/mscw_moddata.html
+static_variables/Ndep/
 
 European biogeographical regions:
 https://sdi.eea.europa.eu/catalogue/srv/eng/catalog.search#/metadata/c6d27566-e699-4d58-a132-bbe3fe01491b
