@@ -1,0 +1,29 @@
+# take a multiyear average of the sum of the wet and dry nitrogen deposition
+IN_DIR='/mnt/eos_rw/projects/FOREST-RESILIENCE/data/static_variables/Ndepo/raw_files/'
+TMP_DIR='/mnt/eos_rw/projects/FOREST-RESILIENCE/data/static_variables/Ndepo/multiyear_mean/tmp/'
+OUT_DIR='/mnt/eos_rw/projects/FOREST-RESILIENCE/data/static_variables/Ndepo/multiyear_mean/'
+
+
+START_Y=2013
+END_Y=2014
+
+# Loop over the considered years
+for YEAR in $(seq $START_Y $END_Y) ; do
+    echo $YEAR
+
+
+    # select the variables of interest
+    cdo selvar,DDEP_RDN_m2Grid,WDEP_RDN ${IN_DIR}EMEP01_rv5.3_year.${YEAR}met_${YEAR}emis_rep2024.nc ${TMP_DIR}EMEP01_rv5.3_year.${YEAR}met_${YEAR}emis_rep2024_2var.nc
+
+    #  Total deposition of reduced nitrogen (Dry+Wet RdN = DDEP_RDN_m2Grid+WDEP_RDN)
+    cdo expr,'RdN=DDEP_RDN_m2Grid+WDEP_RDN' ${TMP_DIR}EMEP01_rv5.3_year.${YEAR}met_${YEAR}emis_rep2024_2var.nc ${TMP_DIR}EMEP01_rv5.3_year_totalRdN_${YEAR}.nc
+    
+done
+
+# calculate the multi-year mean
+cdo ensmean ${TMP_DIR}EMEP01_rv5.3_year_totalRdN_*.nc ${OUT_DIR}EMEP01_rv5.3_year_totalRdN.nc
+
+# remapbil to kndvi data
+TRG_FILE='/mnt/eos_rw/projects/FOREST-RESILIENCE/data/vegetation/8day/kNDVI/kNDVI_nc_merged_rescaled10_masked_01/merged_kndvi_2003_2021_rescaled10_masked50_01.nc'
+cdo remapbil,${TRG_FILE} ${OUT_DIR}EMEP01_rv5.3_year_totalRdN_origResolution.nc ${OUT_DIR}EMEP01_rv5_3_year_totalRdN_01.nc
+#EMEP01_rv5.3_year_totalRdN.nc input.nc output.nc
