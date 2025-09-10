@@ -24,7 +24,8 @@ rm(list = ls())
 
 # set initialisation script names
 main_initialisation_file   <- '0_main/initialise_R.R'
-script_config_dir          <- '1_create_df/input/'    ;   script_config_file <- 'input_createDf_statistics.R'
+script_config_dir          <- '1_create_df/input/'    ;   
+script_config_file <- 'input_createDf_statistics.R'
 
 # initialise code setup and repo building
 source(main_initialisation_file)
@@ -43,7 +44,7 @@ library(robustbase)  # For robust regression
 ###################################################
 
 # set/create output directory
-output_path <- paste0(root_data_proce, script_output_ext, '_', full_date,  '/')
+output_path <- paste0(root_data_proce, script_output_ext,  '/')
 print(paste0('output_path is : ', output_path ))
 
 # create output if not present
@@ -67,7 +68,7 @@ df_var <- na.omit(df_var)
 
 # select all the unique timestamps to be considered in the analysis
 v_dates <-  unique(df_var$date)
-if( length(v_dates) != 874) {'Warning: check dates maybe something wrong'}
+if( length(v_dates) != 874) {'Warning: dataset not 19 years'}
 rm(df_var)
 
 ###################################################
@@ -87,11 +88,9 @@ for (i in 1:length(v_variables)){ # i <- 1
   ###################################################
   ### first run over and take statistics of the residuals time-series
   
-  # load( paste0(input_dir, 'df_', var_i, '_deseason' ,'_full.RData'  ) ) # original
   load( paste0(input_dir, 'df_', var_i, '_deseason_full.RData'  ) ) # head(df_var) # dim(df_var)
   
-  # MP Can probably remove this or move to separate anomaly checking script
-  ### create a kndvi df with z_scores of kndvi anomalies
+  ### create a kndvi df with z_scores of kndvi anomalies (for cloud cover)
   ### and save it and a df of count of non-na values
   if(var_i =='kndvi' & b_stats_outliers){
     # create a df of kndvi anomalies with z_scores 
@@ -103,10 +102,9 @@ for (i in 1:length(v_variables)){ # i <- 1
     df_count_non_na <- df_var %>% dplyr::group_by( x, y ) %>% dplyr::summarise(non_na_count = sum(!is.na(!!as.symbol(var_i))))
   }
   
-  ### can prob wrap up in function
   ### if var_i is kndvi and if outliers masking option is active, 
   ### create a df with binary index whether kndvi value is below
-  ### a defined threshold and mask kndvi accordingly
+  ### the defined threshold and mask kndvi accordingly
   if(var_i =='kndvi' & b_mask_outliers){
     # create the outliers dataframe
     df_outliers <- f_find_outliers(df_var, var_i, outlier_threshold)
@@ -122,7 +120,6 @@ for (i in 1:length(v_variables)){ # i <- 1
     names(df_var)[4] <- var_i
   }
 
-  # MP Can probably remove this or move to separate anomaly checking script
   ### create a df with z_scores of kndvi anomalies
   ### after masking them for outliers and save it and a df of count of non-na values after masking outliers
   if(var_i =='kndvi' & b_stats_outliers){
@@ -189,7 +186,7 @@ for (i in 1:length(v_variables)){ # i <- 1
     # all calculated via linear model construction
     # to each pixel (x,y combination)
     df_lm_TAC <- df_shifted %>%
-      group_by(x, y) %>%           # filter(x >1.01 & x < 1.05 & y > 41.4 & y < 41.42 ) %>% # test with single pixel
+      group_by(x, y) %>%           
       do(f_calc_lm_tac(., b_robust = F ))
     
     # count total number of values in timeseries
@@ -220,7 +217,7 @@ for (i in 1:length(v_variables)){ # i <- 1
     df_stats_tac <- full_join( df_stats_tac, df_lm_TAC_robust)
     df_stats_tac <- full_join( df_stats_tac, df_stats_var)
     
-  } #end alt TAC method for kndvi
+  } # end alt TAC method for kndvi
   
   rm(df_var)  
   
@@ -269,7 +266,6 @@ for (i in 1:length(v_variables)){ # i <- 1
       mean  = mean( !!as.symbol(var_i), na.rm = T),
       SD  = sd( !!as.symbol(var_i), na.rm = T),
       CV  = raster::cv( !!as.symbol(var_i), na.rm = T),
-      # cv_calc_var = sd_var/mu_var *100    # calculate by hand as check
     )
   # dim(df_stats) ; summary(df_stats) ; head(df_stats)  
   

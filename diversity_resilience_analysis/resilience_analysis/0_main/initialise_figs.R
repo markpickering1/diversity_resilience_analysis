@@ -70,7 +70,11 @@ l_lables_metrics <- list(
   't2m_mean'   = '2m temp mean [K]'      , 't2m_CV'   = '2m temp C.V.'  ,     't2m_TAC' = '2m temp AC1',
   'tp_mean'    = 'Precip. Mean [mm/day]' , 'tp_CV'    = 'Precip. C.V.'  ,     'tp_TAC'  = 'Precip. AC1', 
   'VPD_mean'   = 'VPD mean [kPa]'        , 'VPD_CV'   = 'VPD C.V.'      ,     'VPD_TAC' = 'VPD AC1'    ,
-  'ssr_mean'   = 'SSR mean [W/m2]'       , 'ssr_CV'   = 'SSR C.V.'      ,     'ssr_TAC' = 'SSR AC1'
+  'ssr_mean'   = 'SSR mean [W/m2]'       , 'ssr_CV'   = 'SSR C.V.'      ,     'ssr_TAC' = 'SSR AC1',
+
+  # others
+  't2m_trend'  = 'Temperature trend [°C/yr]',  # is actually per 19-years -must to convert
+  'Ndep'       = 'N deposition [mgN/m2]'       # mean 2013-2018
 )
 
 l_diversity_metrics_list <- list(
@@ -112,7 +116,7 @@ basic_fig_theme <- ggplot2::theme( # set the 'theme' various aesthetic features
   axis.text.y  = element_blank(),    # remove text on axis
   axis.ticks.x = element_blank(),   # remove tick marks for x-axis
   axis.ticks.y = element_blank(),   # remove tick marks for y-axis
-  
+
   legend.key.width = unit(legend_width, 'cm'), #change legend key width
   legend.key.size = unit(legend_size, 'cm'), #change legend key size
   legend.position = "bottom",
@@ -139,8 +143,6 @@ basic_graph_theme <- theme( # set the 'theme' various aesthetic features
   
   legend.key.width = unit(legend_width, 'cm'), #change legend key width
   legend.key.size = unit(legend_size, 'cm') #change legend key size
-  
-  
 )
 
 ########### HISTOGRAMS ONLY #############
@@ -164,7 +166,7 @@ land_shapefile_in <- sf::st_read(land_shapefile_in, quiet = TRUE)               
 # bb_shapefile <- 'data/ancillary/world_vectors/boundingBoxes/Europe_BB.shp'
 # bboxpolygon <- sf::st_read(bb_shapefile, quiet = TRUE)                         # read shapefile
 
-# alt - create bounding box manually
+# alternative - create bounding box manually
 # bb_shapefile <- as(raster::extent(-10.66164, 34.56369, 44.82037, 71.18416), "SpatialPolygons")
 bb_shapefile <- as(raster::extent(extent_europe), "SpatialPolygons")
 sp::proj4string(bb_shapefile) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"

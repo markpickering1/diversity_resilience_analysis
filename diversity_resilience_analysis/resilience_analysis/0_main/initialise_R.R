@@ -11,9 +11,6 @@
 
 print('initialise')
 
-# # todo
-# - make the folders be created if not yet created 
-
 ###################################################
 ######     INITIALISE INPUT INFO              #####
 ###################################################
@@ -71,13 +68,10 @@ f_time_update <- function(reference_time){
   print(t_duration)
 }
 
-
 # short function to add a string (string_2) into another string (string_1) at the final position
 # that a third string (e.g. a period [default]) is found
 f_inst_str_b4_expr <- function(string_item, string_insert, expr_find = "\\.") {
-  # https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html
   last_period_index <- max(gregexpr(expr_find, string_item)[[1]])
-  
   if (last_period_index > 0) {
     modified_string <- paste0( substr(string_item, 1, last_period_index - 1), string_insert, substr(string_item, last_period_index, nchar(string_item)))
     return(modified_string)

@@ -17,11 +17,11 @@
 script_output_ext <- '2_ts_statistics_sv1'           # time-series stats     
 
 # input dataset containing the dataframes to calculate stats for
-version_num <- '2025-02-19' # new div res metrics
-input_dir <- paste0(root_data_proce, '1_inputDataframes_sv1_', version_num, '/')
+# version_num <- '2025-02-19' # extra version indicator, e.g. full_date from run of the previous script
+input_dir <- paste0(root_data_proce, '1_inputDataframes_sv1', '/')
 
 # input phenology dataframe to be used in case of growing season masking
-f_phenology_df <- 'ancillary/phenology/modis_phenology_nc_masked_005_df/phenology_df.RData'   # new version post alignment fix
+f_phenology_df <- 'ancillary/phenology/modis_phenology_nc_masked_005_df/phenology_df.RData'   
 
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####
@@ -33,15 +33,15 @@ f_phenology_df <- 'ancillary/phenology/modis_phenology_nc_masked_005_df/phenolog
 # time-series variables to create dataframes containing TAC, mean, CV
 v_variables        <- c( 'kndvi',
                          't2m',
-                          'VPD',
-                         'ssr'
-                           # 'tp'
+                         'VPD',
+                         'ssr', 
+                          'tp'
                          ) 
 
 ###################################################
 ######     SET OUTLIERS THRESHOLD             #####
 ###################################################
-# set this threshold as number of std for cloud cover
+# set the threshold (std. dev) for cloud cover contamination removal
 outlier_threshold <- -2.5
 
 ###################################################
@@ -49,10 +49,10 @@ outlier_threshold <- -2.5
 ###################################################
 
 # set options to activate/deactivate outliers masking, growing season masking and detrending of time-series
-b_stats_outliers       <- F   # create df of kNDVI z-scores before and after outlier masking
+b_stats_outliers       <- F      # create df of kNDVI z-scores before and after outlier masking for cross-checking
 b_mask_outliers        <- TRUE   # remove outliers in the kNDVI above outlier_threshold
 b_mask_gs              <- TRUE   # mask the growins season
 b_detrend              <- TRUE   # de-trend the GS using a simple linear detrend
-# set option to save intermediate dataframe
+# set option to save intermediate dataframes throughout
 b_save_intermediate_df <- TRUE
 

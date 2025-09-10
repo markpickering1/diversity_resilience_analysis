@@ -16,13 +16,13 @@
 
 # set output path name - with date this will link output (variables) to next script
 # instead just place data in the ts area
-script_output_ext <- '3_combDFselect_origDetren'           # time-series stats
+script_output_ext <- '3_combDFselect'           # time-series stats
 
 # input dataset containing the time-series statistic dataframes to combine
-input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1_2025-02-19/')   # 
+input_dir_ts <- paste0(root_data_proce, '2_ts_statistics_sv1/')   # 
 
 # input dataset containing the static dataframes to combine
-input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1_2025-02-19/') # New div metrics + SB metrics
+input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1/') # New div metrics + SB metrics
 
 f_name_output_comb <- 'df_all_long_base'
 
@@ -34,21 +34,19 @@ f_name_output_comb <- 'df_all_long_base'
 # 2) static variables (to extract single value snapshot)
 
 # time-series variables to create dataframes containing TAC, mean, CV
-v_variables        <- c('kndvi', 't2m', 'VPD',  'ssr',  'tp' ) #; v_variables <- c('kndvi', 'spei','swvl1')
-
+v_variables        <- c('kndvi', 't2m', 'VPD',  'ssr',  'tp' ) 
 
 # static variables to create dataframes of a single snapshot
-v_variables_static <- c('forestcover', 'socc30cm', 
+v_variables_static <- c('forestcover', 'socc30cm', 'Ndep',
                         'KG5', 'KG16',
                         'forestarea',
                         'topology',
-                        'div_count',
-                        'div_vert',
-                        'div_horiz1', 'div_horiz2',
-                        'div_hull'    
+                        'div'
+                        # 'div_count',
+                        # 'div_vert',
+                        # 'div_horiz1', 'div_horiz2',
+                        # 'div_hull'    
                         )
-                        # 'diversity_structural') #,  # previous metric
-                        # 'diversity_EVI_dissimilarity', 'diversity_EVI_homogeneity', 'diversity_biomass', 'diversity_kndvi')
 
 # name of the forest cover label for use in masking
 forestcover_name   <- 'forestcover'

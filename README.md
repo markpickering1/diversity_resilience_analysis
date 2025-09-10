@@ -14,10 +14,14 @@ The emergent relationship is explored as an adaptation measure to preserve fores
 
 Please find within separate repositories for:
 
-## resilience_data_collection
+## resilience_data_collection/
 These scripts download and collect the publicly available data sources used in this analysis.
+For users that have already downloaded the relevant input data of:
+1) climate & vegetation timeseries, including, separately, a deseasonalised version (.nc format)
+2) other relevant static datasets (.nc, .tif or .RDATA dataframe formats)
+it is advised to skip to resilience_analysis.
 
-## resilience_analysis
+## resilience_analysis/
 This code is used for:
 1) Data harmonisation and processing (ie building common dataframes)
 2) Building the random forest model

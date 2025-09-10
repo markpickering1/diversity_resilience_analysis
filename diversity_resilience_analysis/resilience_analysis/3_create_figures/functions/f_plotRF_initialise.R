@@ -17,8 +17,6 @@
 ######     INITIALISE                         #####
 ###################################################
 
-# f_plotRF_initialise <- function(script_subtitle){ 
-  
 # set initialisation script names
 main_initialisation_file   <- '0_main/initialise_R.R'
 script_config_dir          <- '3_create_figures/input/'    ;   script_config_file <- 'input_plotRF.R'
@@ -28,9 +26,9 @@ source(main_initialisation_file)
 # initialise user inputs to script
 source( paste0( script_config_dir, script_config_file) )
 # initialise figure common formatting for code base
-source('0_main/initialise_figs.R')
+source(path_figures_init)
 # load common plotting functions
-source('0_main/functions/plotting_functions.R')
+# source('0_main/functions/plotting_functions.R')
 # load RF plotting functions
 source('3_create_figures/functions/f_plotRF.R')
 

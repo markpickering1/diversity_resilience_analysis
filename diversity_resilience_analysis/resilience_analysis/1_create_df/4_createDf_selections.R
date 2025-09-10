@@ -1,7 +1,6 @@
 # ########################################################
-# Title         : 4_createDF_combine.R
+# Title         : 4_createDf_selections.R
 # Description   : Place selections on the combined analysis dataframe
-#                 
 # Aims          : coordinated selections on datasets
 # Inputs	      : df_comb single df containing all columns and all rows (inc NAs)
 # Outputs	      : df tailored to particular analysis or plotting
@@ -45,8 +44,8 @@ if( exists( 'script_output_ext' )   ) {
   output_path <- paste0(root_data_proce, script_output_ext, '_', full_date,  '/')
   print(paste0('output_path is : ', output_path ))
 
-  # create output if not present
-  if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
+# create output if not present
+if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
     print( paste0( 'creating output dir for dataframes of analysis inputs : ', output_path ) ) }
 
 } else{
@@ -67,7 +66,7 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 # load any dataframe from list (that should contain entire timeseries)
 load( paste0(root_data_proce, input_dir, '/', f_name_input , '.RData') )
 
-# visualise
+# checks
 print(dim(df_comb)) 
 head(df_comb) ; summary(df_comb) ;  names(df_comb)
 
@@ -127,13 +126,13 @@ if(b_resComparison){
 
 # select on number of GEDI entries per pixel
 if(b_GEDI_count_filter) {
-  # Check those below cutoff - probably also not so important 
+  # Check those below cutoff
   df_comb <- df_comb %>% filter( div_count < n_GEDI_count )
   save(df_comb, file=paste0(output_path, f_name_output_comb, '_lt', n_GEDI_count, 'GEDIcount' , ".RData")) 
   # reload the dataframe for the other unrelated selections
   load( paste0(root_data_proce, input_dir, '/', f_name_input , '.RData') )
 
-  # Apply cutoff - probably also not so important 
+  # Apply cutoff 
   df_comb <- df_comb %>% filter( div_count > n_GEDI_count )
   save(df_comb, file=paste0(output_path, f_name_output_comb, '_gt', n_GEDI_count, 'GEDIcount' , ".RData"))
 }
@@ -144,7 +143,7 @@ if(b_GEDI_count_filter) {
 
 # select on number of ts entries for calculation
 if(b_kndvi_count_filter) {
-  # Check those below cutoff - probably also not so important 
+  # Check those below cutoff
   df_comb <- df_comb %>% filter( kndvi_n_ts_entries > n_kndvi_count )
   save(df_comb, file=paste0(output_path, f_name_output_comb, '_gt', n_kndvi_count, 'kndvicount' , ".RData"))
 }
@@ -192,8 +191,8 @@ if(b_consistent_dataset_andTestTrainSet) {
   
 }
 
-# test remove negative TAC values and low lambda values
-df_comb <- df_comb %>% filter(kndvi_TAC > 0.03)
-summary(df_comb$kndvi_lambda_variance)
-save(df_comb      , file=paste0(output_path, 'df_all_TACgt003.RData' )    )
+# # Check to remove negative TAC values and low lambda values
+# df_comb <- df_comb %>% filter(kndvi_TAC > 0.03)
+# summary(df_comb$kndvi_lambda_variance)
+# save(df_comb      , file=paste0(output_path, 'df_all_TACgt003.RData' )    )
 

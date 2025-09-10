@@ -26,9 +26,9 @@ script_config_dir          <- '3_create_figures/input/'    ;   script_config_fil
 # initialise code setup and repo building
 source(main_initialisation_file)
 # initialise figure common formatting for code base
-source('0_main/initialise_figs.R')
-# load common plotting functions
-source('0_main/functions/plotting_functions.R')
+source(path_figures_init)
+# # load common plotting functions
+# source('0_main/functions/plotting_functions.R')
 # initialise user inputs (config) to script
 source( paste0( script_config_dir, script_config_file) )
 

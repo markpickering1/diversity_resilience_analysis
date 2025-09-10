@@ -13,23 +13,25 @@
 ######     SET ROOT DIRECTORIES               #####
 ###################################################
 
-# analysis version info
-# this sets a version on the code used to produce the main analysis dataframes - output data/figs will be stored in subfolder of version
-# can set subdirs but do not need to add final '/'
-analysis_version <- 'version_3_Aug23/2023-11-08_alignment' # 
-
 # dir root of analysis data
-root_data         <- "forest_resilience/data/"  # local directory
+# this should be set the root name of the directory for data input/outputs
+root_data         <- "/home/forest_resilience/data/"  # local directory
+
+# analysis version info
+# this sets a version on the code used to produce the main analysis dataframes
+# output data/figs will be stored in subfolder of this version 
+analysis_version <- 'version_1' 
 
 # dir root of analysis code
 # this is manually set to code/ directory of git - currently set by default to code/
+# used to create backups of configuration setups copied to the output directories
 root_project <- paste0(getwd(), '/')
 
 ###################################################
 ######     SET INDIVIDUAL INPUT FILE DATASETS #####
 ###################################################
 # set the extensions of the individual input files of kndvi, climate etc datasets
-# datasets should be in the root_data/data directory
+# datasets must be in the previously set root_data/data directory
 
 # land shapefiles
 input_land_shapefile <- '/ancillary/world_vectors/50m_coastline/ne_50m_coastline.shp'
