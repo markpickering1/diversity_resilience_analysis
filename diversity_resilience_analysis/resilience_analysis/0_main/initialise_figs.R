@@ -46,17 +46,21 @@ fig_height_wide = 8
 ########### LABLES FOR METRICS       #############
 # set universal labels for metrics
 l_lables_metrics <- list(
-  # key div metrics
+  "Kurtosis" = 'FSDV'  ,   "Canopy_heights_sd"  = 'FSDH' ,   "Shannon"    = 'FSDH+V',         
+  "Coefficient_variation" = "CoV", "Skewness" = "Skewness",            
+  "Cover_sd" = "S.D. in Cover",  "Rao"   = 'Rao Quadratic Entropy' ,    "Hull" = "Hull Vol." ,
+  
+  # key div metrics - OLD Nomenclature - expanded vars.
   # 'sd_rh98' = 'S.D. in RH 98 [m]',    , "mu_kurt" = 'Excess kurtosis', "shannon_entropy" = 'Shannon Entropy',
   # 'sd_rh98' = 'Horizontal diversity'      , "mu_kurt" = 'Vertical diversity', "shannon_entropy" = 'Combined diversity',
-  'sd_rh98' = 'FSDH'      , "mu_kurt" = 'FSDV', "shannon_entropy" = 'FSDH+V',
+  # 'sd_rh98' = 'FSDH'      , "mu_kurt" = 'FSDV', "shannon_entropy" = 'FSDH+V',
   # diversity predictors 
-  'mu_rh50' = 'RH 50 [m]'              , 'mu_rh75' = 'RH 75 [m]'          , 'mu_rh98' = 'RH 98 [m]',
-  'sd_rh50' = 'S.D. in RH 50 [m]' , 'sd_rh75' = 'S.D. in RH 75 [m]'  , 'sd_rh98' = 'S.D. in RH 98 [m]',
-  "mu_skew" = 'Skewness'               , 
-  "simpson_index" = 'Simpson Index',
-  'mu_fhd_normal'  = 'FHD Normal'      , 'euclidean_distances_mean' = 'Euclid. Dist.',
-  'rao_quadratic_entropy' = 'Rao Quadratic Entropy',
+  # 'mu_rh50' = 'RH 50 [m]'              , 'mu_rh75' = 'RH 75 [m]'          , 'mu_rh98' = 'RH 98 [m]',
+  # 'sd_rh50' = 'S.D. in RH 50 [m]' , 'sd_rh75' = 'S.D. in RH 75 [m]', 'sd_rh98' = 'S.D. in RH 98 [m]',
+  # "mu_skew" = 'Skewness'               , 
+  # "simpson_index" = 'Simpson Index',
+  # 'mu_fhd_normal'  = 'FHD Normal'      , 'euclidean_distances_mean' = 'Euclid. Dist.',
+  # 'rao_quadratic_entropy' = 'Rao Quadratic Entropy',
   
   # Resilience metrics
   "kndvi_TAC" = 'kNDVI TAC' , 
@@ -79,11 +83,14 @@ l_lables_metrics <- list(
 
 l_diversity_metrics_list <- list(
   "no_diversity",
-  "mu_rh98"                 ,   "mu_rh50"                 , "mu_rh75"                 ,  "mu_rh25",
-  "mu_skew"                 ,   "mu_kurt"                 , "mu_sd"                   ,
-  "sd_rh98"                 ,   "sd_rh75"                 , "sd_rh50"                 ,  "sd_rh25"                  ,
-  "shannon_entropy"         ,   "simpson_index"           ,
-  "rao_quadratic_entropy"   , "euclidean_distances_mean"
+  "Coefficient_variation", "Skewness" ,            
+  "Kurtosis"  ,            "Canopy_heights_sd" ,    "Cover_sd" ,             "Shannon"     ,         
+  "Rao"       ,            "Hull"  
+  # "mu_rh98"                 ,   "mu_rh50"                 , "mu_rh75"                 ,  "mu_rh25",
+  # "mu_skew"                 ,   "mu_kurt"                 , "mu_sd"                   ,
+  # "sd_rh98"                 ,   "sd_rh75"                 , "sd_rh50"                 ,  "sd_rh25"                  ,
+  # "shannon_entropy"         ,   "simpson_index"           ,
+  # "rao_quadratic_entropy"   , "euclidean_distances_mean"
 )
 
 ########### COLOUR SCHEMES           #############
@@ -158,7 +165,7 @@ basic_hist_theme <- theme( # plot.margin = margin(0, 210, 0, 210),    # add left
 
 # Europe only 
 # load and process shapefile
-land_shapefile_in <- paste0(root_data_input, input_land_shapefile) # set shapefile path (global coastlines@50m)
+# land_shapefile_in <- paste0(root_data_input, input_land_shapefile) # set shapefile path (global coastlines@50m)
 land_shapefile_in <- sf::st_read(land_shapefile_in, quiet = TRUE)                         # read shapefile
 # summary(land_shapefile) # plot(land_shapefile)
 

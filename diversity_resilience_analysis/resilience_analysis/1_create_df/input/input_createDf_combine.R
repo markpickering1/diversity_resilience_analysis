@@ -38,10 +38,11 @@ v_variables        <- c('kndvi', 't2m', 'VPD',  'ssr',  'tp' )
 
 # static variables to create dataframes of a single snapshot
 v_variables_static <- c('forestcover', 'socc30cm', 'Ndep',
-                        'KG5', 'KG16',
-                        'forestarea',
-                        'topology',
+                        'forestpixelcount',
+                        "topology_elevation_mean",  "topology_elevation_std",
+                        "topology_slope_mean"    ,  "topology_slope_std", # 'topology',
                         'div'
+                        # previous diversity var inputs
                         # 'div_count',
                         # 'div_vert',
                         # 'div_horiz1', 'div_horiz2',

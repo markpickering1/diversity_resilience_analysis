@@ -37,21 +37,13 @@ library(caTools) # for test/training split
 ###################################################
 
 # set/create output directory
-# use set output as input of timeseries - store in same dir if we do not declare script_output_ext
 
-# set/create output directory as script_output_ext if user input
-if( exists( 'script_output_ext' )   ) {
-  output_path <- paste0(root_data_proce, script_output_ext, '_', full_date,  '/')
-  print(paste0('output_path is : ', output_path ))
+output_path <- paste0(root_data_proce, script_output_ext, '/')
+print(paste0('output_path is : ', output_path ))
 
 # create output if not present
 if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
-    print( paste0( 'creating output dir for dataframes of analysis inputs : ', output_path ) ) }
-
-} else{
-  output_path <- paste0(root_data_proce, input_dir, '/')
-  print( paste0('use existing dir for output: ', output_path ) )
-}
+  print( paste0( 'creating output dir for dataframes of analysis inputs : ', output_path ) ) }
 
 # copy configuration input variables to output for storage
 if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy config file') 
@@ -73,10 +65,10 @@ head(df_comb) ; summary(df_comb) ;  names(df_comb)
 #######################################
 ##### ADD COLUMNS FOR RES METRIC DIFF  #####
 #######################################
-# add some extra metrics for plotting
-# subtract various combinations of kndvi for comparison
-# save these separately - could show a little statistical analysis or save for the plotting
+# add some extra metrics for tests/comparison/checks - save separately
+# subtract various combinations of kndvi for comparison of metrics
 if(b_resComparison){
+  print('run kndvi metrics tests/comparisons')
   df_comb <- df_comb %>% mutate(
     # the xt slopes
     diff_TAC_slopext           = kndvi_TAC - kndvi_slope_xt,
@@ -126,6 +118,7 @@ if(b_resComparison){
 
 # select on number of GEDI entries per pixel
 if(b_GEDI_count_filter) {
+  print('Apply filter on GEDI entries/sample count per pixel')
   # Check those below cutoff
   df_comb <- df_comb %>% filter( div_count < n_GEDI_count )
   save(df_comb, file=paste0(output_path, f_name_output_comb, '_lt', n_GEDI_count, 'GEDIcount' , ".RData")) 
@@ -142,7 +135,8 @@ if(b_GEDI_count_filter) {
 #######################################  
 
 # select on number of ts entries for calculation
-if(b_kndvi_count_filter) {
+if( b_kndvi_count_filter ) {
+  print('Apply filter on number of kndvi values in per-pixel timeseries')
   # Check those below cutoff
   df_comb <- df_comb %>% filter( kndvi_n_ts_entries > n_kndvi_count )
   save(df_comb, file=paste0(output_path, f_name_output_comb, '_gt', n_kndvi_count, 'kndvicount' , ".RData"))
@@ -151,10 +145,11 @@ if(b_kndvi_count_filter) {
 
 
 #######################################
-##### SELECT CERTAIN DIV METRICS  #####
+##### SELECTS DIV METRICS, T/T    #####
 #######################################
-# we now want to only select certain diversity metrics and then remove the NAs that are not present for those
-# we also want to split the test train data so that it is common to all variables
+# To ensure a consistent comparable dataset between different models split test/train dataset 
+# Select certain diversity metrics and then remove the NAs that are not present for all cols
+# Also split the test train data so that it is common to all variables (simple random selection here)
 
 if(b_consistent_dataset_andTestTrainSet) {
   dim(df_comb) 
@@ -173,14 +168,16 @@ if(b_consistent_dataset_andTestTrainSet) {
   
   # create test train split
   set.seed(n_setseed_trainTest) ; print( paste0('train-test seed: ', n_setseed_trainTest))   # set the test/train split seed
-  # train_sample <- sample.split(df_comb[['sd_rh98']] , SplitRatio = f_train_frac)
+  
   train_sample <- sample.split(1:dim(df_comb)[1] , SplitRatio = f_train_frac)
   df_comb.train <- subset(df_comb, train_sample == TRUE)
   df_comb.test  <- subset(df_comb, train_sample == FALSE)
+  
+  # cross-checks
   # summary(df_comb.train) ; summary(df_comb.test) 
   # dim(df_comb.train) ; dim(df_comb.test) ; print(dim(df_comb.train)[1] / (dim(df_comb.test)[1] + dim(df_comb.train)[1]))
   
-  # add split data to the full dataframe
+  # add test-train split data to the full dataframe
   df_comb <- cbind(df_comb, train_sample)
 
   # save train and test set for later analysis as well as full df

@@ -40,25 +40,19 @@ library(stringr)
 # set/create output directory
 
 # set/create output directory as script_output_ext if user input
-if( exists( 'script_output_ext' ) ) {
-  output_path <- paste0(root_data_proce, script_output_ext, '/')
-  print(paste0('output_path is : ', output_path ))
+output_path <- paste0(root_data_proce, script_output_ext, '/')
+print(paste0('output_path is : ', output_path ))
 
-  # create output if not present
-  if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
-    print( paste0( 'creating output dir for dataframes of analysis inputs : ', output_path ) ) }
-  
-  # copy configuration input variables to output for storage
-  if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy config file') 
-    file.copy(from= paste0( script_config_dir, script_config_file) , to= paste0(output_path, script_config_file ), 
-              overwrite = TRUE, recursive = FALSE, copy.mode = TRUE)
-  } else{ print('could not copy config file') }
-  
-} else{
-  print( paste0('use existing timeseries dir for output: ', output_path ) )
-  output_path <- input_dir_ts
-}
+# create output if not present
+if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
+  print( paste0( 'creating output dir for dataframes of analysis inputs : ', output_path ) ) }
 
+# copy configuration input variables to output for storage
+if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy config file') 
+  file.copy(from= paste0( script_config_dir, script_config_file) , to= paste0(output_path, script_config_file ), 
+            overwrite = TRUE, recursive = FALSE, copy.mode = TRUE)
+} else{ print('could not copy config file') }
+  
 
 #######################################
 ##### COMBINE DATAFRAMES          #####
@@ -77,7 +71,7 @@ for (i in 1:length(v_variables)){
   
   # add the name  of the variable
   df_stats <- as.data.frame(df_stats)
-  colnames(df_stats)[3:length(df_stats)] <- paste0( var_i, '_',  colnames(df_stats)[3:length(df_stats)] )   
+  colnames(df_stats)[3:length(df_stats)] <- paste0( var_i, '_',  colnames(df_stats)[3:length(df_stats)])
   df_stats[1:2] <- df_stats[1:2] %>% round( digits = 3) # this only works for 0.05deg resolution check rounding
   
   # create df or join to existing dfs

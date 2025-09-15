@@ -28,3 +28,4 @@ This code is used for:
 3) Plotting and visualisation related to the performance of the RF model, cross-checking, and the interpretation of results
 
 The code is streamlined for interpretability and producing the main figures only. It therefore does not necessarily include all cross checks and testing described in the methodology or the plotting of supplementary figures.
+As the Forest Structural Diversity (FSD) dataset used in the manuscript analysis (containing the mean GEDI values of various FSD metrics) differs slightly from the publicly available one (containing a spatially complete predictive model of FSD metrics), there may be differences between the final outputs.

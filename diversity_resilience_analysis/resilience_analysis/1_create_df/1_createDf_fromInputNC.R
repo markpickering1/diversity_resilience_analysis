@@ -147,7 +147,8 @@ for (j in 1:length(v_variables_static)){
   } else{
     print(paste0('error in file type of file: ', file_i_baseVar) )
   }
-  # for certain formats of diversity metrics
+  
+  # for certain formats of diversity metrics - likely no longer necessary
   # else( file_type == 'nc' & v_variable_j == 'div_vert' ){
   #   # if file netcdf format spatial sd of vertical values
   #   # need to treat differently as contains bands of sd mean values
@@ -165,7 +166,7 @@ for (j in 1:length(v_variables_static)){
 
   # if only a single values column then match to variable name
   if( length(names(df_var)) == 3 ) { names(df_var)[3] <- v_variable_j
-  } else if( grepl('div', v_variable_j) | v_variable_j == 'forestarea'  ){
+  } else if( grepl('div', v_variable_j) | v_variable_j == 'forestpixelcount'  ){
     # for the diversity metrics don't give a prefix
     print("don't rename cols") 
   }else{ # for the rest give the column names a prefix of the variable names 

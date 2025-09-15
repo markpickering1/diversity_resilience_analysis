@@ -13,19 +13,19 @@
 ######     SET ROOT DIRECTORIES               #####
 ###################################################
 
+# dir root of analysis code
+# this is manually set to code/ directory of git - currently set by default to code/
+# used to create backups of configuration setups copied to the output directories
+root_project <- paste0(getwd(), '/')
+
 # dir root of analysis data
 # this should be set the root name of the directory for data input/outputs
-root_data         <- "/home/forest_resilience/data/"  # local directory
+root_data         <- paste0(root_project, "resilience_data_collection/"  # local directory
 
 # analysis version info
 # this sets a version on the code used to produce the main analysis dataframes
 # output data/figs will be stored in subfolder of this version 
 analysis_version <- 'version_1' 
-
-# dir root of analysis code
-# this is manually set to code/ directory of git - currently set by default to code/
-# used to create backups of configuration setups copied to the output directories
-root_project <- paste0(getwd(), '/')
 
 ###################################################
 ######     SET INDIVIDUAL INPUT FILE DATASETS #####

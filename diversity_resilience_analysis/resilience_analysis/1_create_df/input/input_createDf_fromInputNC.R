@@ -48,10 +48,12 @@ input_socc              <- 'static_variables/socc/SOCC_nc_masked_005/SOCC30cmRes
 input_Ndep              <- 'static_variables/Ndepo/multiyear_mean/EMEP01_rv5_3_year_totalRdN.nc' # Nitrogen deposition
 input_topology          <- 'static_variables/srtm/SRTM_005_nc_aligned_df/df_elevation.RDATA'  # elevation data 
 
+# calculations of forest area (not required)
 input_forestpixelcount  <- 'ancillary/area/hansenForestCoverNoLoss2000AtModisMean_mask50_005.nc'  
 
 # diversity metric variables - which may be split across several datasets
 input_biodiv            <- 'biodiversity/figshare_ESSD_paper_output/dataset/Metrics/Structural_diversity_5km.nc'
+# previous forms of diversity variable inputs
 # input_biodiv_count      <- 'biodiversity/count.nc'           # number GEDI points
 # input_biodiv_vert       <- 'biodiversity/mean_std.nc'        # diversity rhXX + mean + sd + kurt + skew
 # input_biodiv_horiz_1    <- 'biodiversity/entropy-2-3-4-7_bins05.nc' #  diversity entropies
@@ -84,6 +86,7 @@ v_variables_static  <- list(
   'forestpixelcount'  = input_forestpixelcount    ,
   'topology'    = input_topology,
   'div'         = input_biodiv
+  # previous extra diversity var inputs
   # 'div_count'   = input_biodiv_count,
   # 'div_vert'    = input_biodiv_vert,
   # 'div_horiz1'  = input_biodiv_horiz_1,

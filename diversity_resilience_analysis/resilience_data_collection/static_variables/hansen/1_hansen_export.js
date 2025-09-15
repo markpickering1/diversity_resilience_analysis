@@ -1,6 +1,6 @@
 var terra = ee.ImageCollection("MODIS/061/MOD09GA"),
-    europe = ee.FeatureCollection("users/agataelia1991/aoi/Europe_BB"),
-    modisSample = ee.Image("users/agataelia1991/Hansen/modisSample");
+    europe = ee.FeatureCollection("users/INSERT_GEE_USERNAME/aoi/Europe_BB"),
+    modisSample = ee.Image("users/INSERT_GEE_USERNAME/Hansen/modisSample");
 
 // Hansen forest cover dataset 
 var gfc = ee.Image("UMD/hansen/global_forest_change_2021_v1_9");

@@ -24,7 +24,7 @@ This is the starting point for tailoring the program to the user's local environ
 
 ### input/input_initialise_R.R
 - Acts as a user input to initialise_R.R
-- Set the path links to the the directory structure
+- User must set the path links to the local directory structure
 ### initialise_R.R
 - Sourced at the start of each program to set up the directory structure & links
 ### initialise_figs.R
@@ -84,4 +84,4 @@ The input data should consist of either of
 - Config script: sets I/O, sets filters & parameters, choose model features, treatment of removal of missing values, test/train dataset parameters
 
 
-## Detailed script descriptions: 1_create_df/
+## Detailed script descriptions: 2_analysis/

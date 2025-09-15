@@ -8,6 +8,13 @@ https://www.earthdata.nasa.gov/data/catalog/lpcloud-myd09ga-061
 https://www.earthdata.nasa.gov/data/catalog/lpcloud-mod09ga-061
 vegetation/
 
+Forest structural diversity (FSD):
+Public versions of the forest structural diversity metrics are available here:
+https://figshare.com/s/daa9b652c12beb42e518
+From the paper: https://essd.copernicus.org/preprints/essd-2024-471/
+It should be noted this public version of the dataset uses a predictive machine learning model to predict FSD across all Europe including where there are no GEDI points.
+The version used in the publication 'Enhanced structural diversity increases European forest resilience and potentially compensates for climate-driven declines' does not use the predictive model to fill in the gaps in GEDI coverage, instead using the average FSD values from the GEDI sampling.
+
 Land cover dynamics:
 https://doi.org/10.5067/MODIS/MCD12Q2.061
 /ancillary/phenology/

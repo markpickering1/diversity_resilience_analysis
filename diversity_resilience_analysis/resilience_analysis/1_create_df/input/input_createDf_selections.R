@@ -34,7 +34,7 @@ f_name_input <- 'df_all_long_base'
 # create extra resilience comparison metrics
 b_resComparison <- F
 
-# number of Gedi points 
+# filter on number of Gedi points (only if available - if using predictive dataset, then not avaialble)
 b_GEDI_count_filter <- F
 n_GEDI_count <- 40
 
@@ -58,6 +58,7 @@ v_predictors <- c( 'kndvi_mean',
                    'socc30cm', # soil carbon content
                    'Ndep',     # Nitrogen deposition
                    'forestcover',
+                   'forestarea', 
                    'topology_elevation_std', # topology metric # topology_elevation_mean topology_slope_mean topology_slope_std
                    'ssr_mean', 'ssr_CV', 'ssr_TAC',
                    't2m_mean', 't2m_CV', 't2m_TAC', 
@@ -67,7 +68,8 @@ v_predictors <- c( 'kndvi_mean',
 
 # v_optional_predictors <- c( "no_diversity")
 v_optional_predictors <- c( 
-  "Kurtosis", "Shannon", "Canopy_heights_sd"     
+  "Kurtosis", "Shannon", "Canopy_heights_sd"
+  # "Coefficient_variation", "Skewness" , "Cover_sd" , "Rao" , "Hull"  
 )
   # other alternative resilience metrics:
   # "Coefficient_variation", "Skewness"             
