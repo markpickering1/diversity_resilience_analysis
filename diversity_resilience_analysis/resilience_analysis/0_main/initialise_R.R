@@ -22,15 +22,13 @@ print('initialise')
 source('0_main/input/input_initialise_R.R')
 
 # set path of figures initialisation script
-path_figures_init <- '0_main/input/initialise_figs.R'
+path_figures_init <- '0_main/initialise_figs.R'
 
 
 ###################################################
 ######     CREATE COMMON FILE STRUCTURE       #####
 ###################################################
 
-# dir input data
-root_data_input   <- paste0(root_data, "data/")
 # create input_data if not present
 if(! dir.exists(root_data_input)) {dir.create(paste0(root_data_input),recursive=T) ; 
   print( paste0( 'creating data input dir : ', root_data_input ) ) }

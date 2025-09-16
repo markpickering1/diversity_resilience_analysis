@@ -1,7 +1,7 @@
 # resilience_data_collection
 These scripts give an overview of the data collection of the initial input data used in the analysis.
 
-The datasets can be found below, alongside the directories containing the scripts relating to them.
+The datasets can be found below, alongside the directories containing the scripts relating to them or suggested locations for the datasets within the framework.
 
 MODIS Terra & Aqua Surface Reflectance:
 https://www.earthdata.nasa.gov/data/catalog/lpcloud-myd09ga-061
@@ -41,6 +41,18 @@ static_variables/Ndep/
 
 European biogeographical regions:
 https://sdi.eea.europa.eu/catalogue/srv/eng/catalog.search#/metadata/c6d27566-e699-4d58-a132-bbe3fe01491b
+ancillary/EEA_biogeographic_regions/europe/
+
+Input shapefiles for plotting:
+https://www.naturalearthdata.com/downloads/50m-physical-vectors/50m-coastline/
+/ancillary/world_vectors/50m_coastline/
 
 main/
 Contains designed to be tailored to setup the working environment. The input data should be placed in directories and linked in the format found in each individual script.
+
+## Post-download
+Once the data is downloaded enter ../resiliance_analysis/ and ensure that the program links to the relevant datasets
+0_main/input_initialise.R and 0_main/initialise_R.R
+- Initialise/Configure the main paths (global paths) to the local input data 
+1_create_df/input/input_createDf_fromInputNC.R
+- Sets the local links to the individual input datasets (based on the global paths) for harmonisation and combination

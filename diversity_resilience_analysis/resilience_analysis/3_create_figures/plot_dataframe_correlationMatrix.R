@@ -27,8 +27,6 @@ script_config_dir          <- '3_create_figures/input/'    ;   script_config_fil
 source(main_initialisation_file)
 # initialise figure common formatting for code base
 source(path_figures_init)
-# # load common plotting functions
-# source('0_main/functions/plotting_functions.R')
 # initialise user inputs (config) to script
 source( paste0( script_config_dir, script_config_file) )
 
@@ -37,13 +35,7 @@ library(dplyr)        # use %>%
 library(reshape)      # reshaping dataframes
 # require(ggplot2)      # for plotting
 require(scales)       # for ggplot2 functions eg oob & trans
-# library(ggpubr)       # for arranging ggplots together (ggarrange)
-# library(ggExtra)      # more complex figures, marginal hists
-# library(grid)         # for making multi-gird plots and tables
-# library(gridExtra)    # for making multi-gird plots and tables
-# library(lattice)      # for making multi-gird plots and tables
 library(RColorBrewer) # colour palettes
-# library(sf)           # utilise shapefiles etc
 library(cowplot)      # for ggdraw
 
 
@@ -51,9 +43,8 @@ library(cowplot)      # for ggdraw
 ######       I/O                              #####
 ###################################################
 
-# output location
 # set/create output directory
-output_path <- paste0(root_data_figs, script_output_ext, '_', full_date,  '_corMat/')
+output_path <- paste0(root_data_figs, script_output_ext,  '/')
 print(paste0('output_path is : ', output_path ))
 # create output if not present
 if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
@@ -66,7 +57,8 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 } else{ print('could not copy config file') }
 
 # load input file
-load( paste0(input_dir, input_file  ) ) # head(df_comb)  ;  summary(df_comb) ;  dim(df_comb) ;   names(df_comb) ; 
+load( paste0(input_dir, input_file  ) ) 
+# head(df_comb)  ;  summary(df_comb) ;  dim(df_comb) ;   names(df_comb) ; 
 
 # filter all column variables for containing all entries across all other variables
 if(b_completeCases_for_fullDF) df_comb <- df_comb[complete.cases(df_comb), ]
@@ -85,21 +77,26 @@ if(filter_NA_by_variable){  print( paste0('only include points which are availab
 # only run on training data
 df_comb_cor  <- subset(df_comb, train_sample == T) ; print('using train data') 
 
+# invert diversity metrics?
+if(b_invert_mu_kurt){
+  df_comb_cor['Kurtosis'] <- -1 * df_comb_cor['Kurtosis']
+  print('invert Kurtosis')
+}
+if( b_useAbs_RestRate  ){
+  df_comb_cor['kndvi_lambda_xt'] <- -1* df_comb_cor['kndvi_lambda_xt']
+  df_comb_cor['kndvi_lambda_variance'] <- -1* df_comb_cor['kndvi_lambda_variance']
+  # l_label_res <- paste0( '|', l_lables_metrics[[target_name_k]], '|' )
+  print('invert rest rate')
+}
+
 # Subset the dataframe using these valid column names
 df_comb_cor <- df_comb_cor[, l_vars_cor]
-
-dim(df_comb_cor) ; # head(df_comb_cor)
-
 names(df_comb_cor) <- unlist(l_lables_metrics)[names(df_comb_cor)]
 
-# # Create a logical vector where TRUE indicates a column name contains any of the strings from l_vars
-# columns_to_select <- sapply(names(l_vars), function(v) {
-#   grepl(v, names(df_comb))
-# })
-# # Since the above results in a matrix, use apply to reduce to a single logical vector with any TRUE
-# columns_to_select <- apply(columns_to_select, 1, any)
-# # Subset df_comb to only include columns that have a match
-# df_comb_cor <- df_comb[, columns_to_select]
+if( b_useAbs_RestRate  ){
+  names(df_comb_cor)[names(df_comb_cor) == "Rest. Rate AC1"] <- paste0( '|Rest. Rate AC1|' )
+  names(df_comb_cor)[names(df_comb_cor) == "Rest. Rate Variance"] <- paste0( '|Rest. Rate Variance|' )
+}
 
 #######################################
 ##### CREATE CORRELATION MATRIX   #####
@@ -109,9 +106,6 @@ cor_matrix <- cor(df_comb_cor[, names(df_comb_cor)])  # assuming df_train is you
 
 melted_cor_matrix <- melt(cor_matrix)
 names(melted_cor_matrix) <- c('Var1', 'Var2', 'value')
-
-# melted_cor_matrix$Var1 <- unlist(l_lables_metrics)[as.character(melted_cor_matrix$Var1)]
-# melted_cor_matrix$Var2 <- unlist(l_lables_metrics)[as.character(melted_cor_matrix$Var2)]
 
 # reverse order
 # melted_cor_matrix <- melted_cor_matrix %>% map_df(rev)
@@ -139,7 +133,7 @@ g_cor <- ggplot(melted_cor_matrix, aes(Var1, Var2, fill = value)) +
             ) +
       coord_fixed()  # Ensure the tiles are square
 
-ggsave(plot = g_cor, filename = paste0(output_path, 'g_corMat_train_predictors_presentable.png' ) , 
-       width = 20, height = 20 ) # width = fig_width_wide, height = fig_width_wide ) # 
+ggsave(plot = g_cor, filename = paste0(output_path, 'g_corMat_train_predictors.png' ) , 
+       width = 20, height = 20 ) 
 
 

@@ -16,6 +16,11 @@ functions - Contains helper functions for processing/plotting data
 
 inputs    - Contains configuration parameters that can be varied or tuned for the plotting scripts; this includes the input/output names of files, in order to guide the program such that the main scripts do not need significant changing
 
+## Running the code
+To start the analysis from scratch, first ensure that the links match the downloaded input data (see resilience_data_collection/ or Detailed script descriptions: 1_create_df/ for the required format). These global links can be configured in 0_main/ and the local links to the datasets can be set in in  1_create_df/input/input_createDf_fromInput.R (see description below).
+The analysis is started (via the conversion of the required input data to a common format) by running 1_create_df/1_createDf_fromInput.R . Subsequent scripts are run numerically (1, 2, ...) where required.
+If the required data is already harmonised/formatted it is possible to start from one of the subsequent scripts (see detailed script descriptions below).
+
 
 ## Detailed script descriptions: 0_main/
 
@@ -35,13 +40,13 @@ This is the starting point for tailoring the program to the user's local environ
 
 ## Detailed script descriptions: 1_create_df/
 
-The aim of the scripts in this directory is to produce a harmonised dataframe of the input variables and features for the diversity-resilience model. These scripts take the input data downloaded and adjusted to a time series using the scripts in resilience_data_collection. The output of these scripts is a combined dataframe (df_comb, saved as 'df_all.RData') that covers the full time series (with a single value for each x,y, across the time series) and that has each of these input variables in the format:
+The aim of the scripts in this directory is to produce a harmonised dataframe of the input variables and features for the diversity-resilience model. These scripts take the input data downloaded and adjusted to a time series using the scripts in resilience_data_collection. The output of these scripts is a combined dataframe (df_comb, saved as 'df_all.RData') that covers the full time series (with a single value for each spatial pixel (x,y) across the time series) and that has each of these input variables in the format:
 
-      x  |   y |  area | train_sample ... other identifying/useful variables
+      x  |  y |  area | train_sample ... other identifying/useful variables
       kndvi_n | kndvi_mean | kndvi_lambda_xt | kndvi_lambda_variance | ... other kndvi timeseries related factors
       t2m_n | t2m_mean | t2m_CV | t2m_TAC | ... other ERA5 variables
       forestcover | socc30cm | Ndep | forestarea | topology_elevation_mean | ... other confounding factors
-      div_count | mu_kurt | shannon_entropy | sd_rh98 | ... other diversity metrics
+      Kurtosis | Shannon | Canopy_heigts_sd | ... other diversity metrics
 
 where:
 x/y are lon/lat coordinates ; area = pixel area ; n/count = number of entries ; mean refers to the multi-year mean ; xt/TAC refers to temporal autocorrelation ; CV refers to the coefficient of variation ; forestcover = the proportion of the pixel covered by forest ; forestarea the total forest area in a pixel ; socc30cm = soil organic carbon content in the 30cm layer ; Ndep = Nitrogen deposition.
@@ -85,3 +90,34 @@ The input data should consist of either of
 
 
 ## Detailed script descriptions: 2_analysis/
+
+The aim of these scripts is to build a model (e.g. Random Forest) that relates the resilience metric to the other model features. Different scripts are present to build a simple RF model, or to bootstrap multiple versions of the model (e.g. for uncertainty estimation). The scripts assume a dataframe, df_comb, containing, e.g.:
+
+    Identification variables, e.g.: | x | y | train_sample [test or train pixel] | 
+    Target variables, e.g.        : | kndvi_lambda_xt  | kndvi_lambda_variance   |
+    Predictor variables, e.g.     : | t2m_mean | t2m_CV | t2m_TAC | (other environmental vars)
+    Optional predictors, e.g.     : | FSDV/Kurtosis | FSDH/Canopy_heights_sd | other diversity metrics
+
+The models predict the target variables (one per model) using the predictor variables and one of the optional predictors (per model). The identification variables determine if a given pixel is part of the test or training dataset, as well as location identifiers and other information that may be of use, but does not go into the input model.
+
+### input/input_createRF_model.R 
+- This script configures the parameters of the model and selects the relevant input/target/ID variables
+### createRF_model_simple.R
+- This script creates a single RF model for each FSD metric - resilience metric combination
+- Also provides a simplified non-parallel version of the parameter tuning
+### createRF_model_boot.R
+- This script creates multiple different RF models in parallel, for each FSD metric - resilience metric combination
+- The resulting models can be bootstrapped to give the uncertainty inherent to the model (this simplified version does not consider other uncertainties, e.g. in predictors)
+
+
+## Detailed script descriptions: 3_create_figures/
+
+These scripts plot both the dataframe created in 1_createDf_fromInput.R and figures that enable the interpretation of the models created in 2_analysis/. As such they take as input either df_comb or the RF model.
+
+### plot_dataframe.R
+- This script plots & maps each of a selected number of plots from the analysis dataframe (i.e. model inputs and predicted values)
+### input/input_plot_dataframe.R
+- Configures minor plotting details, sets map/histogram limits and units on variables
+- Note: can toggle between setting |abs| values of the restoration rates and inverse of kurtosis
+- Also configures plot_dataframe_correlationMatrix.R
+### plot_dataframe_correlationMatrix.R

@@ -1,7 +1,6 @@
 # ########################################################
 # Title         : 3_createDf_combine.R
 # Description   : Combine the separate dfs of the different variables
-#                 
 # Aims          : Merge dataframes of all data and RF predictors data for each X/Y
 # Inputs	      : df_stats containing KNDVI CLIMATE (&FC) data (mu/CV/TAC) & static dataframes
 # Outputs	      : single merged df

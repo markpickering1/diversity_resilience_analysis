@@ -2,7 +2,6 @@
 # Title         : f_createRF_model.R
 # Description   : statistical functions to apply to RF modelling
 #                 
-#                 
 # Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
@@ -21,24 +20,16 @@ boot_function <- function(index) {
   boot_data <- df_comb.train_i[indices, ]
   print('run rf.model')
   
-  # old method - set metric
-  # rf.model <- randomForest( kndvi_TAC ~ . , data = boot_data, 
-  #                           mtry = mtry_1, ntree = ntree_1, importance = TRUE,
-  #                           na.action=na.omit) # superfluous: previously cleaned NAs manually
-  
-  # new method - user input resilience metric 
   # Create formula as a character string
   formula_str <- paste(target_name_j, "~ .")
   # Convert to formula object
   formula_obj <- as.formula(formula_str)
   
-  # rf.model <- randomForest(!!as.symbol(target_name_j) ~ . , data = df_comb.train,  importance = TRUE)
   rf.model <- randomForest( formula = formula_obj , data = df_comb.train_i, 
                             mtry = mtry_1, ntree = ntree_1, importance = TRUE,
                             na.action=na.omit) # previously cleaned NAs manually
   
   
-  # rf.model <- randomForest(Species ~ ., data = boot_data, ntree = 1000)
   print('completed rf.model, now partial')
   pdp_i <- partial(rf.model, pred.var = v_pdp , pred.grid = pred_grid, train = boot_data) # v_pdp
   pdp_i$para_iteration <- index
@@ -57,8 +48,8 @@ combine_function <- function(...) {
 ######     FUNCTIONS  - PARA DIV MODELS       #####
 ###################################################
 
-# Function to fit random forest and compute PDP for one diversity metric: var_name_i
-# NOTE: to add v_target - needs testing and maybe adding to function input!
+# Function to fit in parallel random forest and compute PDP for one diversity metric: var_name_i
+# not for bootstrapped models
 parallelDiv_function <- function( var_name_i) {
   
   # select only relevant predictors and the identifiers
@@ -98,26 +89,11 @@ parallelDiv_function <- function( var_name_i) {
   # select only relevant predictors without the identifiers to run in model
   df_comb.train_i <- df_comb.train_i[, v_all_vars_train]
   
-  # # Sample with replacement - DON'T DO AS IS NOT BOOSTRAP
-  # set sampling seed (do not reuse seed when combining bootstrapped rfs between R sessions)
-  # I think we don't need this as we are not bootstrapping - i.e. don't need diff seeds for results
-  # set.seed(n_setseed_boot)
-  # indices <- sample(1:nrow(df_comb.train_i), replace = TRUE)
-  # boot_data <- df_comb.train_i[indices, ]
-  # print('run rf.model')
-  
-  # old method - set metric
-  # rf.model <- randomForest( kndvi_TAC ~ . , data = boot_data, 
-  #                           mtry = mtry_1, ntree = ntree_1, importance = TRUE,
-  #                           na.action=na.omit) # superfluous: previously cleaned NAs manually
-  
-  # new method - user input resilience metric 
   # Create formula as a character string
   formula_str <- paste(target_name_j, "~ .")
   # Convert to formula object
   formula_obj <- as.formula(formula_str)
   
-  # rf.model <- randomForest(!!as.symbol(target_name_j) ~ . , data = df_comb.train,  importance = TRUE)
   rf.model <- randomForest( formula = formula_obj , data = df_comb.train_i, 
                             mtry = mtry_1, ntree = ntree_1, importance = TRUE,
                             na.action=na.omit) # previously cleaned NAs manually
@@ -126,18 +102,11 @@ parallelDiv_function <- function( var_name_i) {
   save(rf.model     , file=paste0(output_path, 'list_rf_model_results_parallelDiv_div-', var_name_i  , '_targ-', target_name_j,   '.RData' )    ) 
   
   # also return the model for combining and saving
-  # return( list( rf.model = rf.model)  ) # first version
   return( list( rf.model = rf.model, div_metric = var_name_i)  )
   
-  # # rf.model <- randomForest(Species ~ ., data = boot_data, ntree = 1000)
-  # print('completed rf.model, now partial')
-  # pdp_i <- partial(rf.model, pred.var = v_pdp , pred.grid = pred_grid, train = boot_data) # v_pdp
-  # pdp_i$para_iteration <- index
-  # print('finish boot function for iteration')
-  # return(list(rf.model = rf.model, pdp_i = pdp_i, indices = indices))
 }
 
-# Custom combine function
+# Custom combine function - for producing models in parallel
 combine_function_parallelDiv <- function(...) {
   list(rf.models = lapply(list(...), `[[`, "rf.model") )
 }

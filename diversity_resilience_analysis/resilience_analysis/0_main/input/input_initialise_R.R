@@ -22,6 +22,9 @@ root_project <- paste0(getwd(), '/')
 # this should be set the root name of the directory for data input/outputs
 root_data         <- paste0(root_project, "resilience_data_collection/"  # local directory
 
+# dir input data
+root_data_input   <- paste0(root_data, "data/")
+
 # analysis version info
 # this sets a version on the code used to produce the main analysis dataframes
 # output data/figs will be stored in subfolder of this version 
@@ -34,4 +37,4 @@ analysis_version <- 'version_1'
 # datasets must be in the previously set root_data/data directory
 
 # land shapefiles
-input_land_shapefile <- '/ancillary/world_vectors/50m_coastline/ne_50m_coastline.shp'
+input_land_shapefile <- paste0(root_data_input, '/ancillary/world_vectors/50m_coastline/ne_50m_coastline.shp')

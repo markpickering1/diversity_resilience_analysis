@@ -7,7 +7,6 @@
 # Outputs	      : figures to a specified directory
 # Options	      : 
 # Date          : 2025-02-19
-# Version       : 2 
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
 # ########################################################
@@ -27,8 +26,6 @@ script_config_dir          <- '3_create_figures/input/'    ;   script_config_fil
 source(main_initialisation_file)
 # initialise figure common formatting for code base
 source(path_figures_init)
-# # load common plotting functions
-# source('0_main/functions/plotting_functions.R')
 # initialise user inputs (config) to script
 source( paste0( script_config_dir, script_config_file) )
 
@@ -37,13 +34,7 @@ library(dplyr)        # use %>%
 # library(reshape)      # reshaping dataframes
 # require(ggplot2)      # for plotting
 require(scales)       # for ggplot2 functions eg oob & trans
-# library(ggpubr)       # for arranging ggplots together (ggarrange)
-# library(ggExtra)      # more complex figures, marginal hists
-# library(grid)         # for making multi-gird plots and tables
-# library(gridExtra)    # for making multi-gird plots and tables
-# library(lattice)      # for making multi-gird plots and tables
 library(RColorBrewer) # colour palettes
-# library(sf)           # utilise shapefiles etc
 library(cowplot)      # for ggdraw
 
 ###################################################
@@ -52,7 +43,7 @@ library(cowplot)      # for ggdraw
 
 # output location
 # set/create output directory
-output_path <- paste0(root_data_figs, script_output_ext, '_', full_date,  '/')
+output_path <- paste0(root_data_figs, script_output_ext,  '/')
 print(paste0('output_path is : ', output_path ))
 # create output if not present
 if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
@@ -81,27 +72,25 @@ if(filter_NA_by_variable){  print( paste0('only include points which are availab
 # this loops over the variables listed above and plots each of the variables as map and histogram
 print('plotting')
 
-for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
+for (i in 1:length(l_vars)){ # names(l_vars)
   var_i <- names(l_vars)[i] ; print(var_i)
   # extract variable information: 
   var_i_full <- l_vars[[var_i]][['label']] ; print(var_i_full)
   
   
-  # select only column containing relevant variables as the last characters in the column
-  df_comb_var <- df_comb %>%   dplyr::select(x, y, starts_with(paste0(var_i) ) ) # matches(paste0(var_i, "$"))) # head(df_comb_var) ; dim(df_comb_var)
+  # select only columns containing relevant variables as the last characters in the column
+  df_comb_var <- df_comb %>%   dplyr::select(x, y, starts_with(paste0(var_i) ) ) 
+  # head(df_comb_var) ; dim(df_comb_var)
 
-  # filter for each group of variables - probably unneccessary - but seems to stop overlapping points...
+  # filter for each group of variables - potentially unneccessary...
   df_comb_var <- na.omit(df_comb_var)
   
-  # df_stats <- df_stats %>% mutate(dTAC_MAvsSB = TAC - slope_xt) # quick show differences in tac methods
-  # testx_hist <- make_hist(df_stats,  'dTAC_MAvsSB', 'dTAC_MAvsSB', c(-0.005,0.005) )
-  
   # loop over the remaining columns of dataframe - run from the 3rd column (i.e. after X,Y)
-  for(j in 3:ncol(df_comb_var)){ # j <- 3 12 16 ; # names(df_comb_var)
+  for(j in 3:ncol(df_comb_var)){ # names(df_comb_var)
     # extract column name 
     col_name <- names(df_comb_var)[j] ; print(col_name) # paste0( stat_j, '_', var_i) ; 
     # separate from column name the group and the 'statistic'
-    stat_j   <- gsub( paste0(var_i, '_'), '', colnames(df_comb_var)[j] ) # ; print(stat_j) # extract only the statistic
+    stat_j   <- gsub( paste0(var_i, '_'), '', colnames(df_comb_var)[j] ) ; print(stat_j) 
     # extract the units to use in the bar legend
     var_unit <- l_vars[[var_i]][[stat_j]][[3]]
     
@@ -116,7 +105,7 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
     lims_h_i <- l_vars[[var_i]][[stat_j]][[1]] # l_all[[j]][[1]][[i]]
     # extract map [[2]] limits from input file containing format: l_vars[[var_name]][[stat_name]][[hist/map]]
     lims_m_i <- l_vars[[var_i]][[stat_j]][[2]] #  l_all[[j]][[2]][[i]]
-    s_direction_rr <- TRUE # set the direction of the color schemee legend
+    s_direction_rr <- TRUE # set the direction of the color scheme legend
     
     # extract the long name (variable + units) to use in the histogram
     long_name <- paste0(var_i_full, ' ', var_unit)
@@ -130,7 +119,7 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
       lims_h_i <- - lims_h_i[c(2, 1)]   # invert the range
       lims_m_i <- - lims_m_i[c(2, 1)]
       s_direction_rr <- TRUE              # invert the color scheme so more resilience is blue/green 
-      print('invert rest rate')
+      print('absolute rest rate')
     }       
     # invert diversity metrics?
     if(b_invert_mu_kurt & col_name== 'mu_kurt'){
@@ -140,16 +129,8 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
       var_unit <- paste0(var_unit, '_inv')
       print('invert mu_kurt')
     }
-
     
-    
-    # extract the long name for hist and map - if there are multiple stats for the same variable then add the stat to the name
-    # if(length(l_vars[[var_i]]) >2  ){
-    #   long_name <- paste0(var_i_full, ' ', stat_j)
-    # } else{long_name <- var_i_full } # ; stat_j <- long_name
-
-    
-    # if the variable has no label/limits associated with it (i.e. I can't be bothered to insert)
+    # if the variable has no label/limits associated with it in config input_file the apply default vals
     if ( is.null(var_i_full) ) {
       long_name <- col_name # set the label to the name of the column
       var_i_full <- col_name # set the label to the name of the column
@@ -163,17 +144,13 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
       }
     } # finish dealing with null limts
 
-      
     ## make histogram and map      
     # create hist
     h_dist <- make_hist(df_comb_var, col_name, long_name , lims_h_i)
     
-    
     # create the map with title var_i_full and legend title either statistic or var_i_full (if no stat) ifelse(stat_j == col_name, var_i_full, stat_j )
-    # so var unit goes on the z/fill-axis, var_i_full goes as the title (which I think we don't add)
+    # so var unit goes on the z/fill-axis, var_i_full goes as the title (if added)
     g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12,"Terrain", rev = s_direction_rr)) # for res
-    # g_input <- make_map(df_comb_var, col_name, long_name , long_name, lims_m_i, col_palette = hcl.colors(12, "Heat", rev = s_direction_rr)) # for div
-    # add stats 
 
     # save map only
     if(save_map_separately) ggsave(plot = g_input, filename = paste0(output_path, 'g_', col_name, '_absRR-', b_useAbs_RestRate, '.png' ) ) # , width = wid, height = hei)
@@ -181,10 +158,9 @@ for (i in 1:length(l_vars)){ # i <-  33 22 28 33 22 ; names(l_vars)
     # combine map with hist
     g_draw <- f_combine_map_hist (g_input, h_dist, b_cut_title = 'T_short_europe')
 
-    # save file (var_i ,'_', stat_j,)
-    ggsave(plot = g_draw, filename = paste0(output_path, 'g_comb_', col_name, '_absRR-', b_useAbs_RestRate,  '.png' ) , 
-           width = fig_width, height = fig_height ) # , width = wid, height = hei)
-           # width = 4, height = 6 ) # , width = wid, height = hei)
+    ggsave(plot = g_draw, filename = paste0(output_path, 'g_comb_', col_name, 
+                                            '_absRR-', b_useAbs_RestRate,  '.png' ) , 
+           width = fig_width, height = fig_height ) 
     
   
   } # end loop over cols

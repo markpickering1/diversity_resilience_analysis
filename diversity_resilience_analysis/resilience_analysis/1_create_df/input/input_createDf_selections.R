@@ -3,7 +3,6 @@
 # Description   : This text script acts as a user input to createDf_combine.R
 #                 By setting variables in this file, the user should not need to edit the main code.
 #                 createDf_combine.R should not change once initialised, except when running full separate
-#                 analysis after major changes
 # Date          : 2025-02-19
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
@@ -34,7 +33,8 @@ f_name_input <- 'df_all_long_base'
 # create extra resilience comparison metrics
 b_resComparison <- F
 
-# filter on number of Gedi points (only if available - if using predictive dataset, then not avaialble)
+# filter on number of Gedi points if available
+# (if using predictive dataset form ESSD, then not avaialble)
 b_GEDI_count_filter <- F
 n_GEDI_count <- 40
 

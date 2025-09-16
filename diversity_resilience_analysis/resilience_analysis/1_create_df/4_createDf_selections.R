@@ -3,10 +3,10 @@
 # Description   : Place selections on the combined analysis dataframe
 # Aims          : coordinated selections on datasets
 # Inputs	      : df_comb single df containing all columns and all rows (inc NAs)
-# Outputs	      : df tailored to particular analysis or plotting
+# Outputs	      : df_comb tailored to particular analysis or plotting
 # Options	      : 
 # Date          : 2025-02-19
-# Version       : 3
+# Version       : 
 # Authors       : Mark Pickering & Agata Elia
 # Notes		      : 
 # ########################################################
@@ -165,6 +165,9 @@ if(b_consistent_dataset_andTestTrainSet) {
   
   dim(df_comb) 
   # summary(df_comb) ;  names(df_comb)
+  
+  # optional - drop all cols except v_all_vars
+  df_comb <- df_comb[v_all_vars]
   
   # create test train split
   set.seed(n_setseed_trainTest) ; print( paste0('train-test seed: ', n_setseed_trainTest))   # set the test/train split seed

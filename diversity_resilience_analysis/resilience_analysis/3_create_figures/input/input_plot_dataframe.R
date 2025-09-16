@@ -13,44 +13,45 @@
 ###################################################
 
 # input dataset containing the combined dataframes to plot
-date_production <- '4_selections_2025-02-19/'              
+date_production <- '4_selections/'              
 input_dir <- paste0(root_data_proce, date_production ) 
 
 # input file
 input_file <- 'df_all.RData'   # common test train split + select >40 Gedi & >200 n_ts_kndvi
 
 # set output path name - with date this will link output (variables) 
-script_output_ext <- 'combineDF_plots_2025-02-19'           # time-series stats     
+script_output_ext <- 'plot_dataframe'              
 
 #######################################
-##### SELECTIONS ON NAS           #####
+##### SELECTIONS ON NAs           #####
 #######################################
 
 # decide whether to map/plot all entries in df or limit just to those available to a particular column
-# e.g. can plot only variables in the columns that match another specific column(e.g. diversity values)
+# e.g. can plot only variables in each of the columns that are non-NA in another specific column(e.g. diversity values)
+# likely not necessary
 filter_NA_by_variable <- F
-# filter_NA_colname     <- 'diversity_structural_rh50_avg'
+filter_NA_colname     <- 'Shannon'
 
 # require that all variables in the dataframe are present in each other variable column
 b_completeCases_for_fullDF <- F
 
-# save also the map on its own (i.e. without combination with histogram)
+# save also the map on its own (i.e. without combining with histogram)
 save_map_separately         <- F
 
 #######################################
-##### OTHER SELECTIONS         #####
+##### OTHER SELECTIONS            #####
 #######################################
 
 # toggle whether to use the '|abs|' restoration rates - this inverts the resilience metric so that higher = more resilience
 b_useAbs_RestRate <- T
+# toggle to invert the kurtosis metric (so higher kurtosis = more diversity)
 b_invert_mu_kurt  <- T
 
 
 #######################################
 ##### SET MAP/HIST LIMITS         #####
 #######################################
-# set the hist and map min/max
-# probably better to set as universal values rather than dynamically coding them
+# set the hist and map min/max - for non-hardcoded values
 
 ## default limits for those not set
 # set as a percentage of the min max span
@@ -68,22 +69,31 @@ l_kndvi_n_hist   <- c(0, 874 ) ; l_kndvi_n_map   <- c(400, 700)  ; l_kndvi_n_uni
 l_kndvi_mu_hist  <- c(0, 0.6 ) ; l_kndvi_mu_map  <- c(0.3, 0.55 ); l_kndvi_mu_unit <- 'mean'      ; l_kndvi_mu_rescale  <- NA
 l_kndvi_SD_hist  <- c(0, 0.25) ; l_kndvi_SD_map  <- c(0, 0.15 )  ; l_kndvi_SD_unit <- 'S.D.'      ; l_kndvi_SD_rescale  <- NA
 l_kndvi_CV_hist  <- c(0, 150 ) ; l_kndvi_CV_map  <- c(10, 40 )   ; l_kndvi_CV_unit <- 'C.V.'      ; l_kndvi_CV_rescale  <- NA
+
 # alt res metrics
-l_kndvi_TAC_hist       <- c(-0.1, 1) ; l_kndvi_TAC_map       <- c(0, 0.6 )   ; l_kndvi_TAC_unit       <- 'TAC'              ; l_kndvi_TAC_rescale       <- NA
-l_kndvi_VAR_resid_hist <- c(0, 0.01) ; l_kndvi_VAR_resid_map <- c(0, 0.005 ) ; l_kndvi_VAR_resid_unit <- 'var[resid]'       ; l_kndvi_VAR_resid_rescale <- NA
-l_kndvi_SD_resid_hist  <- c(0, 0.15) ; l_kndvi_SD_resid_map  <- c(0.03, 0.06); l_kndvi_SD_resid_unit  <- 'sd[resid]'        ; l_kndvi_SD_resid_rescale  <- NA
-l_kndvi_lambda_kappa_hist    <- c(-4, 0.1) ; l_kndvi_lambda_kappa_map    <- c(-2.5, -0.25 )  ; l_kndvi_lambda_kappa_unit    <- 'lambda kappa'     ; l_kndvi_lambda_kappa_rescale     <- NA
-l_kndvi_lambda_xt_hist       <- c(-4, 0.1) ; l_kndvi_lambda_xt_map       <- c(-2.5, -0.25 )  ; l_kndvi_lambda_xt_unit       <- 'Rest. Rate AC1'        ; l_kndvi_lambda_xt_rescale        <- NA
-l_kndvi_lambda_variance_hist <- c(-4, 0.1) ; l_kndvi_lambda_variance_map <- c(-2.5, -0.25 )  ; l_kndvi_lambda_variance_unit <- 'Rest. Rate Variance'       ; l_kndvi_lambda_variance_rescale  <- NA
+l_kndvi_TAC_hist       <- c(-0.1, 1) ; l_kndvi_TAC_map       <- c(0, 0.6 )   ; 
+l_kndvi_TAC_unit       <- 'TAC'      ; l_kndvi_TAC_rescale       <- NA
+l_kndvi_VAR_resid_hist <- c(0, 0.01) ; l_kndvi_VAR_resid_map <- c(0, 0.005 ) ; 
+l_kndvi_VAR_resid_unit <- 'var[resid]'       ; l_kndvi_VAR_resid_rescale <- NA
+l_kndvi_SD_resid_hist  <- c(0, 0.15) ; l_kndvi_SD_resid_map  <- c(0.03, 0.06); 
+l_kndvi_SD_resid_unit  <- 'sd[resid]'        ; l_kndvi_SD_resid_rescale  <- NA
+l_kndvi_lambda_kappa_hist    <- c(-4, 0.1)   ; l_kndvi_lambda_kappa_map    <- c(-2.5, -0.25 )  ; l_kndvi_lambda_kappa_unit    <- 'lambda kappa'          ; l_kndvi_lambda_kappa_rescale     <- NA
+l_kndvi_lambda_xt_hist       <- c(-4, 0.1)   ; l_kndvi_lambda_xt_map       <- c(-2.5, -0.25 )  ; l_kndvi_lambda_xt_unit       <- 'Rest. Rate AC1'        ; l_kndvi_lambda_xt_rescale        <- NA
+l_kndvi_lambda_variance_hist <- c(-4, 0.1)   ; l_kndvi_lambda_variance_map <- c(-2.5, -0.25 )  ; l_kndvi_lambda_variance_unit <- 'Rest. Rate Variance'   ; l_kndvi_lambda_variance_rescale  <- NA
+
 # slope and input metrics
 l_kndvi_n_ts_entries_hist <- c(0, 874) ; l_kndvi_n_ts_entries_map  <- c(400 , 700 ); l_kndvi_n_ts_entries_unit  <- '# entries'  ; l_kndvi_n_ts_entries_rescale <- NA
 l_kndvi_slope_kappa_hist  <- c(-0.1, 1); l_kndvi_slope_kappa_map   <- c(0, 0.6 ) ; l_kndvi_slope_kappa_unit   <- 'slope kappa'; l_kndvi_slope_kappa_rescale  <- NA
-l_kndvi_slope_xt_hist     <- c(-0.1, 1); l_kndvi_slope_xt_map      <- c(0, 0.6 ) ; l_kndvi_slope_xt_unit      <- 'slope xt'   ; l_kndvi_slope_xt_rescale     <- NA
+l_kndvi_slope_xt_hist     <- c(-0.1, 1); l_kndvi_slope_xt_map      <- c(0, 0.6 ) ; 
+l_kndvi_slope_xt_unit      <- 'slope xt'   ; l_kndvi_slope_xt_rescale     <- NA
 l_kndvi_rob_slope_xt_hist <- c(-0.1, 1); l_kndvi_rob_slope_xt_map  <- c(0, 0.6 ) ; l_kndvi_rob_slope_xt_unit  <- 'rob slope xt'; l_kndvi_rob_slope_xt_rescale<- NA
 l_kndvi_sigma_kappa_hist  <- c(0, 0.2) ; l_kndvi_sigma_kappa_map  <- c(0, 0.08 ) ; l_kndvi_sigma_kappa_unit   <- 'sig kappa'  ; l_kndvi_sigma_kappa_rescale  <- NA
-l_kndvi_sigma_xt_hist     <- c(0, 0.2) ; l_kndvi_sigma_xt_map     <- c(0, 0.08 ) ; l_kndvi_sigma_xt_unit      <- 'sig xt'     ; l_kndvi_sigma_xt_rescale     <- NA
-l_kndvi_lt_var_hist       <- c(0, 0.01); l_kndvi_lt_var_map       <- c(0, 0.005 ); l_kndvi_lt_var_unit        <- 'LT var'     ; l_kndvi_lt_var_rescale <- NA
-# rob res metrics
+l_kndvi_sigma_xt_hist     <- c(0, 0.2) ; l_kndvi_sigma_xt_map     <- c(0, 0.08 ) ; 
+l_kndvi_sigma_xt_unit      <- 'sig xt'     ; l_kndvi_sigma_xt_rescale     <- NA
+l_kndvi_lt_var_hist       <- c(0, 0.01); l_kndvi_lt_var_map       <- c(0, 0.005 ); 
+l_kndvi_lt_var_unit        <- 'LT var'     ; l_kndvi_lt_var_rescale <- NA
+
+# robust res metrics
 l_kndvi_rob_lambda_kappa_hist    <- c(-4, 0.1) ; l_kndvi_rob_lambda_kappa_map    <- c(-2.5, -0.25 )  ; l_kndvi_rob_lambda_kappa_unit    <- 'rob lambda kappa'   ; l_kndvi_rob_lambda_kappa_rescale <- NA
 l_kndvi_rob_lambda_xt_hist       <- c(-4, 0.1) ; l_kndvi_rob_lambda_xt_map       <- c(-2.5, -0.25 )  ; l_kndvi_rob_lambda_xt_unit       <- 'Rob. Rest. Rate AC1'      ; l_kndvi_rob_lambda_xt_rescale    <- NA
 l_kndvi_rob_lambda_variance_hist <- c(-4, 0.1) ; l_kndvi_rob_lambda_variance_map <- c(-2.5, -0.25 )  ; l_kndvi_rob_lambda_variance_unit <- 'Rob. Rest. Rate Var'     ; l_kndvi_rob_lambda_variance_rescale  <- NA
@@ -152,8 +162,6 @@ l_ssr_TAC_hist <- c(-0.1, 1)    ; l_ssr_TAC_map <- c(0.05, 0.25)   ; l_ssr_TAC_u
 tp_label <- 'Total precipitation' # tp
 l_tp_n_hist   <- c(0, 874 )   ; l_tp_n_map   <- c(400, 700 )  ; l_tp_n_unit  <- '# entries'        ; l_tp_n_rescale    <- NA       
 l_tp_mu_hist  <- c(0, 3200)   ; l_tp_mu_map  <- c(500, 1200); l_tp_mu_unit <- 'mean annual [mm]' ; l_tp_mu_rescale   <- parse( text = "tp_mean*365.25") # rescale to annual total
-# keeping original units - mm/day (rough limts as was overestimate)
-# l_tp_mu_hist  <- c(0, 1)      ; l_tp_mu_map  <- c(0, 0.4)   ; l_tp_mu_unit <- 'daily mean [mm]'; l_tp_mu_rescale   <- parse( text = "tp_mean*365.25") # rescale to annual total   
 l_tp_SD_hist  <- c(0, 5)      ; l_tp_SD_map  <- c(1.5, 3.5)     ; l_tp_SD_unit <- 'S.D. (daily) [mm]'; l_tp_SD_rescale   <- NA   
 l_tp_CV_hist  <- c(0,200)     ; l_tp_CV_map  <- c(60, 70)   ; l_tp_CV_unit <- 'C.V.  (daily)'    ; l_tp_CV_rescale   <- NA   
 l_tp_TAC_hist <- c(-0.1, 1)   ; l_tp_TAC_map <- c(0, 0.2)   ; l_tp_TAC_unit<- 'TAC'              ; l_tp_TAC_rescale  <- NA 
@@ -191,17 +199,14 @@ l_tp <- list(    label = tp_label,
 # limits for static metrics
 forestcover_label <- 'Forest cover' # forestcover
 l_forestcover_hist <- c(-0.05, 1 )   ; l_forestcover_map <- c(0.55, 0.95 )   ; l_forestcover_unit  <- ''
-# l_forestcover_hist <- c(-0.05, 1 )   ; l_forestcover_map <- c(0, 1 )   ; l_forestcover_unit  <- ''  # previous forest definition
 
 socc30cm_label <- 'Soil organic carbon content 30cm' # socc30cm
 l_socc30cm_hist <- c(0, 5 )   ; l_socc30cm_map <- c(0.25, 1.25 )   ;  l_socc30cm_unit  <- 'Mg/ha'
 
-# KG5 biome
-KG5_label   <- 'Climate zone (5)' # KG5
-l_KG5_hist  <- c(1, 5 )   ; l_KG5_map <- c(1, 5 )   ;  l_KG5_unit  <- '1 TRO, 2 ARI, 3 TEM, 4 CON'
-# KG16 biome
-KG16_label  <- 'Climate zone (16)' # KG5
-l_KG16_hist <- c(1, 16 )   ; l_KG16_map <- c(1, 16 )   ;  l_KG16_unit  <- ''
+Ndep_label <- 'Nitrogen Deposition'
+l_Ndep_hist <- c(0, 8000 )   ; l_Ndep_map <- c(0, 1000 )   ;  l_Ndep_unit  <- '/m2'
+
+
 # topology_elevation_mean
 elevation_mean_label  <- 'Elevation' # topology_elevation_mean
 l_elevation_mean_hist <- c(-20, 1980 ) ; l_elevation_mean_map <- c(0, 1500 ) ;  l_elevation_mean_unit  <- 'mean [m]'
@@ -216,16 +221,13 @@ slope_std_label       <- 'Slope' # topology_slope_std
 l_slope_std_hist      <- c(0, 20 )     ; l_slope_std_map      <- c(0, 10)   ;  l_slope_std_unit  <- 'S.D.'
 
 
-
 # static datasets
 l_forestcover    <- list(label         = forestcover_label,
                          forestcover  = list(l_forestcover_hist,   l_forestcover_map, l_forestcover_unit)  )
 l_socc30cm       <- list(label         = socc30cm_label,
                          socc30cm     = list(l_socc30cm_hist,   l_socc30cm_map, l_socc30cm_unit)  )
-l_KG5            <- list(label         = KG5_label,
-                         KG5          = list(l_KG5_hist,   l_KG5_map, l_KG5_unit)  )
-l_KG16           <- list(label         = KG16_label,
-                         KG16         = list(l_KG16_hist,   l_KG16_map, l_KG16_unit)  )
+l_Ndep       <- list(label         = Ndep_label,
+                         Ndep     = list(l_Ndep_hist,   l_Ndep_map, l_Ndep_unit)  )
 l_elevation_mean <- list(label         = elevation_mean_label,
                          topology_elevation_mean  = list(l_elevation_mean_hist,   l_elevation_mean_map, l_elevation_mean_unit)  )
 l_elevation_std  <- list(label         = elevation_std_label,
@@ -271,7 +273,8 @@ sd_rh50_label    <- 'RH-50 (SD)'          # sd_rh50
 l_sd_rh50_hist   <- c(0, 15  )       ;   l_sd_rh50_map   <- c(2, 12   )      ; l_sd_rh50_unit  <- ' [m]'
 sd_rh75_label  <- 'RH-75 (SD)'          # sd_rh75 
 l_sd_rh75_hist   <- c(0, 15  )       ;   l_sd_rh75_map   <- c(2, 12   )      ; l_sd_rh75_unit  <- ' [m]'
-sd_rh98_label    <- l_lables_metrics[['sd_rh98']] # 'RH-98 (SD)'          # sd_rh98 
+sd_rh98_label    <- l_lables_metrics[['Canopy_heights_sd']] # 'RH-98 (SD)'          # sd_rh98
+# sd_rh98_label    <- l_lables_metrics[['sd_rh98']] # 'RH-98 (SD)'          # sd_rh98 
 l_sd_rh98_hist   <- c(0, 15  )       ;   l_sd_rh98_map   <- c(3, 9  )      ; l_sd_rh98_unit  <- '' #  ' [m]'
 
 l_sd_rh25 <- list(    label        = sd_rh25_label,
@@ -281,7 +284,9 @@ l_sd_rh50 <- list(    label        = sd_rh50_label,
 l_sd_rh75 <- list(    label        = sd_rh75_label,
                       sd_rh75      = list(l_sd_rh75_hist,   l_sd_rh75_map, l_sd_rh75_unit)  )
 l_sd_rh98 <- list(    label        = sd_rh98_label,
-                      sd_rh98      = list(l_sd_rh98_hist,   l_sd_rh98_map, l_sd_rh98_unit)  )
+                      Canopy_heights_sd      = list(l_sd_rh98_hist,   l_sd_rh98_map, l_sd_rh98_unit)  )
+# l_sd_rh98 <- list(    label        = sd_rh98_label,
+#                       sd_rh98      = list(l_sd_rh98_hist,   l_sd_rh98_map, l_sd_rh98_unit)  )
 
 # vertical mean sd cv (first and second moments) and spatial mu sd cv
 mu_mean_label    <- 'Vertical mean (mu_mean)'      # mu_mean 
@@ -331,7 +336,8 @@ l_mu_cover  <- list(    label        = mu_cover_label,
 # skewnewss and kurtosis
 mu_skew_label    <- 'Skewness'          # mu_skew # skew_mean
 l_mu_skew_hist   <- c(-2, 2  )       ;   l_mu_skew_map   <- c(-0.6, 0.6  )  ; l_mu_skew_unit  <- ''
-mu_kurt_label    <- l_lables_metrics[['mu_kurt']] # 'Excess kurtosis'          # mu_kurt # kurt_mean
+mu_kurt_label    <- l_lables_metrics[['Kurtosis']] # 'Excess kurtosis'          # mu_kurt # kurt_mean
+# mu_kurt_label    <- l_lables_metrics[['mu_kurt']] # 'Excess kurtosis'          # mu_kurt # kurt_mean
 l_mu_kurt_hist   <- c(-1.5, 1.5  )       ;   l_mu_kurt_map   <- c(-1  , 0    )      ; l_mu_kurt_unit  <- ''
 # l_mu_kurt_hist   <- c(-2, 2  )       ;   l_mu_kurt_map   <- c(-1,0.25  )      ; l_mu_kurt_unit  <- ''
 sd_skew_label    <- 'Skewness (S.D.)'          # sd_skew # skew_mean
@@ -342,14 +348,17 @@ l_sd_kurt_hist   <- c(0, 2  )       ;   l_sd_kurt_map   <- c(0.25, 1  )      ; l
 l_mu_skew   <- list(    label        = mu_skew_label,
                         mu_skew      = list(l_mu_skew_hist,   l_mu_skew_map, l_mu_skew_unit)  )
 l_mu_kurt   <- list(    label        = mu_kurt_label,
-                        mu_kurt      = list(l_mu_kurt_hist,   l_mu_kurt_map, l_mu_kurt_unit)  )
+                        Kurtosis      = list(l_mu_kurt_hist,   l_mu_kurt_map, l_mu_kurt_unit)  )
+# l_mu_kurt   <- list(    label        = mu_kurt_label,
+#                         mu_kurt      = list(l_mu_kurt_hist,   l_mu_kurt_map, l_mu_kurt_unit)  )
 l_sd_skew   <- list(    label        = sd_skew_label,
                         sd_skew      = list(l_sd_skew_hist,   l_sd_skew_map, l_sd_skew_unit)  )
 l_sd_kurt   <- list(    label        = sd_kurt_label,
                         sd_kurt      = list(l_sd_kurt_hist,   l_sd_kurt_map, l_sd_kurt_unit)  )   
 
 # updated limits for static metrics - diversity structural horizontal
-shannon_entropy_label   <- l_lables_metrics[['shannon_entropy']] # 'Shannon entropy'   # shannon_entropy
+shannon_entropy_label   <- l_lables_metrics[['Shannon']] 
+# shannon_entropy_label   <- l_lables_metrics[['shannon_entropy']] # 'Shannon entropy'   # shannon_entropy
 l_shannon_entropy_hist  <- c(0, 6  )         ;   l_shannon_entropy_map   <- c(2.5, 4.75  )      ; l_shannon_entropy_unit   <- ''
 # l_shannon_entropy_hist  <- c(0, 8  )         ;   l_shannon_entropy_map   <- c(3.8, 6.8  )      ; l_shannon_entropy_unit   <- ''
 # l_shannon_entropy_hist  <- c(0, 8  )         ;   l_shannon_entropy_map   <- c(3.8, 7  )      ; l_shannon_entropy_unit   <- ''
@@ -362,8 +371,11 @@ l_euclidean_distances_mean_hist <- c(0, 40 ) ;   l_euclidean_distances_mean_map 
 convex_hull_volume_label     <- 'Convex hull vol'   # convex_hull_volume
 l_convex_hull_volume_hist    <- c(0, 60000  );   l_convex_hull_volume_map   <- c(0, 40000   )    ; l_convex_hull_volume_unit   <- ''
 
+# set lists
+# l_shannon_entropy          <- list(    label          = shannon_entropy_label,
+#                                shannon_entropy        = list(l_shannon_entropy_hist,   l_shannon_entropy_map, l_shannon_entropy_unit)  )
 l_shannon_entropy          <- list(    label          = shannon_entropy_label,
-                               shannon_entropy        = list(l_shannon_entropy_hist,   l_shannon_entropy_map, l_shannon_entropy_unit)  )
+                                       Shannon        = list(l_shannon_entropy_hist,   l_shannon_entropy_map, l_shannon_entropy_unit)  )
 l_simpson_index            <- list(    label            = simpson_index_label,
                              simpson_index          = list(l_simpson_index_hist,   l_simpson_index_map, l_simpson_index_unit)  )
 l_rao_quadratic_entropy    <- list(    label    = rao_quadratic_entropy_label,
@@ -379,7 +391,7 @@ l_convex_hull_volume       <- list(    label        = convex_hull_volume_label,
 #######################################
 ##### SELECT OPTIONS TO LOOP OVER #####
 #######################################
-# here chose which variables to run over in this particular analysi
+# here chose which variables to run over in this particular analysis
 
 # Create a named list of the variables containing the parameters, format:  l_vars_ts[[var_name]][[stat_name/label]][[hist/map/unit]]
 l_vars    <- list(# time varying metrics
@@ -387,88 +399,56 @@ l_vars    <- list(# time varying metrics
                   't2m' = l_t2m, 'VPD' = l_VPD, 'ssr' = l_ssr, 'tp' = l_tp,
 
                   # fixed metrics
-                  'forestcover' = l_forestcover, 'socc30cm' = l_socc30cm,
-                  'KG5' = l_KG5, 'KG16' = l_KG16,
-                  'topology_elevation_mean' = l_elevation_mean, 'topology_elevation_std' = l_elevation_std,
-                  'topology_slope_mean' = l_slope_mean, 'topology_slope_std' = l_slope_std,
+                  'forestcover' = l_forestcover, 'socc30cm' = l_socc30cm, 'Ndep' = l_Ndep,
+                  'topology_elevation_std' = l_elevation_std,
+                  # 'topology_slope_mean' = l_slope_mean, 'topology_slope_std' = l_slope_std, 
+                  # 'topology_elevation_mean' = l_elevation_mean,
 
+                  "Shannon"  = l_shannon_entropy , "Kurtosis" = l_mu_kurt , "Canopy_heights_sd" = l_sd_rh98
                   ## diversity metrics
-                  'div_count' = l_div_count ,
+                  # 'div_count' = l_div_count ,
                   #  vertical structural profile
-                  'mu_rh50' = l_mu_rh50   , 'mu_rh98'  = l_mu_rh98  ,  'mu_rh75' = l_mu_rh75  ,
-                  'mu_rh25' = l_mu_rh25   ,
-                  'mu_pai' = l_mu_pai     , 'mu_cover' = l_mu_cover ,
-                  #  vertical structural diversity
-                  'mu_skew' = l_mu_skew   , 'mu_kurt'  = l_mu_kurt  ,
-                  'mu_sd'   = l_mu_sd     , 'mu_mean'  = l_mu_mean  ,  'mu_cv'   = l_mu_cv    ,
-                  'mu_fhd_normal' = l_mu_fhd_normal ,
-
-                  #  spatial diversity in vertical profile
-                  'sd_rh50' = l_sd_rh50   , 'sd_rh98'  = l_sd_rh98  ,  'sd_rh75' = l_sd_rh75  ,
-                  'sd_rh25' = l_sd_rh25   ,
-                  'sd_pai' = NULL         , 'sd_cover' = NULL       ,
-                  
+                  # 'mu_rh50' = l_mu_rh50   , 'mu_rh98'  = l_mu_rh98  ,  'mu_rh75' = l_mu_rh75  ,
+                  # 'mu_rh25' = l_mu_rh25   ,
+                  # 'mu_pai' = l_mu_pai     , 'mu_cover' = l_mu_cover ,
+                  # #  vertical structural diversity
+                  # 'mu_skew' = l_mu_skew   , 'mu_kurt'  = l_mu_kurt  ,
+                  # 'mu_sd'   = l_mu_sd     , 'mu_mean'  = l_mu_mean  ,  'mu_cv'   = l_mu_cv    ,
+                  # 'mu_fhd_normal' = l_mu_fhd_normal ,
+                  # #  spatial diversity in vertical profile
+                  # 'sd_rh50' = l_sd_rh50   , 'sd_rh98'  = l_sd_rh98  ,  'sd_rh75' = l_sd_rh75  ,
+                  # 'sd_rh25' = l_sd_rh25   ,
+                  # 'sd_pai' = NULL         , 'sd_cover' = NULL       ,
                   # #  spatial diversity in vertical diversity
                   # 'sd_skew' = l_sd_skew   , 'sd_kurt'  = l_sd_kurt  ,
                   # 'sd_sd'   = l_sd_sd     , 'sd_mean'  = l_sd_mean  ,  'sd_cv'   = l_sd_cv    ,
                   # 'sd_fhd_normal' = NULL  ,
+                  # #  spatial diversity  via entropy index of rh50 rh75 rh98 cover
+                  # 'shannon_entropy' = l_shannon_entropy, 'simpson_index' = l_simpson_index,
+                  # 'rao_quadratic_entropy' = l_rao_quadratic_entropy,
+                  # 'euclidean_distances_mean' = l_euclidean_distances_mean
                   
-                  #  spatial diversity  via entropy index of rh50 rh75 rh98 cover
-                  'shannon_entropy' = l_shannon_entropy, 'simpson_index' = l_simpson_index,
-                  'rao_quadratic_entropy' = l_rao_quadratic_entropy,
-                  'euclidean_distances_mean' = l_euclidean_distances_mean
-                  
-                  # # 'euclidean_distances_stdev' = NULL,
-                  # 'div_hull' = l_convex_hull_volume , 
-
-                  # # # metrics as above but including negative values
-                  # 'mu_skew_negativevalues' = l_mu_skew , 'mu_kurt_negativevalues' = l_mu_kurt, 'mu_sd_negativevalues' = l_mu_sd,
-                  # 'mu_mu_negativevalues'   = l_mu_mean   , 'mu_cv_negativevalues'   = l_mu_cv  ,
-                  # 'sd_skew_negativevalues' = l_sd_skew , 'sd_kurt_negativevalues' = l_sd_kurt, 'sd_sd_negativevalues' = l_sd_sd,
-                  # 'sd_mu_negativevalues'   = l_sd_mean   , 'sd_cv_negativevalues'   = NULL
-                  
-                  # ## difference between resilience metrics
-                  # # TAC vs (xt kappa) slopes
-                  # "diff_TAC_slopext" = NULL       ,"diff_TAC_robslopext" = NULL   ,"diff_robslopext_slopext" = NULL,
-                  # "diff_TAC_slopekappa" = NULL ,"diff_robslopekappa_slopekappa" = NULL,
-                  # # xt vs kappa
-                  # "diff_robslopext_robslopekappa" = NULL ,"diff_slopext_slopekappa" = NULL       ,
-                  # # diff lamda 
-                  # "diff_lamxt_lamkappa" = NULL ,"diff_lamxt_lamvar" = NULL             ,"diff_kappa_lamvar" = NULL      , 
-                  # # diff labda (rob)
-                  # "diff_roblamxt_roblamkappa" = NULL         ,"diff_roblamxt_roblamvar" = NULL       ,"diff_robkappa_roblamvar" = NULL,     
-                  # # diff rob lamda vs lamda
-                  # "diff_roblamxt_lamxt" = NULL ,"diff_roblamkappa_lamkappa" = NULL     ,"diff_roblamvar_lamvar" = NULL 
                 )
 
 
 
-
-
 l_vars_cor <- c(
-"kndvi_TAC"              , "kndvi_lambda_xt"          , "kndvi_lambda_variance"    ,
-
- "kndvi_mean"            ,  "kndvi_CV"                 ,
+ "kndvi_lambda_xt"          , "kndvi_lambda_variance"    ,
+ "kndvi_mean"            ,  
  "t2m_mean"              ,    "t2m_CV"                 ,   "t2m_TAC"                  , 
  "VPD_mean"              ,    "VPD_CV"                 ,   "VPD_TAC"                  , 
  "ssr_mean"              ,   "ssr_CV"                  ,   "ssr_TAC"                  , 
  "tp_mean"               ,   "tp_CV"                   ,   "tp_TAC"                   , 
  "forestcover"           , 
  "socc30cm"              ,                  
- "topology_elevation_std"  , 
-
+ "topology_elevation_std", 
+ "Shannon"               , "Kurtosis"                  , "Canopy_heights_sd"
  # "div_count"              ,   
- # "mu_rh25"                , "mu_rh50"                 ,   "mu_rh75"               ,  
- # "mu_rh98"                  , 
- # "sd_rh25"                ,  "sd_rh50"                ,   "sd_rh75"               ,   
- "sd_rh98"                ,   
- # "mu_fhd_normal"          ,   "mu_pai"                , "mu_cover"                , 
- # "mu_skew"                ,
- # "mu_sd"                  , "mu_mean"                 ,   "mu_cv"                 , 
+ # "mu_rh25"                , "mu_rh50"                 , "mu_rh75"               ,  "mu_rh98"
+ # "sd_rh25"                ,  "sd_rh50"                , "sd_rh75"               ,  "sd_rh98"
+ # "mu_fhd_normal"          ,   "mu_pai"                , "mu_cover"              ,  "mu_skew"
+ # "mu_sd"                  , "mu_mean"                 , "mu_cv"                 , 
  # "sd_pai"                 , "sd_cover"                , 
- "mu_kurt"               ,
- "shannon_entropy"       
-# ,   "simpson_index"            
-
+ # "mu_kurt"                , # "shannon_entropy"       , "simpson_index"            
 
 )

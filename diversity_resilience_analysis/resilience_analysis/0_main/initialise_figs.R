@@ -88,7 +88,7 @@ l_diversity_metrics_list <- list(
   "Rao"       ,            "Hull"  
   # "mu_rh98"                 ,   "mu_rh50"                 , "mu_rh75"                 ,  "mu_rh25",
   # "mu_skew"                 ,   "mu_kurt"                 , "mu_sd"                   ,
-  # "sd_rh98"                 ,   "sd_rh75"                 , "sd_rh50"                 ,  "sd_rh25"                  ,
+  # "sd_rh98"                 ,   "sd_rh75"                 , "sd_rh50"                 ,  "sd_rh25"          
   # "shannon_entropy"         ,   "simpson_index"           ,
   # "rao_quadratic_entropy"   , "euclidean_distances_mean"
 )
@@ -104,10 +104,6 @@ colors_diversity_metrics <- setNames(c("#E41A1C", "#377EB8", "#4DAF4A"), c("FSDH
 
 ########### HISTOGRAMS ONLY #############
 n_bins <- 100
-
-########### MAPS ONLY       #############
-# extent_europe <- c(-10.66164, 44.56369, 33.0, 71.18416 ) # full Europe
-extent_europe <- c(-10.66164, 44.56369, 33.0, 53 ) # Europe GEDI
 
 
 ###################################################
@@ -159,27 +155,23 @@ basic_hist_theme <- theme( # plot.margin = margin(0, 210, 0, 210),    # add left
 )           
 
 
+
 ###################################################
 ######     MAP SHAPEFILES                     #####
 ###################################################
 
-# Europe only 
+########### MAPS ONLY       #############
+# extent_europe <- c(-10.66164, 44.56369, 33.0, 71.18416 ) # full Europe
+extent_europe <- c(-10.66164, 44.56369, 33.0, 53 ) # Europe GEDI
+
 # load and process shapefile
-# land_shapefile_in <- paste0(root_data_input, input_land_shapefile) # set shapefile path (global coastlines@50m)
-land_shapefile_in <- sf::st_read(land_shapefile_in, quiet = TRUE)                         # read shapefile
-# summary(land_shapefile) # plot(land_shapefile)
+land_shapefile_in <- sf::st_read(input_land_shapefile, quiet = TRUE) # read shapefile
 
-# load bounding box from shapefile (has coords: -10.66164 34.56369 44.82037 71.18416)
-# bb_shapefile <- 'data/ancillary/world_vectors/boundingBoxes/Europe_BB.shp'
-# bboxpolygon <- sf::st_read(bb_shapefile, quiet = TRUE)                         # read shapefile
-
-# alternative - create bounding box manually
+# create bounding box manually
 # bb_shapefile <- as(raster::extent(-10.66164, 34.56369, 44.82037, 71.18416), "SpatialPolygons")
 bb_shapefile <- as(raster::extent(extent_europe), "SpatialPolygons")
 sp::proj4string(bb_shapefile) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-# crs(bb_shapefile) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-# bb_shapefile <- rgeos::bbox2SP(n = -10.66164, s = 34.56369, w = 44.82037, e = 71.18416, proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 # crop land_shapefile
-land_shapefile <- sf::st_crop(land_shapefile_in, bb_shapefile)                          # crop shapefile to bounding box
+land_shapefile <- sf::st_crop(land_shapefile_in, bb_shapefile)      # crop shapefile to bounding box
 # plot(land_shapefile)

@@ -1,11 +1,10 @@
 # ########################################################
 # Title         : 2_createDF_statistics.R
 # Description   : create a df of X | Y | mu | TAC | CoV 
-#                 for each time-series variable at each point in the ncdf files
+#                 for each time-series variable at each point in the timeseries ncdf files
 #                 create a df of mean, coeff of var, 1-lag TAC for each variable
-# Aims          : dataframes of all data and RF predictor data for each X/Y
 # Inputs	      : dfs containing KNDVI and CLIMATE data extracted from raster
-#                 one df for residuals and one for actualy values
+#                 one df for residuals and one for actual values
 # Outputs	      : separate and combined dfs of variables
 # Options	      : 
 # Date          : 19/02/25
