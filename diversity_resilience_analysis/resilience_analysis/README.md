@@ -153,3 +153,12 @@ These scripts plot both the dataframe created in 1_createDf_fromInput.R and figu
 - The mean and uncertainty bounds (e.g. via s.d. or 95% percentile) are calculated for each combination of metrics
 - The diversity-resilience figures with uncertainty bands are plotted
 - A diversity-resilience figure showing multiple diversity metrics is plotted, whereby the diversity metric is scaled to represent the range (e.g. 95%) of diversity observed in the training dataset.
+
+### plotRF_createICE.R
+- Create a dataframe containing the Individual Conditional Expectation (ICE) values for each pixel
+- Also takes the derivative of the ICE curves at each pixel's value (giving the direction of diversity-resilience relationship
+- Outputs a dataframe containing the two
+- NOTE: the computation takes a while and can run to a lot of RAM (therefore be split into chunks) so it is not recommended to run over multiple diverstiy & resilience metrics at a time
+### plotRF_createICE_plotICE.R
+- Take the df_dice dataframes containing the derivatie of the ICE curve at each point for a given resilience-diversity metric combination
+- Plot the derivative in map form

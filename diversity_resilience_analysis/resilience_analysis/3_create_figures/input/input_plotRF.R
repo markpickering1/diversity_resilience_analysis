@@ -116,14 +116,15 @@ b_scale_importance <- TRUE
 ###### ICE FIGURES              ######
 ######################################
 
-#input
-f_ice_input <- 'figures/plotRF_2025-02-19/'  # old un-updated shannon
+# input
+dir_createICE_output <- 'plotRF_createICE/'  
+f_ice_input <- paste0(root_data_figs, dir_createICE_output)
 
 # plot derivative vs predictor scatters
 b_create_deriv_vs_predictor_figs <- F
 
-## DERIVATIVE LIMITS
-l_dice_lims_h_in <- c(-1, 1) ; l_dice_lims_m_in <- c(-0.5, 0.5) # mu_kurt/shannon & lambda_xt
+## DERIVATIVE LIMITS - for maps and histograms
+l_dice_lims_h_in <- c(-1, 1) ; l_dice_lims_m_in <- c(-0.5, 0.5) 
 l_dice_lims <- list(l_dice_lims_h_in, l_dice_lims_m_in)
 
 

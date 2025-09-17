@@ -375,11 +375,9 @@ f_add_category <- function(df_in, col_name, div_metrics_list = v_optional_predic
 
 # function taking dataframe as input, an rf.model to run over and a variable of interest (and plotting limits if required)
 # first splits the dataframe into manageable chunks
-# honestly, this takes so long it is better to run over each variable individually and not loop over the diversity variables
-# unless you are absolutely sure it is working and will plot the correct limits
+# As this takes so long it is better to run over each variable individually and not loop over the diversity variables
 # also may need to rename input values in functions as function input names are same as acutal names that will be used
-# function is untested (but code was separately tested)
-f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predicted_metric = target_name_k, n_splits = 10){ # , lims_h_i = F, lims_h_i = F
+f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predicted_metric = target_name_k, n_splits = 10, b_saveChunks = F){ # , lims_h_i = F, lims_h_i = F
   
   # First split the dataframe into manageable chunks over which to run using parameters:
   n_rows <- dim(df_comb_i)[1] ; 
@@ -388,130 +386,68 @@ f_run_ICE <- function(df_comb_i, rf.model,  predictor_metric = var_name_i, predi
   print( paste0('chunk size: ', chunk_size))
   print( paste0('splits: ', n_splits))
   
-  # old method - not sure about
-  # df_comb_ij <- split(df_comb_i,  (as.numeric(rownames(df_comb_i))-1) %/% chunk_size) # split dataframe
-  # new method to obtain the chunks - assign all rows a number in a column showing which chunk they are in
   df_comb_i$Chunk <- cut(seq_len(nrow(df_comb_i)), breaks = seq(1, nrow(df_comb_i) + chunk_size, chunk_size),
                   labels = FALSE, include.lowest = TRUE)
   df_comb_ij <- split(df_comb_i, df_comb_i$Chunk)
   
-  # dim(df_comb_ij$`0`) ; dim(df_comb_ij$`9`) ; 
-  # test the sum of the split rows adds up
-  print('Does sum of rows in splits add up to total : ')
-  print( dim(df_comb_ij$`2`)[1]*(n_splits - 2)  + dim(df_comb_ij$`1`)[1] + dim(df_comb_ij[[n_splits ]])[1] == n_rows)
-  
-  # create a 'vector of response values for the object was trained on' - i.e. the values of diversity metric to compute ICE curve for at each pixel
-  # probably 500 is sufficient - this might be the reason things were slow before - we wanted to use the full range of values at each point (like 10,000 if dim(df_comb_i)[1]/10
-  # set a range containing 500 values between the 2% and 98% percentiles:
-  # c_min_max <- find_cutpts_from_percentile(df_comb_i, predictor_metric , 0.02)
-  # v_vect_div_values <- seq(c_min_max[[1]], c_min_max[[2]], length.out = 500)
-  # That didn't work - instead, just set -> # num_grid_pts = 500
-  # Previously was defined by : 
-  # y = df_comb_i[[predictor_metric]] = dictates that the response values comes from the values of the original df and not the chunk
-  # this should ensure that all the same values are trained on - it doesn't - they area always different - same as y = df_comb_ij_j[[predictor_metric]]
-  # if nothing is inserted, then just the actual values of the other points are used for each point - seems like a computationally expensive way to run
-  # can instead create a range from the original data and feed that in? Use enough points to get a meaningful curve (but not )
-  # or can just set:
-  
+  # print('Does sum of rows in splits add up to total : ')
+  # print( dim(df_comb_ij$`2`)[1]*(n_splits - 2)  + dim(df_comb_ij$`1`)[1] + dim(df_comb_ij[[n_splits ]])[1] == n_rows)
   
   # create empty df of ICE
   df_ice_i <- data.frame()
   
   # create loop over deciles of the df to build the full model
-  for (j in 1:n_splits){ # j <- 5
-  # for (j in 9:10){ # j <- 1
-    print(j)
-    #select only the jth subdivision
+  for (j in 1:n_splits){ 
+    # print(j)
+    # select only the jth subdivision
     df_comb_ij_j <- df_comb_ij[[j]]
+    print(paste0('create ice-object block:', j))
     print('dim of chunk: ') ; print(dim(df_comb_ij_j))
     
-    print(paste0('create ice-object block:', j))
     # create an ice object from the rf model the split df
-    rf.ice_j = ice(object = rf.model, X = df_comb_ij_j, y = df_comb_ij_j[[target_name_k]], predictor = predictor_metric, # y = df_comb_i$tac_resid_kndvi
-                   # y = v_vect_div_values  
-                   # num_grid_pts = 100, # 500, # setting this selects only certain grid points in diversity metric for building
-                   indices_to_build = )
-    # print(rf.ice_j$gridpts)
-    # }
-    #frac_to_build = 1)
-    
+    rf.ice_j = ice(object = rf.model, X = df_comb_ij_j, y = df_comb_ij_j[[target_name_k]], 
+                   predictor = predictor_metric, indices_to_build = )
+
     # as a temporary precaution save these blocks of ice objects
-    save(rf.ice_j, file=paste0(output_path, 'df_dice-', predictor_metric, '_targ-', target_name_k, '_iceObj_split-', j, '.RData' )    ) 
-    print(paste0('saved ice-object block:', j))
+    if(b_saveChunks){
+      save(rf.ice_j, file=paste0(output_path, 'df_dice-', predictor_metric, '_targ-', target_name_k, '_iceObj_split-', j, '.RData' )    )
+      print(paste0('saved ice-object block:', j))
+    }
     
     # create a derivative ice object (dice)
     # rf.dice_j <- dice(rf.ice_j, ICEbox::DerivEstimator ( rf.ice_j$gridpts, rf.ice_j$actual_prediction) )
     rf.dice_j <- dice(rf.ice_j )
-    # test plot ;    plot.dice
-    
+
     # ice sorts the order of the df so need to recombine with the input dataframe 
     # (match the input diversity values with the 'xj' valuse of predictor as a check)
-    print('check column match:') ; print(summary(rf.dice_j$Xice[[predictor_metric]] == rf.dice_j$xj))
+    # print('check column match:') ; print(summary(rf.dice_j$Xice[[predictor_metric]] == rf.dice_j$xj))
     
     # now bind the dice output of the derivative at the point (local derivative)
     df_rf.dice_j_t <- as.data.frame(rf.dice_j$actual_deriv) #, rf.dice_j$dpdp)
     names(df_rf.dice_j_t) <- 'actual_deriv'
     if(dim(rf.dice_j$Xice)[1] == dim(df_rf.dice_j_t)[1]) {
       df_rf.dice_j <- cbind(rf.dice_j$Xice, df_rf.dice_j_t) }
-    # # should I add dpdp (overall derivative? It has a different length so can't bind to original df
-    # # need to confirm what exactly is this from literature but was difficult
-    # df_rf.dice_j_d <- as.data.frame(rf.dice_j$dpdp) #, rf.dice_j$dpdp) }
-    # names(df_rf.dice_j_d) <- 'dpdp'
-    # if( dim(df_rf.dice_j)[1] == dim(df_rf.dice_j_d)[1] ) { print('add dpdp')
-    #   df_rf.dice_j <- cbind(df_rf.dice_j, df_rf.dice_j_d) }
+
+    if(b_saveChunks){
+      save(df_rf.dice_j, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-', j, '.RData' )    ) 
+      print(paste0('saved dice-object block:', j))
+    }
     
-    # df_rf.dice_j <- cbind(rf.dice_j$xj,rf.dice_j$actual_deriv) # list of changed points
-    # df_rf.dice_j <- as.data.frame(df_rf.dice_j)
-    # names(df_rf.dice_j)[2] <- 'ice_deriv'
-    # df_rf.dice_j <- cbind(rf.dice_j$Xice, df_rf.dice_j$ice_deriv)
-    
-    print('save chunk')
-    save(df_rf.dice_j, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-', j, '.RData' )    ) 
-    
-    print('join chunk')
+    # print('join chunk')
     # join the split dice with the other splits
     if (j == 1){df_ice_i <- df_rf.dice_j
     } else{df_ice_i <- rbind(df_ice_i, df_rf.dice_j)}
     
-    print('dice split timing complete for split : ', i)
-    f_time_update(t_start_time)
+    # print('dice split timing complete for split : ', i)
+    # f_time_update(t_start_time)
     
   } # end loop over deciles
-  save(df_ice_i, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-all.RData' )    ) 
+  
+  if(b_saveChunks){
+      save(df_ice_i, file=paste0(output_path, 'df_dice-',predictor_metric, '_targ-', target_name_k, '_diceObj_split-all.RData' )    ) 
+    print(paste0('saved final output'))
+  }
   
   return(df_ice_i)
-} # close function
-
-
-# simply loop over different dice objects and rbind them together
-# should not be a real function - this is a quick fix
-input_dice <- "figures/plotRF_newDiv_2025-02-19/"
-f_run_ICE_loop<- function(input_dice  ) { #df_comb_i, rf.model,  var_name_i){ # , lims_h_i = F, lims_h_i = F
-  
-  # create empty df of ICE
-  df_dice <- data.frame()
-
-  # loop over the previous outputs, load and add to df of ICE
-  for (m in 1:100){ # m <- 9
-    
-    # load( paste0(input_dice, "df_dice-shannon_entropy_diceObj_split-", m, ".RData" ) )
-    # load( paste0(input_dice, "df_dice-shannon_entropy_diceObj_split-", m, ".RData" ) )
-    load( paste0(input_dice, "df_dice-", var_name_i , "_targ-", target_name_k, "_diceObj_split-", m, ".RData" ) )
-    # load( paste0(input_dice, "df_dice-kurt_mean_diceObj_split-", m, ".RData" ) )
-    print(dim(df_rf.dice_j)[1])
-    
-    # test if we have a dpdp col in some but not others 
-    if( dim(df_rf.dice_j)[2] < dim(df_dice)[2] & dim(df_dice)[2] != 0 ) { df_rf.dice_j$dpdp <- NA   ; print('m missing dpdp col'  ) }
-    if( dim(df_rf.dice_j)[2] > dim(df_dice)[2] & dim(df_dice)[2] != 0 ) { df_rf.dice_j$dpdp <- NULL ; print('m has extra dpdp col') }
-    
-    # join the split dice with the other splits
-    if (m == 1){df_dice <- df_rf.dice_j
-    } else{df_dice <- rbind(df_dice, df_rf.dice_j)}
-  
-  } # end loop  
-  
-  print(dim(df_dice)) # head(df_dice)
-  
-  return(df_dice)
-} # close function
+} 
 
