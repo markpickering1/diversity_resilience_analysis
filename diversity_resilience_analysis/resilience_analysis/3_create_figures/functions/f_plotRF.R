@@ -19,8 +19,6 @@
 # load the df required for the analysis (e.g. test train etc)
 f_plotRF_load_RFDF <- function(df_in, s_train_test_all = s_use_pdp_dataset){
   # load df containing all test train data
-  # load( paste0(input_dir, 'df_all_div-',var_name_i, '.RData') )        # df_comb_i      head(df_comb_i)
-  
   # # initialise train/test df
   df_comb.train_i <- subset(df_in, train_sample == T) # head(df_comb.train_i)
   df_comb.test_i  <- subset(df_in, train_sample == F) # head(df_comb.test_i)
@@ -92,7 +90,7 @@ f_obs_vs_mod_density <- function(df_in, s_title = var_name_i,
                          # x=-0.05, y=0.8, # - relative to exact posiiton
                          size = text_size/2, hjust = -0.05,
                          #parse = TRUE,
-                         label = s_label_stats  ) # geom_text(data = df_cor, size=txt_size*1.4, aes(x = lim_upper[1]*text_pos_x, y = lim_upper[2]*0.96), parse = TRUE)  # add text of data
+                         label = s_label_stats  ) 
   return(ggp)
 }
 
@@ -100,7 +98,8 @@ f_obs_vs_mod_density <- function(df_in, s_title = var_name_i,
 ######     PLOTTING FUNCTIONS RF IMPORTANCE   #####
 ###################################################
 
-# for a df df_in, creates line graph showing the ranking of variables var_in in, ordered  by their values value_in 
+# for a df df_in, creates line graph showing the ranking of variables var_in in, 
+# ordered  by their values value_in 
 # (_full denotes x,y labesl). Option to include a categorisation by color
 f_importance_ranking <- function(df_in, var_in, var_in_full, value_in, value_in_full, s_title = 'he', 
                                  point_color = 'orange', lims_c = NA,
@@ -111,30 +110,22 @@ f_importance_ranking <- function(df_in, var_in, var_in_full, value_in, value_in_
   ifelse(length(point_color)==1 , point_color_1 <- point_color , point_color_1 <- 'orange' )
   
   g_importance_i <-
-    ggplot(df_in %>% arrange( !!sym(value_in) ) %>% mutate( Variable = factor(!!sym(var_in), levels=!!sym(var_in)) ),
-           # aes_string(x="Variable", y=value_in )) + # , color = "Category"
+    ggplot(df_in %>% arrange( !!sym(value_in) ) %>% 
+             mutate( Variable = factor(!!sym(var_in), levels=!!sym(var_in)) ),
            aes(x= Variable, y= !!sym(value_in) )) + # , color = "Category"
-    # geom_segment( aes_string(xend=var_in, yend=0),  linewidth = 1) + # , color = type (size or line size)
     geom_point( size=4  , color = point_color_1  ) + # single color point
     coord_flip() +  #scale_y_log10() + 
     ylim( lims_c ) +
-    # labs(title = s_title)
     ylab(value_in_full) + xlab(var_in_full) +
-    # theme(text = element_text(size=20) ) + #axis.text.x = element_text(size = 20) # angle=90, hjust=1
-    basic_graph_theme +  # theme_bw() 
-    theme(text = element_text(size=30) ) #axis.text.x = element_text(size = 20) # angle=90, hjust=1
+    basic_graph_theme +  
+    theme(text = element_text(size=30) )
     
-    
-  
   # overwrite color scale with category of colors 
   if(length(point_color) > 1){
     g_importance_i <- g_importance_i +
-      # geom_point( size=4  , aes_string( color = "Category")   ) + #, color="orange") + #  , aes_string( color = "Category")
-      geom_point( size=4  , aes( color = Category)   ) + #, color="orange") + #  , aes_string( color = "Category")
+      geom_point( size=4  , aes( color = Category)   ) + 
       guides(color=guide_legend(override.aes=list(fill=NA))) +   # no grey box around legend
       scale_color_manual(name = "Category", values=point_color ) 
-    # scale_color_manual(name = "category", values = c(T2M = "red", TP = 'blue', SSR = 'brown', VPD = 'orange', Other = "dark green") )  +
-    # scale_color_manual(name = "type",     values = c(mean = "black", TAC = 'grey50', CV = 'grey10') )  +
   }
   
   # add unc band if requested - assumes default label yhat_upper and yhat_lower
@@ -157,7 +148,6 @@ f_importance_ranking <- function(df_in, var_in, var_in_full, value_in, value_in_
 
 # Define a function to create fixed-width y-axis labels
 # This will set aside some space on the y-axis for the labels
-# I'm not sure it's 100% necessary, but it seems to work
 fixed_width_labels <- function(width = 12) {
   function(labels) {
     str_pad(labels, width, "right")
@@ -165,8 +155,7 @@ fixed_width_labels <- function(width = 12) {
 }
 
 # this histogram is designed to sit below the partial plots. 
-# the difficulty (yet to fully get right) is to match the axes of the x-axes of histogram and partial. 
-# The only way I've managed to match them so far is by having fixed text_size at 8 for the histogram of frequency. It's all quite messy
+# the difficulty is to match the axes of the x-axes of histogram and partial. 
 f_plot_partial_hist <- function(df_pdp, var_name_x, var_label_x = NA, s_oob = 'squish', # s_oob  = 'censor'
                                 n_bins_x = 100, lims_x, coord_flip = F ){
   
@@ -174,7 +163,6 @@ f_plot_partial_hist <- function(df_pdp, var_name_x, var_label_x = NA, s_oob = 's
   if(is.na(var_label_x)) var_label_x <- var_name_x
   
   # Plot the histogram for the x-axis
-  # g_hist <- ggplot(df_pdp, aes_string(x = var_name_x) ) +
   g_hist <- ggplot(df_pdp, aes( x = !!sym(var_name_x) ) ) +
     geom_histogram(bins = n_bins_x) +
     scale_x_continuous(limits = lims_x, oob= get(s_oob, envir = asNamespace('scales')))  +  # access squish etc limits
@@ -183,8 +171,7 @@ f_plot_partial_hist <- function(df_pdp, var_name_x, var_label_x = NA, s_oob = 's
     ylab("Frequency") +
     # basic_graph_theme +
     scale_y_continuous(labels = fixed_width_labels(12))
-  # theme(plot.margin = unit(c(0.5, 0.5, 0.5, y_axis_space), "cm"))    # geom_point(data = pdp_list_df, aes(Petal.Width, yhat, color = iteration ), size = 3 )
-  
+
   if(coord_flip)  g_hist <-g_hist + coord_flip() 
   return(g_hist)
 }
@@ -259,9 +246,6 @@ f_plot_partial_overlay <- function(df_pdp, var_name_x, var_name_y,
                                    add_hist_under = FALSE,
                                    add_error_band_even = FALSE, add_error_band_uneven = FALSE, var_name_se = NA) {
   
-  # g_pdp <- f_base_plot_partial(df_pdp_base = df_pdp, var_name_x_base  = var_name_x , var_name_y_base  = var_name_y , 
-  #                              var_label_x_base = var_label_x, var_label_y_base = var_label_y, lims_x_base = lims_in, lims_y_base = lims_y, 
-  #                              line_width_base = line_width, add_hist_under_base = add_hist_under)
 
   # first produce the partial plot
   g_pdp <- f_plot_partial(df_pdp = df_pdp, 
@@ -287,12 +271,23 @@ f_plot_partial_overlay <- function(df_pdp, var_name_x, var_name_y,
       # geom_line(linewidth = line_width)
   }
   
-  # g_pdp <- f_base_plot_partial(df_pdp, var_name_x, var_name_y, lims_x, lims_y, var_label_x, var_label_y, add_hist_under)
-  # if(!is.na(legend_pos)) 
-  g_pdp <- g_pdp + theme(legend.position = legend_pos ) # "none")
-  
-  
+  g_pdp <- g_pdp + theme(legend.position = legend_pos ) 
   return(g_pdp)
+}
+
+###################################################
+######     PLOTTING MULTIPLE 1D PDPs          #####
+###################################################
+
+# Rescale function to map the values to the range [0.05, 0.95]
+# this rescales a given dataframe colmn such that each value is reexpressed as a percentile 0-1
+rescale <- function(x, percentile_alpha, p5, p95) {
+  # Scale x to the range [0.05, 0.95] based on the 5th and 95th percentiles
+  scaled_x <- percentile_alpha + ((x - p5) / (p95 - p5)) * ( (1-percentile_alpha) - percentile_alpha)
+  # Cap values outside the range as NA (or 0.95 0.05)
+  scaled_x[scaled_x < percentile_alpha] <- NA
+  scaled_x[scaled_x > (1- percentile_alpha)] <- NA
+  return(scaled_x)
 }
 
 
@@ -311,25 +306,21 @@ pdp_2d_parallelDiv_function <- function( var_name_i, target_name_k) {
   
   # load rf model
   # s_name_rf_model <-  paste0(input_dir, 'rf_model_div-',var_name_i, '_targ-', target_name_k, '_seed-102.RData' ) 
-  s_name_rf_model <-  paste0(input_dir, 'list_rf_model_results_parallelDiv_div-',var_name_i, '_targ-', target_name_k, '.RData')
+  s_name_rf_model <-  paste0(input_dir, 'list_rf_model_results_parallelDiv_div-',var_name_i, 
+                             '_targ-', target_name_k, '.RData')
   load(s_name_rf_model) # rf.model - load the rf model for each div variable
   
   if(!b_do_common_testTrainSplit){ 
     load( paste0(input_dir,
                  'df_all_div-', var_name_i, '_targ-', target_name_k , '.RData' ) ) # head(df_comb_i)
   } else{
-    load( paste0(input_dir, 'df_all.RData' ) ) # head(df_comb)
+    load( paste0(input_df, 'df_all.RData' ) ) # head(df_comb)
     df_comb_i <- df_comb ; rm(df_comb)
   }
   
-  # # load dataframes of variables containing test/train split
-  # s_name_df_comb <-  paste0(input_dir, 'df_all_div-',var_name_i, '_targ-', target_name_k, '.RData')
-  # load( s_name_df_comb )        # df_comb_i      head(df_comb_i)
-  
   # # initialise train/test df and df to use in analysis - select only those needed
   df_pdp <- f_plotRF_load_RFDF(df_comb_i, s_use_pdp_dataset) #; head(df_pdp)
-  # # df_pdp <- result_temp[[1]] ; # df_comb.train_i <- result_temp[[2]] ; df_comb.test_i <- result_temp[[3]] ; rm(result_temp)
-  
+
   ###################################################
   ######     PARTIAL DEPENDENCE DIVERSITY 2D    #####
   ###################################################
@@ -354,17 +345,9 @@ pdp_2d_parallelDiv_function <- function( var_name_i, target_name_k) {
     
     f_time_update(t_start_time)
     
-    # probably want to build a separate function for plloting by ggplot2 - can add features        
-    # # plot the histogram below
-    # # Plot instead the normalized histogram for kurtosis
-    # x_hist <- make_hist(df_comb_i,  pdp_2d_var_j, pdp_2d_var_j, lims_in)
-    #   ggplot(df_comb_i, aes_string(x = Kurtosis) ) + geom_histogram(binwidth = 0.1) +
-    #   xlab("Kurtosis") + ylab("Frequency")
-    
   } # end loop over 2d pdp vars
   
   return('saved')
-  
 } # end function
 
 ###################################################

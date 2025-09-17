@@ -118,7 +118,6 @@ metric         <- "Rsquared" # metric to tune for
 # be reproduced in that order (so should set new seed)
 # therefore you cannot produce results with the same seed in different sessions and bootstrap them (they will be replications)
 # it is advisable to either change seed (but this will affect the test/train sampling) or run over different i in X:Y
-# n_setseed_boot <- 102 # for set.seed(n_setseed_trainTest)  # set seed in order to run the same sample each time
 n_setseed_boot <- 99 # for set.seed(n_setseed_trainTest)  # set seed in order to run the same sample each time
 
 # number of bootstrap iterations to run in each parallelisation

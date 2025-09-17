@@ -8,7 +8,6 @@
 # Date          : 2025-02-19
 # Version       : 1
 # Authors       : Mark Pickering & Agata Elia
-# Maintainer    : Mark Pickering 
 # Notes		      : 
 # ########################################################
 
@@ -27,8 +26,6 @@ source(main_initialisation_file)
 source( paste0( script_config_dir, script_config_file) )
 # initialise figure common formatting for code base
 source(path_figures_init)
-# load common plotting functions
-# source('0_main/functions/plotting_functions.R')
 # load RF plotting functions
 source('3_create_figures/functions/f_plotRF.R')
 
@@ -60,10 +57,9 @@ library(foreach)    # run in parallel
 ######       I/O                              #####
 ###################################################
 
-# f_plotRF_IO <- function(script_subtitle){ 
 # output location
 # set/create output directory
-output_path <- paste0(root_data_figs, script_output_ext, '_', full_date, '_', script_subtitle,  '/')
+output_path <- paste0(root_data_figs, script_output_ext, '_', script_subtitle,  '/')
 print(paste0('output_path is : ', output_path ))
 
 # create output if not present

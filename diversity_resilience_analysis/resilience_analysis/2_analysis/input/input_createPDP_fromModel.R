@@ -18,25 +18,23 @@
 # the subdirectories are generally separate runs of the rf production that use different random seeds
 # in the case where no subdirectories are used, then input_subdir <- c('') & the dir is the 
 
-# here is info for the no diversity dataset
+# input dataset containing dataframe used in model
+input_dataframe <-  '4_selections'
+input_df <- paste0(root_data_proce, input_dataframe, '/')
 
-# the main directory used
-input_dir <- '4_selections_2025-02-19/'
+# the main directory used for the oreviously output bootstrapped results models
+input_dir <- 'createRF_model/' # '4_selections/'
 
-# list of the subdirectories
-# input_subdir           <- c('createRF_2023-08-24_101/',  'createRF_2023-08-24_102/',  'createRF_2023-08-24_103/', 'createRF_2023-08-26_104_parallel/')
-input_subdir           <- c('','','','','')
+# list of the subdirectories (if stored in subdirs, e.g. if 5 runs stored in 5 subdirs, see below)
+# input_subdir           <- c('createRF_98/', 'createRF_99/', 'createRF_100/', 'createRF_101/',  'createRF_102/') 
+input_subdir           <- c('') # ,'','','','')
 # list of the seeds used in each subdir production (should correspond to the dir order)
-l_seed                 <- c(98,99,100,101,102)
+l_seed                 <- c(99) # e.g c(98,99,100,101,102)
 # list of the niterations used in each subdir productions (should correspond to the dir order)
-l_iter                 <- c(20,20,20,20,20)
+l_iter                 <- c(20) # e.g. c(20,20,20,20,20)
 
 # prefix of name of results object to load
-f_results_name <- 'list_rf_model_boot'                        # this is the earliest produced results ones
-f_results_name_2 <- 'list_rf_model_pdp_results_boot_parallel' # used for the ones over diversity metrics
-
-
-
+f_results_name <- 'list_rf_model_pdp_results_boot_parallel'                       
 
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####
@@ -47,46 +45,29 @@ f_results_name_2 <- 'list_rf_model_pdp_results_boot_parallel' # used for the one
 v_target <- c(  'kndvi_lambda_xt', 'kndvi_lambda_variance')
 
 # v_optional_predictor - the diversity predictor used in the model
-v_optional_predictor <- 'shannon_entropy' # 'sd_rh98'  #'shannon_entropy' #'sd_rh98' #'simpson_index' # 'mu_rh98' ## 'simpson_index' #'mu_rh98'
-   #  # 'no_diversity'
-    # 'mu_kurt' #
-# "no_diversity"
-# "rh50_mean", "rh98_mean",
-# "fhd_mean"
-# "skew_mean", "kurt_mean",
-# "shannon_entropy", "simpson_index"
-# "rao_quadratic_entropy", "euclidean_distances_mean", "convex_hull_volume"
+# these pdps should have been produced in previous step
+v_optional_predictor <-  "Kurtosis" # "Shannon" "Canopy_heights_sd"
+  # 'sd_rh98' 'mu_kurt' "shannon_entropy" "euclidean_distances_mean",
+  # "rh50_mean", "rh98_mean", "fhd_mean" "skew_mean", "kurt_mean",
+  # 'mu_rh98' 'no_diversity' "simpson_index" "rao_quadratic_entropy" "convex_hull_volume"
 
 
-# variables to test partial dependence in every model
-v_predictors <- c( 'shannon_entropy' # 'sd_rh98' # 
-  # 'mu_kurt'
-  # 'shannon_entropy' #'simpson_index' #'mu_rh98' # 'sd_rh98' # 'simpson_index' #'mu_rh98'
-  #'kndvi_mean', 
-  # 'socc30cm' # soil carbon content
-                   # 'forestcover', # previously: 'mu_treecover',
-                    # 'topology_elevation_std', # topology metric # topology_elevation_mean topology_slope_mean topology_slope_std
-                   # 't2m_mean', #'t2m_CV', 't2m_TAC', 
-  # 'tp_mean' 
-  # 'tp_CV', 'tp_TAC'
-  # 'VPD_mean', #'VPD_CV', 'VPD_TAC'
-  # 'ssr_mean', 'ssr_CV', 'ssr_TAC',
-  # "rh50_mean", "rh98_mean",
-  # 'mu_kurt'
-  # 'shannon_entropy' # 
-  # "fhd_mean"
-  # "skew_mean", "kurt_mean",
-  # "shannon_entropy", "simpson_index"
-  # "rao_quadratic_entropy", "euclidean_distances_mean", "convex_hull_volume"
-)
+# variables to test partial dependence in every model 
+# these pdps have not yet been produced and can be producde if (b_run_basic == F)
+v_predictors <- c( "Kurtosis" )
+  # "Shannon" "Canopy_heights_sd"
+  # 'kndvi_mean' # 'socc30cm' # 'forestcover', 
+  # 'topology_elevation_std', # topology_elevation_mean topology_slope_mean topology_slope_std
+  # 't2m_mean', #'t2m_CV', 't2m_TAC',  'ssr_mean', 'ssr_CV', 'ssr_TAC',
+  # 'tp_mean'  'tp_CV', 'tp_TAC' 'VPD_mean', #'VPD_CV', 'VPD_TAC'
 
 
 ###################################################
 ######     PDP RELEVANT PARAMS                 ####
 ###################################################
 
-# Some pdps were by default created when creating the RF. These are for the diversity variables (and forestcover for no_diversity)
-# if you only want to run over these (faster) then select T
+# Some pdps were by default created when creating the RF. These are for the diversity variables (and forestcover for no_diversity) if you only want to run over these (faster) then select T 
+# F: may not be applicable for for simplified published code
 b_run_basic  <- T
 
 # toggle whether to run from the saved 'results' objects (recommended and tested) or use separately produced pdps
