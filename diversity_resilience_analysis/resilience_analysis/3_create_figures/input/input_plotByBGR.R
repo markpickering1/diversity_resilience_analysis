@@ -1,9 +1,9 @@
 # ########################################################
-# Title         : input_plot_by_bgr.R
-# Description   : This text script acts as a user input to all the scripts working by bgr
+# Title         : input_plotByBGR.R
+# Description   : This text script acts as a user input to all the scripts plotting 1d PDPs by bgr
 #                 By setting variables in this file, the user should not need to edit the main code
 #                 this script does not contain plotting or styles themes: see initialse_figs.R
-# Date          : 2025-02-19
+# Date          : 23/09/25
 # Authors       : Mark Pickering & Agata Elia
 # Notes         : 
 # ########################################################
@@ -13,41 +13,44 @@
 ###################################################
 
 # set output path name - with date this will link output (variables) to next script
-script_output_ext <- 'combineDF_plots_by_bgr'                           # new name
+script_output_ext <- 'combineDF_plotByBGR'                           # new name
 
 # input dataset containing the dataframes used for training the rf models and the respective rf models
 date_production_rf <- 'bootDiv_metrics_2025-02-19' # bootstrapped rf models with same train test for all corrected for x and y in the training df
-input_dir_rf <- paste0('data_processing/', 'createRF_', date_production_rf, '/') # for the bs rf models
+input_dir_rf <- paste0('data_processing/', 'createRF_', date_production_rf, '/list_of_rfs/') # for the bs rf models
+input_all_data <- 'df_all.RData'
+input_rf_common_name <- 'list_rf_model_pdp_results_boot_parallel_nIter-20_div-'
 
-# input file used to retrieve x,y if necessary
 # input file containing the BGR
 input_dir_bgr <- 'data/ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/'
 input_file_bgr <- 'df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
 
-# input datasets contatining the pdp by bgr
-input_dir_pdp_by_bgr <- 'figures/combineDF_plots_explore_ice_coarse_2025-02-19/'  
+# identify unique KG classes to loop over
+bgr <- c(1, 7, 9)
+
+# identify bgr classes for plots
+colors <- c("#D55E00", "#5BB99F","#F0C442")
+regions <- c("alpine", "temperate", "mediterranean")
 
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####
 #####################################################
-v_target <- c('kndvi_lambda_xt') #c('kndvi_TAC', 'kndvi_lambda_xt', 'kndvi_lambda_variance') #c('kndvi_TAC') c('kndvi_lambda_xt') c('kndvi_lambda_variance')
+v_target <- c('kndvi_lambda_xt','kndvi_lambda_variance')
 v_identifiers <- c('x', 'y')
 
 # variables to go as predictor in every model
 v_predictors <- c( 'kndvi_mean', 
-                   'socc30cm', # soil carbon content
-                   'forestcover', # previously: 'mu_treecover',
-                   'topology_elevation_std', # topology metric # topology_elevation_mean topology_slope_mean topology_slope_std
+                   'socc30cm', 
+                   'forestcover', 
+                   'topology_elevation_std', 
                    'ssr_mean', 'ssr_CV', 'ssr_TAC',
                    't2m_mean', 't2m_CV', 't2m_TAC', 
                    'tp_mean', 'tp_CV', 'tp_TAC',
                    'VPD_mean', 'VPD_CV', 'VPD_TAC'
-                   # 'mu_spei', 'cv_spei', 'tac_resid_spei' # shouldn't really use this as predictor - use VPD instead
 )
 
 # add biodiversity variables to loop over and add to separate models
-# v_optional_predictors <- c( "no_diversity")
-v_optional_predictors <- c("mu_kurt") #c("sd_rh98", "shannon_entropy", "mu_kurt") # c("mu_kurt")  # c("shannon_entropy")
+v_optional_predictors <- c("mu_kurt", "sd_rh98", "shannon_entropy")
 
 t2m_mean_pdp <- FALSE
 
@@ -57,24 +60,6 @@ l_seed <- c(98, 99, 100, 101, 102)
 
 # for paralellisations number of cores to use
 n_cores <- 15
-
-# v_optional_predictors <- c( 
-#   "mu_rh98"                  , "mu_rh50"                 , #"mu_rh75"                 , # "mu_rh25",                
-#   "mu_skew"                  , "mu_kurt"                 , "mu_sd"                   ,
-#   "sd_rh98"                  , #"sd_rh75"                 , "sd_rh50"                 , # "sd_rh25"                  ,
-#   "shannon_entropy"          , "simpson_index"           , "rao_quadratic_entropy"    #, "euclidean_distances_mean",
-#   #"mu_fhd_normal"             , "mu_pai"                  , "mu_cover"  ,
-#   #"mu_mean"                   , "mu_cv"       
-#   # "mu_skew_negativevalues"    "mu_kurt_negativevalues"    "mu_sd_negativevalues"      "mu_mu_negativevalues"     
-#   # "mu_cv_negativevalues"      
-#   # "sd_fhd_normal"             "sd_pai"                   
-#   # "sd_cover"                  "sd_skew_negativevalues"    "sd_kurt_negativevalues"    "sd_sd_negativevalues"     
-#   # "sd_mu_negativevalues"      "sd_cv_negativevalues"      "sd_skew"                   "sd_kurt"                  
-#   # "sd_sd"                     "sd_mean"                   "sd_cv"                       "euclidean_distances_stdev"
-# )
-
-# vars to run 2d visualisation with
-pdp_2d_extra_vars <- c('t2m_mean') #, 'tp_mean', 'VPD_mean', 'ssr_mean') 
 
 ###################################################
 ######     SET RF PARAMETERS                  #####
@@ -452,27 +437,6 @@ l_vars    <- list(# time varying metrics
   'shannon_entropy' = l_shannon_entropy, 'simpson_index' = l_simpson_index,
   'rao_quadratic_entropy' = l_rao_quadratic_entropy,
   'euclidean_distances_mean' = l_euclidean_distances_mean
-  # 'euclidean_distances_stdev' = NULL,
-  #'div_hull' = l_convex_hull_volume ,
-
-  # metrics as above but including negative values
-  # 'mu_skew_negativevalues' = l_mu_skew , 'mu_kurt_negativevalues' = l_mu_kurt, 'mu_sd_negativevalues' = l_mu_sd,
-  # 'mu_mu_negativevalues'   = l_mu_mean   , 'mu_cv_negativevalues'   = l_mu_cv  ,
-  # 'sd_skew_negativevalues' = l_sd_skew , 'sd_kurt_negativevalues' = l_sd_kurt, 'sd_sd_negativevalues' = l_sd_sd,
-  # 'sd_mu_negativevalues'   = l_sd_mean   , 'sd_cv_negativevalues'   = NULL
-
-  # ## difference between resilience metrics
-  # # TAC vs (xt kappa) slopes
-  # "diff_TAC_slopext" = NULL       ,"diff_TAC_robslopext" = NULL   ,"diff_robslopext_slopext" = NULL,
-  # "diff_TAC_slopekappa" = NULL ,"diff_robslopekappa_slopekappa" = NULL,
-  # # xt vs kappa
-  # "diff_robslopext_robslopekappa" = NULL ,"diff_slopext_slopekappa" = NULL       ,
-  # # diff lamda
-  # "diff_lamxt_lamkappa" = NULL ,"diff_lamxt_lamvar" = NULL             ,"diff_kappa_lamvar" = NULL      ,
-  # # diff labda (rob)
-  # "diff_roblamxt_roblamkappa" = NULL         ,"diff_roblamxt_roblamvar" = NULL       ,"diff_robkappa_roblamvar" = NULL,
-  # # diff rob lamda vs lamda
-  # "diff_roblamxt_lamxt" = NULL ,"diff_roblamkappa_lamkappa" = NULL     ,"diff_roblamvar_lamvar" = NULL
 )
 
 
