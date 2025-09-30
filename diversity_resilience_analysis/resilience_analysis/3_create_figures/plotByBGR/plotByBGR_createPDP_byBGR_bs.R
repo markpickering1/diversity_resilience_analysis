@@ -46,14 +46,13 @@ library(terra)
 library(raster)
 library(randomForest)
 
-
 ###################################################
 ######       I/O                              #####
 ###################################################
 
 # output location
 # set/create output directories
-output_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs_', full_date,  '/')
+output_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs/')
 print(paste0('output_path is : ', output_path ))
 
 # create output if not present
@@ -67,13 +66,13 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 } else{ print('could not copy config file') }
 
 # load BGR file
-load(paste0(input_dir_bgr, input_file_bgr))
+load(paste0(root_data_input, input_bgr))
 
 # round digit of bgr file
 df_var[1:2] <- df_var[1:2] %>% round( digits = 3)
 
 # load all data (since they are now all in one df)
-load(paste0(input_dir_rf, input_all_data) )
+load(paste0(root_data_proce, input_dir_rf, input_all_data))
 
 # initialize train/test df from the all data
 df_comb.train_i <- subset(df_comb, train_sample == T) # head(df_comb.train_i)
@@ -133,7 +132,7 @@ for (i in 1:length(v_optional_predictors)){
         n_seed <- l_seed[n] ; print(n_seed)
         
         # initialize the file containing rf models for the specific seed
-        input_rf_file  <- paste0(input_dir_rf, input_rf_common_name, var_name_i, '_seed-', n_seed, '_targ-', target_i, '.RData')
+        input_rf_file  <- paste0(root_data_proce, input_dir_rf, input_rf_common_name, var_name_i, '_seed-', n_seed, '_targ-', target_i, '.RData')
         
         # load the rf models for the specific seed
         load(input_rf_file) 
