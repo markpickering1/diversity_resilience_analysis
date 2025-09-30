@@ -20,7 +20,7 @@ root_project <- paste0(getwd(), '/')
 
 # dir root of analysis data
 # this should be set the root name of the directory for data input/outputs
-root_data         <- paste0(root_project, "resilience_data_collection/"  # local directory
+root_data         <- paste0(root_project, "resilience_data_collection/")  # local directory
 
 # dir input data
 root_data_input   <- paste0(root_data, "data/")
