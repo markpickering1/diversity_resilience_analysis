@@ -13,17 +13,15 @@
 ###################################################
 
 # set output path name - with date this will link output (variables) to next script
-script_output_ext <- 'combineDF_plotByBGR'                           # new name
+script_output_ext <- 'plotByBGR'                           # new name
 
 # input dataset containing the dataframes used for training the rf models and the respective rf models
-date_production_rf <- 'bootDiv_metrics_2025-02-19' # bootstrapped rf models with same train test for all corrected for x and y in the training df
-input_dir_rf <- paste0('data_processing/', 'createRF_', date_production_rf, '/list_of_rfs/') # for the bs rf models
+input_dir_rf <- 'createRF_model/'
 input_all_data <- 'df_all.RData'
 input_rf_common_name <- 'list_rf_model_pdp_results_boot_parallel_nIter-20_div-'
 
 # input file containing the BGR
-input_dir_bgr <- 'data/ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/'
-input_file_bgr <- 'df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
+input_bgr <- 'ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
 
 # identify unique KG classes to loop over
 bgr <- c(1, 7, 9)
@@ -35,7 +33,7 @@ regions <- c("alpine", "temperate", "mediterranean")
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####
 #####################################################
-v_target <- c('kndvi_lambda_xt','kndvi_lambda_variance')
+v_target <- c('kndvi_lambda_xt') #,'kndvi_lambda_variance')
 v_identifiers <- c('x', 'y')
 
 # variables to go as predictor in every model
@@ -46,17 +44,18 @@ v_predictors <- c( 'kndvi_mean',
                    'ssr_mean', 'ssr_CV', 'ssr_TAC',
                    't2m_mean', 't2m_CV', 't2m_TAC', 
                    'tp_mean', 'tp_CV', 'tp_TAC',
-                   'VPD_mean', 'VPD_CV', 'VPD_TAC'
+                   'VPD_mean', 'VPD_CV', 'VPD_TAC', 'Ndep'
 )
 
 # add biodiversity variables to loop over and add to separate models
-v_optional_predictors <- c("mu_kurt", "sd_rh98", "shannon_entropy")
+# v_optional_predictors <- c("mu_kurt", "sd_rh98", "shannon_entropy")
+v_optional_predictors <- c("Kurtosis") #, "Canopy_heights_sd", "Shannon")
 
 t2m_mean_pdp <- FALSE
 
 stats <- 'median'
 
-l_seed <- c(98, 99, 100, 101, 102)
+l_seed <- c(99) #c(98, 99, 100, 101, 102)
 
 # for paralellisations number of cores to use
 n_cores <- 15
@@ -421,12 +420,12 @@ l_vars    <- list(# time varying metrics
   'mu_rh25' = l_mu_rh25   ,
   'mu_pai' = l_mu_pai     , 'mu_cover' = l_mu_cover ,
   #  vertical structural diversity
-  'mu_skew' = l_mu_skew   , 'mu_kurt'  = l_mu_kurt  ,
+  'mu_skew' = l_mu_skew   , 'Kurtosis'  = l_mu_kurt  ,
   'mu_sd'   = l_mu_sd     , 'mu_mean'  = l_mu_mean  ,  'mu_cv'   = l_mu_cv    ,
   'mu_fhd_normal' = l_mu_fhd_normal ,
 
   #  spatial diversity in vertical profile
-  'sd_rh50' = l_sd_rh50   , 'sd_rh98'  = l_sd_rh98  ,  'sd_rh75' = l_sd_rh75  ,
+  'sd_rh50' = l_sd_rh50   , 'Canopy_heights_sd'  = l_sd_rh98  ,  'sd_rh75' = l_sd_rh75  ,
   'sd_rh25' = l_sd_rh25   ,
   'sd_pai' = NULL         , 'sd_cover' = NULL       ,
   #  spatial diversity in vertical diversity
@@ -434,7 +433,7 @@ l_vars    <- list(# time varying metrics
   'sd_sd'   = l_sd_sd     , 'sd_mean'  = l_sd_mean  ,  'sd_cv'   = l_sd_cv    ,
   'sd_fhd_normal' = NULL  ,
   #  spatial diversity  via entropy index of rh50 rh75 rh98 cover
-  'shannon_entropy' = l_shannon_entropy, 'simpson_index' = l_simpson_index,
+  'Shannon' = l_shannon_entropy, 'simpson_index' = l_simpson_index,
   'rao_quadratic_entropy' = l_rao_quadratic_entropy,
   'euclidean_distances_mean' = l_euclidean_distances_mean
 )
