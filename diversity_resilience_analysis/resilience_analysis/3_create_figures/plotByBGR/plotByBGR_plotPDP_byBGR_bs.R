@@ -58,14 +58,13 @@ library(stringr)
 
 # output location
 # set/create output directory
-input_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs_', full_date,  '/')
-output_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs_', full_date,  '/plots/')
+input_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs/')
+output_path <- paste0(root_data_figs, script_output_ext, '_1d_pdp_bs/plots/')
 
 # create output if not present
 if(! dir.exists(output_path)) {dir.create(paste0(output_path),recursive=T) ; 
   print( paste0( 'creating output dir for figures of dataframe cols : ', output_path ) ) }
 print(paste0('output_path is : ', output_path ))
-
 
 # copy configuration input variables to output for storage
 if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy config file') 
@@ -74,13 +73,13 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 } else{ print('could not copy config file') }
 
 # load BGR file
-load(paste0(input_dir_bgr, input_file_bgr))
+load(paste0(root_data_input, input_bgr))
 
 # round digit of bgr file
 df_var[1:2] <- df_var[1:2] %>% round( digits = 3)
 
 # load all data (since they are now all in one df)
-load(paste0(input_dir_rf, input_all_data) )
+load(paste0(root_data_proce, input_dir_rf, input_all_data))
 
 # initialize train/test df from the all data
 df_comb.train_i <- subset(df_comb, train_sample == T) # head(df_comb.train_i)
@@ -113,9 +112,9 @@ for (i in 1:length(v_optional_predictors)){
     var_i_full <- l_lables_metrics[[var_name_i]] ; print(var_i_full)
 
     # create plot limits
-    if (var_name_i == "shannon_entropy"){
+    if (var_name_i == "Shannon"){
       xlims <- c(3, 4.5)
-    } else if (var_name_i == "mu_kurt"){
+    } else if (var_name_i == "Kurtosis"){
       xlims <- c(0.3, 0.8) # for inverted kurtosis
     } else {
       xlims <- c(4, 15)
@@ -127,10 +126,10 @@ for (i in 1:length(v_optional_predictors)){
         ylims <- c(0.85, 1.7)
       }
     
-    # list all the files in the folder of interest
+    # list all the files in the folder containing the 1d pdps
     file_list <- list.files(path = input_path, full.names = TRUE)
     
-    # identify names of pdp df of all seed and k (so for all bs models) for the specific combination of div and res variable
+    # identify names of pdps df of all seed and k (so for all bs models) for the specific combination of div and res variable
     pdp_df_list <- grep(paste0('df_pdp_1d-', var_name_i, '_targ-', target_i, '.*'), file_list, value = TRUE)
     
     # rowbinds all df of bs pdp 
@@ -160,8 +159,8 @@ for (i in 1:length(v_optional_predictors)){
     }
     
     # fix kurtosis sign
-    if (var_name_i == 'mu_kurt') {
-      merged_pdp_df$mu_kurt <- -1*merged_pdp_df$mu_kurt
+    if (var_name_i == 'Kurtosis') {
+      merged_pdp_df[[var_name_i]] <- -1*merged_pdp_df[[var_name_i]]
     }
     
     # define names of average, standard deviation and confidence interval band of res columns (for each div value)
@@ -178,7 +177,7 @@ for (i in 1:length(v_optional_predictors)){
                 !!sym(ci_up_res) := quantile(!!sym(target_i), probs = 0.975)
       )
     
-    # keep only complete cases (not all the bs models in same bgr can have the same t2m_mean values)
+    # keep only complete cases 
     merged_pdp_df_bs <- merged_pdp_df_bs[complete.cases(merged_pdp_df_bs), ]
     
     # create column with temperature and bgr value
@@ -202,7 +201,7 @@ for (i in 1:length(v_optional_predictors)){
     legend_grob <- cowplot::get_legend(g_pdp)
     g_pdp <- g_pdp + theme(legend.position = "none")
     
-    # plot each pdp (one for seed and k, so one for each bs model) overlayed, one color per bgr with ci
+    # plot pdps one color per bgr with ci
     g_pdp_bs_ci <- ggplot(merged_pdp_df_bs, aes(x = !!sym(var_name_i), y = !!sym(paste0('mean_', target_i)), group = index_tbgr, color = bgr, linetype = as.factor(t))) + 
       geom_ribbon(aes(ymin = !!sym(paste0('ci_low_', target_i)),
                       ymax = !!sym(paste0('ci_up_', target_i)),
@@ -227,7 +226,7 @@ for (i in 1:length(v_optional_predictors)){
     merged_pdp_df_bs_no_ci[[ci_low_res]][merged_pdp_df_bs_no_ci$t==1] <- merged_pdp_df_bs_no_ci[[mean_res]][merged_pdp_df_bs_no_ci$t==1]
     merged_pdp_df_bs_no_ci[[ci_up_res]][merged_pdp_df_bs_no_ci$t==1] <- merged_pdp_df_bs_no_ci[[mean_res]][merged_pdp_df_bs_no_ci$t==1]
     
-    # plot each pdp (one for seed and k, so one for each bs model) overlayed, one color per bgr with ci only for current temperature
+    # plot pdps one color per bgr with ci only for current temperature
     g_pdp_bs_ci_no_ci <- ggplot(merged_pdp_df_bs_no_ci, aes(x = !!sym(var_name_i), y = !!sym(paste0('mean_', target_i)), group = index_tbgr, color = bgr, linetype = as.factor(t))) + 
       geom_ribbon(aes(ymin = !!sym(paste0('ci_low_', target_i)),
                       ymax = !!sym(paste0('ci_up_', target_i)),
@@ -247,9 +246,9 @@ for (i in 1:length(v_optional_predictors)){
     
     g_pdp_bs_ci_no_ci <- g_pdp_bs_ci_no_ci + theme(legend.position = "none")
     
-    ggsave(plot = g_pdp_bs_ci, filename = paste0(output_path, 'df_pdp_1d-', var_name_i, '_targ-', target_i, '_basic_bs_ci.png'), width = fig_width_wide, height = fig_height_wide)
-    ggsave(plot = g_pdp_bs_ci_no_ci, filename = paste0(output_path, 'df_pdp_1d-', var_name_i, '_targ-', target_i, '_basic_bs_ci_no_t1.png'), width = fig_width_wide, height = fig_height_wide)
-    ggsave(plot = legend_grob, filename = paste0(output_path, 'df_pdp_1d-', var_name_i, '_targ-', target_i, '_basic_legend.png'), width = fig_width_wide, height = fig_height_wide)
+    ggsave(plot = g_pdp_bs_ci, filename = paste0(output_path, 'pdp_1d_byBGR-', var_name_i, '_targ-', target_i, '_basic_bs_ci.png'), width = fig_width_wide, height = fig_height_wide)
+    ggsave(plot = g_pdp_bs_ci_no_ci, filename = paste0(output_path, 'pdp_1d_byBGR-', var_name_i, '_targ-', target_i, '_basic_bs_ci_no_t1.png'), width = fig_width_wide, height = fig_height_wide)
+    ggsave(plot = legend_grob, filename = paste0(output_path, 'pdp_1d_byBGR-', var_name_i, '_targ-', target_i, '_basic_legend.png'), width = fig_width_wide, height = fig_height_wide)
 }
   
 }
