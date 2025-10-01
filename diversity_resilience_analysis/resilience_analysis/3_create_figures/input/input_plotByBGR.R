@@ -36,7 +36,7 @@ regions <- c("alpine", "temperate", "mediterranean")
 #####################################################
 ###### SELECT VARIABLES OF INTEREST IN ANALYSIS #####
 #####################################################
-v_target <- c('kndvi_lambda_xt') #,'kndvi_lambda_variance')
+v_target <- c('kndvi_lambda_xt','kndvi_lambda_variance')
 v_identifiers <- c('x', 'y')
 
 # variables to go as predictor in every model
@@ -51,14 +51,13 @@ v_predictors <- c( 'kndvi_mean',
 )
 
 # add biodiversity variables to loop over and add to separate models
-# v_optional_predictors <- c("mu_kurt", "sd_rh98", "shannon_entropy")
-v_optional_predictors <- c("Kurtosis") #, "Canopy_heights_sd", "Shannon")
+v_optional_predictors <- c("Kurtosis", "Canopy_heights_sd", "Shannon")
 
 t2m_mean_pdp <- FALSE
 
 stats <- 'median'
 
-l_seed <- c(99) #c(98, 99, 100, 101, 102)
+l_seed <- c(98, 99, 100, 101, 102)
 
 # for paralellisations number of cores to use
 n_cores <- 15
