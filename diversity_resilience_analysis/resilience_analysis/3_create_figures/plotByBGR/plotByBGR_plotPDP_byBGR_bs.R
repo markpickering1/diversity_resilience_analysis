@@ -73,7 +73,7 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 } else{ print('could not copy config file') }
 
 # load BGR file
-load(paste0(root_data_input, input_bgr))
+load(paste0(input_dir_static, input_merged_bgr))
 
 # round digit of bgr file
 df_var[1:2] <- df_var[1:2] %>% round( digits = 3)
