@@ -47,6 +47,7 @@ input_hansen            <- 'static_variables/hansen/hansen_forest_cover_nc_maske
 input_socc              <- 'static_variables/socc/SOCC_nc_masked_005/SOCC30cmRescaledAtModis_masked50_005.nc'                                   # soil carbon content 
 input_Ndep              <- 'static_variables/Ndepo/multiyear_mean/EMEP01_rv5_3_year_totalRdN.nc' # Nitrogen deposition
 input_topology          <- 'static_variables/srtm/SRTM_005_nc_aligned_df/df_elevation.RDATA'  # elevation data 
+input_bgr               <- 'ancillary/EEA_biogeographic_regions/BiogeoRegions2016_wgs84_europe.tif'
 
 # calculations of forest area (not required)
 input_forestpixelcount  <- 'ancillary/area/hansenForestCoverNoLoss2000AtModisMean_mask50_005.nc'  
@@ -85,6 +86,7 @@ v_variables_static  <- list(
   'Ndep'        = input_Ndep    ,
   'forestpixelcount'  = input_forestpixelcount    ,
   'topology'    = input_topology,
+  'bgr'         = input_bgr,
   'div'         = input_biodiv
   # previous extra diversity var inputs
   # 'div_count'   = input_biodiv_count,
