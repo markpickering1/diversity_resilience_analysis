@@ -66,7 +66,13 @@ if( ! file.exists( paste0(output_path, script_config_file ) ) ) { print('copy co
 } else{ print('could not copy config file') }
 
 # load BGR file
-load(paste0(root_data_input, input_bgr))
+load(paste0(input_dir_static, input_bgr))
+
+# merge continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) in continental (7), save merged output and load it
+df_var$BiogeoRegions2016_wgs84_europe <- ifelse(df_var$BiogeoRegions2016_wgs84_europe %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016_wgs84_europe)
+names(df_var)[names(df_var) == "BiogeoRegions2016_wgs84_europe"] <- "BiogeoRegions2016"
+save(df_var, file=paste0(input_dir_static, input_merged_bgr))
+load(paste0(input_dir_static, input_merged_bgr))
 
 # round digit of bgr file
 df_var[1:2] <- df_var[1:2] %>% round( digits = 3)
