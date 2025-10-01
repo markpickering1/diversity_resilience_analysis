@@ -21,7 +21,10 @@ input_all_data <- 'df_all.RData'
 input_rf_common_name <- 'list_rf_model_pdp_results_boot_parallel_nIter-20_div-'
 
 # input file containing the BGR
-input_bgr <- 'ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
+# input_bgr <- 'ancillary/EEA_biogeographic_regions/europe/EEA_biogeographical_regions_df/df_bgr_baseVar_full_merged_bgr.RData'   #  with continental, atlantic, steppe and pannonian bgr (7, 4, 12, 11) merged in continental (7) df_var$BiogeoRegions2016 <- ifelse(df_var$BiogeoRegions2016 %in% c(4, 7, 11, 12), 7, df_var$BiogeoRegions2016)
+input_dir_static <- paste0(root_data_proce, '1_inputDataframes_sv1/')
+input_bgr <- 'df_bgr_baseVar_full.RData'
+input_merged_bgr <- 'df_bgr_baseVar_full_merged_bgr.RData'
 
 # identify unique KG classes to loop over
 bgr <- c(1, 7, 9)
