@@ -1,9 +1,11 @@
-﻿var europe = ee.FeatureCollection("users/agataelia1991/aoi/Europe_BB"),
-    modisSample = ee.Image("users/agataelia1991/Hansen/modisSample"),
-    SOCC = ee.Image("OpenLandMap/SOL/SOL_ORGANIC-CARBON_USDA-6A1C_M/v02");
+﻿var SOCC = ee.Image("OpenLandMap/SOL/SOL_ORGANIC-CARBON_USDA-6A1C_M/v02");
+
+// Define bounding box
+var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
+Map.addLayer(europe);
 
 // Explore the dataset
-print(SOCC);
+print(SOCC); 
 
 // Retrieve SOCC at 30cm depth and rescale by scale factor (5)
 var SOCC30cm = SOCC.select(['b30']).clip(europe);
@@ -26,7 +28,8 @@ var SOCC30cmRescaledAtModis = SOCC30cmRescaled
     })
     // Request the data at the scale and projection of the MODIS image
     .reproject({ 
-      crs: modisSample.projection()
+      crs: 'EPSG:4326',
+      crsTransform: [0.0049999999999966955, 0, -10.66499999999295, 0, -0.0049999999999966955, 71.18499999995295]
     }); 
 
 // Add layer to map
