@@ -120,6 +120,10 @@ for (j in 1:length(v_variables_static)){
       print('transform metrics to kNDVI template')
       r_i_baseVar <- project(r_i_baseVar, r_i_baseVar_kndvi, method = "bilinear")   
     } 
+    # Resample if grid differs
+    if (!compareGeom(r_i_baseVar, r_i_baseVar_kndvi, stopOnError = FALSE, ext = FALSE, crs = FALSE)) {
+      r_i_baseVar <- resample(r_i_baseVar, r_i_baseVar_kndvi, method = "bilinear")
+    }
     
     df_var <- terra::as.data.frame(r_i_baseVar, xy = T, na.rm = NA) # set to NA for cells with NA in all layers removed
     # calculate the total area in each pixel that we consider forest

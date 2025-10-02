@@ -50,11 +50,11 @@ input_topology          <- 'static_variables/srtm/SRTM_005_nc_aligned_df/df_elev
 input_bgr               <- 'ancillary/EEA_biogeographic_regions/BiogeoRegions2016_wgs84_europe.tif'
 
 # calculations of forest area (not required)
-input_forestpixelcount  <- 'ancillary/area/hansenForestCoverNoLoss2000AtModisMean_mask50_005.nc'  
+input_forestpixelcount  <- 'static_variables/hansen/hansen_forest_cover_nc_masked_005/hansenForestCoverNoLoss2000AtModisMean_mask50_005.nc' 
 
 # diversity metric variables - which may be split across several datasets
 input_biodiv            <- 'biodiversity/figshare_ESSD_paper_output/dataset/Metrics/Structural_diversity_5km.nc'
-# previous forms of diversity variable inputs
+# other forms of diversity variable inputs
 # input_biodiv_count      <- 'biodiversity/count.nc'           # number GEDI points
 # input_biodiv_vert       <- 'biodiversity/mean_std.nc'        # diversity rhXX + mean + sd + kurt + skew
 # input_biodiv_horiz_1    <- 'biodiversity/entropy-2-3-4-7_bins05.nc' #  diversity entropies
