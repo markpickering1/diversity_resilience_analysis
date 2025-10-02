@@ -1,6 +1,9 @@
-var lcd = ee.ImageCollection("MODIS/061/MCD12Q2"),
-    europe = ee.FeatureCollection("users/agataelia1991/aoi/Europe_BB");
+var lcd = ee.ImageCollection("MODIS/061/MCD12Q2");
 
+// Define bounding box
+var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
+Map.addLayer(europe);
+    
 // Create a function to add the length of the growing season
 var addLength = function(img){
   var sos = img.select(['Greenup_1']);
