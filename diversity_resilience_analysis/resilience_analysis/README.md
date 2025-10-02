@@ -182,7 +182,7 @@ These scripts plot both the dataframe created in 1_createDf_fromInput.R and figu
 ### plotByBGR_plotPDP_byBGR_bs.R
 - This script uses the output dataframes of plotByBGR_createPDP_byBGR_bs.R containing the bootstrapped partial dependence values by BGR and under current and increased temperature
 - It merges the boostrapped partial dependence values and the mean and uncertainty bounds are calculated for each combination of metrics, each BGR and each temperature value
-- Itplots for each combination of metrics, and for each BGR, the 1d partial dependence plot (PDP) under current (solid) and increased (dashed) temperature with confidence interval
+- It plots for each combination of metrics, and for each BGR, the 1d partial dependence plot (PDP) under current (solid) and increased (dashed) temperature with confidence interval
 
 ### plotByBGR_map.R
 - This script creates a map showing the biogeographical regions used for the analysis 
