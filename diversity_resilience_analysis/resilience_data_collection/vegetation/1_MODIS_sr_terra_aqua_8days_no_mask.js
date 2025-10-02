@@ -1,7 +1,6 @@
 var terra = ee.ImageCollection("MODIS/061/MOD09GA"),
        aqua = ee.ImageCollection("MODIS/061/MYD09GA");
 
-
 // Define bounding box
 var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
 Map.addLayer(europe);
