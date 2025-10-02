@@ -123,10 +123,6 @@ The models predict the target variables (one per model) using the predictor vari
 These scripts plot both the dataframe created in 1_createDf_fromInput.R and figures that enable the interpretation of the models created in 2_analysis/. As such they take as input either df_comb or the RF model.
  NOTE: The scripts here may assume that either a single RF model or a bootstrapped RF model is input (but it is simple to adapt to accomodate a bootstrapped dataset)
 
-### plot_dataframe.R
-- This script plots & maps each of a selected number of plots from the analysis dataframe (i.e. model inputs and predicted values) created in 1_create_df/
-### plot_dataframe_correlationMatrix.R
-- This script creates a correlation matrix of the different analysis dataframe variables
 ### input/input_plot_dataframe.R
 - Configures minor plotting details, sets map/histogram limits and units on variables
 - Note: can toggle between setting |abs| values of the restoration rates and inverse of kurtosis
@@ -135,19 +131,33 @@ These scripts plot both the dataframe created in 1_createDf_fromInput.R and figu
 ### input/input_plotRF.R
 - Config script that sets parameters for all of the plotRF_...R scripts
 
+### input/input_plotByBGR.R
+- This script configures the input models and data for plotting the 1d partial dependence values at current and increased temperature by biogeographical (BGR) region
+- It takes as input the RF models, the data used to train the models and the BGR dataframe
+
+### plot_dataframe.R
+- This script plots & maps each of a selected number of plots from the analysis dataframe (i.e. model inputs and predicted values) created in 1_create_df/
+
+### plot_dataframe_correlationMatrix.R
+- This script creates a correlation matrix of the different analysis dataframe variables
+
 ### plotRF_performance.R
 - Plot test data performance metrics relating to the RF model
 - Create a figure & dataframe of Observed vs Modelled data for each RF model including optional statistics
+
 ### plotRF_importance.R
 - Plot a figure showing the relative importance of features in the RF model
 
 ### plotRF_partialPlot_createDF.R
 - Create the dataframes for both 1D and 2D partial plots from the rf.models
 - Runs a simple plotting of the partial plots
+
 ### plotRF_partialPlot_plotDF.R
 - Plots the dataframes in a more formalised way for comparison between metrics
+
 ### plotRF_partialPlot_plotDF_2d.R
 - Produce the 2D partial figures
+
 ### plotRF_partialPlot_boot.R
 - Script uses the df_pdp_all dataframes containing the bootstrapped partial dependence values (pdp_i) previously produced via createPDP_fromModel.R
 - The mean and uncertainty bounds (e.g. via s.d. or 95% percentile) are calculated for each combination of metrics
@@ -159,6 +169,21 @@ These scripts plot both the dataframe created in 1_createDf_fromInput.R and figu
 - Also takes the derivative of the ICE curves at each pixel's value (giving the direction of diversity-resilience relationship
 - Outputs a dataframe containing the two
 - NOTE: the computation takes a while and can run to a lot of RAM (therefore be split into chunks) so it is not recommended to run over multiple diverstiy & resilience metrics at a time
+
 ### plotRF_createICE_plotICE.R
 - Take the df_dice dataframes containing the derivatie of the ICE curve at each point for a given resilience-diversity metric combination
 - Plot the derivative in map form
+
+### plotByBGR_createPDP_byBGR_bs.R
+- The script creates the dataframes containing the bootstrapped partial dependence values for each combination on metrics, generated using dataframes with the current and the increased (+1°C) temperature and by biogeographical (BGR) region
+- It takes as input the BGR dataframe and it merges the BGR of interest
+- It takes as input the list of RF models from multiple seeds and the data used to train the models
+
+### plotByBGR_plotPDP_byBGR_bs.R
+- This script uses the output dataframes of plotByBGR_createPDP_byBGR_bs.R containing the bootstrapped partial dependence values by BGR and under current and increased temperature
+- It merges the boostrapped partial dependence values and the mean and uncertainty bounds are calculated for each combination of metrics, each BGR and each temperature value
+- Itplots for each combination of metrics, and for each BGR, the 1d partial dependence plot (PDP) under current (solid) and increased (dashed) temperature with confidence interval
+
+### plotByBGR_map.R
+- This script creates a map showing the biogeographical regions used for the analysis 
+
