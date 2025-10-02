@@ -1,11 +1,11 @@
-var terra = ee.ImageCollection("MODIS/061/MOD09GA"),
-    europe = ee.FeatureCollection("users/INSERT_GEE_USERNAME/aoi/Europe_BB"),
-    modisSample = ee.Image("users/INSERT_GEE_USERNAME/Hansen/modisSample");
+// Define bounding box
+var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
+Map.addLayer(europe);
 
 // Hansen forest cover dataset 
 var gfc = ee.Image("UMD/hansen/global_forest_change_2021_v1_9");
 
-// Get tree cover for the year 2000
+// Get tree cover for the year 2000 
 var treecover = gfc.select(['treecover2000']);
 
 // Get tree cover loss band
@@ -34,6 +34,7 @@ var treecover30pMask = treecover30p.updateMask(patchCount.gt(6)).mask().clip(eur
 
 // Filter out small patches from cover dataset and create binary mask of the results
 var treecover30pnolossMask = treecover30pnoloss.updateMask(patchCountNoLoss.gt(6)).mask().clip(europe).unmask(0);
+Map.addLayer(treecover30pnolossMask);
 
 // Get the forest cover at MODIS export scale, crs and tranform
 var hansenForestCover2000AtModisMean = treecover30pMask
@@ -44,7 +45,8 @@ var hansenForestCover2000AtModisMean = treecover30pMask
     })
     // Request the data at the scale and projection of the MODIS image
     .reproject({ 
-      crs: modisSample.projection()
+      crs: 'EPSG:4326',
+      crsTransform: [0.0049999999999966955, 0, -10.66499999999295, 0, -0.0049999999999966955, 71.18499999995295]
     }); 
 
 // Add layer to map
@@ -70,7 +72,8 @@ var hansenForestCoverNoLoss2000AtModisMean = treecover30pnolossMask
     })
     // Request the data at the scale and projection of the MODIS image
     .reproject({ 
-      crs: modisSample.projection()
+      crs: 'EPSG:4326',
+      crsTransform: [0.0049999999999966955, 0, -10.66499999999295, 0, -0.0049999999999966955, 71.18499999995295]
     }); 
 
 // Add layer to map
