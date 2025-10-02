@@ -1,15 +1,15 @@
-var europe = ee.FeatureCollection("users/agataelia1991/aoi/Europe_BB"),
-    srtm = ee.Image("USGS/SRTMGL1_003"),
-    socc005 = ee.Image("users/agataelia1991/Hansen/socc_005"),
-    modisSample = ee.Image("users/agataelia1991/Hansen/modisSample");
-    
+var srtm = ee.Image("USGS/SRTMGL1_003");
+
+// Define bounding box
+var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
+Map.addLayer(europe);
 
 // Set vis par
 var elevationVis = {
   min: 0.0,
   max: 8000.0,
   palette: ['0000ff','00ffff','ffff00','ff0000','ffffff'],
-};
+}; 
 
 var slopeVis = {
   min: 0.0,
@@ -34,14 +34,6 @@ print(srtmSlope);
 // Add and inspect layers
 Map.addLayer(srtmSlope, slopeVis, 'slope_30');
 
-// Inspect srtm crs and projection
-print(srtmElevation.projection());
-print(srtmElevation.projection().nominalScale()); 
-print(socc005.projection());
-print(socc005.projection().nominalScale());
-print(modisSample.projection());
-print(modisSample.projection().nominalScale()); 
-
 // Export to drive
 Export.image.toDrive({
   image: srtmElevation.clip(europe),
@@ -49,7 +41,7 @@ Export.image.toDrive({
   folder: 'elevation',
   region: europe,
   crs: 'EPSG:4326',
-  crsTransform: [0.00025, 0, -10.66499999999295, 0, -0.00025, 71.18499999995295], // as modis export
+  crsTransform: [0.00025, 0, -10.66499999999295, 0, -0.00025, 71.18499999995295],
   maxPixels: 1e13});
   
 Export.image.toDrive({
@@ -58,6 +50,6 @@ Export.image.toDrive({
   folder: 'elevation',
   region: europe,
   crs: 'EPSG:4326',
-  crsTransform: [0.00025, 0, -10.66499999999295, 0, -0.00025, 71.18499999995295], // as modis export
+  crsTransform: [0.00025, 0, -10.66499999999295, 0, -0.00025, 71.18499999995295],
   maxPixels: 1e13});
   
