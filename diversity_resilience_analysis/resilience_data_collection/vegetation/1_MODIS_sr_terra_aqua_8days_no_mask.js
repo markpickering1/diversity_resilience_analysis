@@ -1,10 +1,9 @@
 var terra = ee.ImageCollection("MODIS/061/MOD09GA"),
-    aqua = ee.ImageCollection("MODIS/061/MYD09GA"),
-    europe = ee.FeatureCollection("users/agataelia1991/aoi/Europe_BB"),
-    forest = ee.Image("users/agataelia1991/Hansen/hansenTreecover2000MaskAtModisBicubic");
-    
+       aqua = ee.ImageCollection("MODIS/061/MYD09GA");
+
+
 // Define bounding box
-//var europe = europe.geometry().bounds();
+var europe = ee.Algorithms.GeometryConstructors.BBox(-10.661639298049197, 34.56368725504253, 44.820364499806, 71.18416372752647);
 Map.addLayer(europe);
 
 // Function to return an image containing just the specified QA bits
@@ -37,7 +36,6 @@ var maskQA = function(image){
   return image.updateMask(mband1).updateMask(mband2).updateMask(mcloud)
               .updateMask(mshadow).updateMask(msnowice).updateMask(msnow)
               .updateMask(mwater).updateMask(mwater2).updateMask(mwater3);
-              //.updateMask(forest.gt(20));// // Mask on FAO forest definition
 };
 
 // Function to add NDVI to each MODIS scene ((scaling factor of bands is 0.0001))
@@ -51,7 +49,6 @@ var addNDVI = function(image) {
 // Function to calculate kNDVI from NDVI 
 var addKNDVI = function(image) {
   var rescaledNDVI = image.select(['NDVI']);
-  //var kNDVI = ((rescaledNDVI.pow(2)).tanh()).rename(['kNDVI']); // This if we want to turn every NDVI into positive
   var kNDVI=((rescaledNDVI.pow(3)).divide(rescaledNDVI.abs())).tanh().rename('kNDVI'); // This if we want to account for snow
   return image.addBands(kNDVI);
 };
@@ -84,11 +81,8 @@ var modisKNDVIBand = modisKNDVI.select(['kNDVI']);
 // Initialize dates
 var date0 = ee.Date('1999-01-01');
 
-// Create empty list to generate count later for one year only (example for 2003 with y = 4; y < 5)
-var list = ee.List([]);
-
-// Export stacks of 8 days averaged kNDVI
-for(var y = 20; y < 23; y++) {
+// Export tiffs of 8 days averaged kNDVI (recommended maximum 4 years by run e.g. y = 4; y < 8)
+for(var y = 4; y < 23; y++) {
   for(var d = 0; d < 366; d+=8){
     
     // Define 8 days window start and end dates
@@ -106,7 +100,6 @@ for(var y = 20; y < 23; y++) {
     var month = dateFileName.get('month').getInfo();
     var day = dateFileName.get('day').getInfo();
     
-    //var fileName = year*10000+month*100+day+3;
     var fileName = year + '_' + month + '_' + day + '_kNDVI';
     print(fileName);
     
@@ -114,23 +107,7 @@ for(var y = 20; y < 23; y++) {
     var eightDaysCollection = modisKNDVIBand.filterDate(dateStart, dateEnd);
     print(eightDaysCollection);
     var eightDaysMean = modisKNDVIBand.filterDate(dateStart, dateEnd).mean();
-    /*
-    // Print range of values in image
-    var reducers = ee.Reducer.min().combine({
-    reducer2: ee.Reducer.max(),
-    sharedInputs: true
-    });
-    var statsValues = eightDaysMean.reduceRegion({
-      reducer: reducers,
-      geometry: europe,
-      scale: 500,
-      crs: modisProjection,
-      maxPixels: 1e13});
-    print(statsValues);
 
-    // Add element to the list
-    var list = list.add(eightDaysMean);
-    */
     // Export data
     Export.image.toDrive({
     image: eightDaysMean.clip(europe).multiply(10000).toInt16().unmask(-32767), // Export as Int16 to save space, set NoData to -32767
@@ -143,59 +120,3 @@ for(var y = 20; y < 23; y++) {
     maxPixels: 1e13});
     
 }}
-/*
-print(list);
-
-// Create image collection from list
-var modisKNDVIBandYearly =  ee.ImageCollection.fromImages(list);
-print(modisKNDVIBandYearly);
-
-// Reduce collection to count
-var modisKNDVIBandYearlyCount = modisKNDVIBandYearly.count();
-print(modisKNDVIBandYearlyCount);
-Map.addLayer(modisKNDVIBandYearlyCount.clip(europe));
-
-// Export results of count
-Export.image.toDrive({
-  image: modisKNDVIBandYearlyCount.clip(europe).toInt8(),
-  description: 'MODIS_terra_aqua_8daysSR_count_2003',
-  fileNamePrefix: 'MODIS_terra_aqua_8daysSR_count_2003',
-  folder: 'modis',
-  scale: 500, //556.597453966,
-  crs: 'EPSG:4326',
-  region: europe,
-  fileFormat: 'GeoTIFF',
-  maxPixels: 1e13});
-
-/*
-// Generate 8 days long-term kNDVi average
-var date0 = ee.Date('2002-01-01');
-var years = ee.List.sequence(1, 21, 1);
-var days = ee.List.sequence(0, 365, 8);
-print(years);
-print(days);
-
-var eightDaysAverage = days.map(function(j){
-  var yearly8Days = years.map(function(i){
-    var annualC = modisKNDVIBand.filterDate(date0.advance(i, 'year'), date0.advance(ee.Number(i).add(1), 'year'));
-    annualC = annualC.filterDate(date0.advance(i, 'year').advance(j, 'day'), 
-    date0.advance(i, 'year').advance(ee.Number(j).add(8), 'day')).toBands();
-    return annualC;
-  });
-  var average = ee.ImageCollection.fromImages(yearly8Days).mean().rename(['meankNDVI']);
-  return average;
-});
-print(eightDaysAverage);
-
-var eightDaysAverageImage = ee.ImageCollection.fromImages(eightDaysAverage).toBands();
-print(eightDaysAverageImage);
-//Map.addLayer(eightDaysAverageImage);
-
-Export.image.toDrive({
-image: eightDaysAverageImage,
-description: 'climatological_8_days_kNDVI_average',
-scale: 500,
-crs: 'EPSG:4326',
-fileFormat: 'GeoTIFF',
-maxPixels: 1e13}); 
-*/
