@@ -4,7 +4,10 @@
 
 0_main/          - Contains scripts and functions that are called upon initialisation of other scripts to create the program environment and harmonise the plotting
 
-1_create_df/     -  Contains scripts that extract, reformat & harmonise the input data (downloaded via /resilience_data_collection) in order to be combined into a single coherent dataframe
+1_create_df/     -  Contains scripts that extract, reformat & harmonise the input data (downloaded via /resilience_data_collection) in order to be combined into a single coherent dataframe.
+                 -  In order for the user to jump straight to running the analysis and plots, 
+                 an example final output of these scripts is placed in:
+                 resilience_data_collection/data_processing/version_1/4_selections/df_all.RData
 
 2_analysis/      - Contains scripts that create the random forest diversity-resilience models
 
@@ -20,6 +23,14 @@ inputs    - Contains configuration parameters that can be varied or tuned for th
 To start the analysis from scratch, first ensure that the links match the downloaded input data (see resilience_data_collection/ or Detailed script descriptions: 1_create_df/ for the required format). These global links can be configured in 0_main/ and the local links to the datasets can be set in in  1_create_df/input/input_createDf_fromInput.R (see description below).
 The analysis is started (via the conversion of the required input data to a common format) by running 1_create_df/1_createDf_fromInput.R . Subsequent scripts are run numerically (1, 2, ...) where required.
 If the required data is already harmonised/formatted it is possible to start from one of the subsequent scripts (see detailed script descriptions below).
+
+An example 'combined dataframe' of various input data is provided via the path:
+resilience_data_collection/data_processing/version_1/4_selections/df_all.RData
+This dataset differs slightly from that used in the corresponding paper,  for example it uses the public versions of the forest structural diversity metrics from here: https://figshare.com/s/daa9b652c12beb42e518
+which do not contain uncertainties and provide an machine learning based extrapolation of data points to
+a larger area of coverage than the raw GEDI data used in the analysis.
+However it is intended to enable the user to jump straight to analysing/plotting example data in: 
+2_analysis/ & 3_create_figures/
 
 
 ## Detailed script descriptions: 0_main/

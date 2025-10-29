@@ -29,3 +29,7 @@ This code is used for:
 
 The code is streamlined for interpretability and producing a simplified version of the main figures only. It therefore does not necessarily include all cross checks and testing described in the methodology or the plotting of supplementary figures, or all of the sources of uncertainty in the uncertainty estimation, and so represents a scaled down version of the full analysis code.
 As the Forest Structural Diversity (FSD) dataset used in the manuscript analysis (containing the mean GEDI values of various FSD metrics) differs slightly from the publicly available one (containing a spatially complete predictive model of FSD metrics), there may be differences between the final outputs.
+
+We suggest starting with resilience_data_collection/ to download the data that will be used in the analysis.
+We do provide an example dataframe: resilience_data_collection/data_processing/version_1/4_selections/df_all.RData
+from which it is possible to immediately start building and plotting the RF model (beginning at resilience_analysis/2_analysis/ and resilience_analysis/3_create_figures/)
