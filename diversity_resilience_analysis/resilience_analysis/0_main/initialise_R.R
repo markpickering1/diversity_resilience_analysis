@@ -34,13 +34,13 @@ if(! dir.exists(root_data_input)) {dir.create(paste0(root_data_input),recursive=
   print( paste0( 'creating data input dir : ', root_data_input ) ) }
 
 # dir processed data output
-root_data_proce   <- paste0(root_data, "data_processing/", analysis_version, '/')
+root_data_proce   <- paste0(root_data, "/data_processing/", analysis_version, '/')
 # create data_processing directory for output data if not present
 if(! dir.exists(root_data_proce)) {dir.create(paste0(root_data_proce),recursive=T) ; 
   print( paste0( 'creating data_processing ouput dir : ', root_data_proce ) )}
 
 # dir figures output
-root_data_figs   <- paste0(root_data, "figures/", analysis_version, '/')
+root_data_figs   <- paste0(root_data, "/figures/", analysis_version, '/')
 # create data_processing directory for output data if not present
 if(! dir.exists(root_data_proce)) {dir.create(paste0(root_data_proce),recursive=T) ; 
   print( paste0( 'creating data_processing ouput dir : ', root_data_proce ) )}
