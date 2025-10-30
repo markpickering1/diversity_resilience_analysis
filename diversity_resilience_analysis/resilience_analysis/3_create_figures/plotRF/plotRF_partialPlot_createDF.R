@@ -114,8 +114,8 @@ for (j in 1:length(v_target)){
       
       
       # add a histogram below
-      # g_hist <- f_plot_partial_hist(df_pdp, var_name_i, n_bins_x = n_bins/2, lims_x = lims_in )
-      # g_pdp_hist <- grid.arrange(g_pdp, g_hist, ncol = 1, heights = c(3, 1))
+      g_hist <- f_plot_partial_hist(df_pdp, var_name_i, n_bins_x = n_bins/2, lims_x = lims_in )
+      g_pdp_hist <- grid.arrange(g_pdp, g_hist, ncol = 1, heights = c(3, 1))
 
       ggsave(filename = paste0('g_partDepHist_divMet-', var_name_i ,  
                                '_targ-', target_name_j, '.png'), plot = g_pdp_hist, 
