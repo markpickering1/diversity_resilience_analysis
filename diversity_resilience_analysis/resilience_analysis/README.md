@@ -25,12 +25,20 @@ The analysis is started (via the conversion of the required input data to a comm
 If the required data is already harmonised/formatted it is possible to start from one of the subsequent scripts (see detailed script descriptions below).
 
 An example 'combined dataframe' of various input data is provided via the path:
+
 resilience_data_collection/data_processing/version_1/4_selections/df_all.RData
-This dataset differs slightly from that used in the corresponding paper,  for example it uses the public versions of the forest structural diversity metrics from here: https://figshare.com/s/daa9b652c12beb42e518
+This dataset differs slightly from that used in the corresponding paper,  for example it uses the public versions of the forest structural diversity metrics from here:
+
+https://figshare.com/s/daa9b652c12beb42e518
+
 which do not contain uncertainties and provide an machine learning based extrapolation of data points to
 a larger area of coverage than the raw GEDI data used in the analysis.
-However it is intended to enable the user to jump straight to analysing/plotting example data in: 
-2_analysis/ & 3_create_figures/
+
+However it is intended to enable the user to jump straight into a simple example of analysing/plotting data in: 
+
+2_analysis/createRF_model_simple.R & 3_create_figures/
+
+As well as giving an example of the data format of downloaded, harmonised data, for replicating the analysis.
 
 
 ## Detailed script descriptions: 0_main/
